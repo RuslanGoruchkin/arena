@@ -12,7 +12,8 @@
     "game-start": "npm run db-migrate && npm run db-seeds && BUILD_ID=dontKillMe npm run forever-start",
     "game-stop": "npm run forever-stop",
     "game-restart": "npm run db-migrate && npm run db-seeds && npm run forever-restart",
-    "game-update": "git pull && npm install && npm run game-restart && echo Update $(date +'%H:%M:%S') >> updates.log",
+    "game-update": "git pull && npm install && npm run forever-restart && echo Update $(date +'%H:%M:%S') >> updates.log",
+    "game-dbreboot": "rm -rf sequelize-*.json && npm run game-start",
     "db-seeds": "node_modules/.bin/sequelize db:seed:all",
     "db-migrate": "node_modules/.bin/sequelize db:migrate",
     "db-make-migration": "node ./node_modules/sequelize-auto-migrations/bin/makemigration"

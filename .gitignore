@@ -41,9 +41,6 @@ build/
 package-lock.json
 .idea/
 
-game/config/
-config/
-
 map.txt
 map4.txt
 map5.txt

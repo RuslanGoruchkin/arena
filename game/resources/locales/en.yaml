@@ -1,0 +1,427 @@
+texts:
+  comics:
+    worldHistory:
+      description: "World's history"
+      1: 'I still have this old college book of mine, "The World in the 21st Century". Let me give you a quote: "Despite the technological breakthrough, by the middle of the 21st century, it became clear that the planet’s resources are exhausted and climate change is irreversible.\n\nSimply put, governments were too busy with their national economic issues. They overlooked one important detail. If you have no planet to live on, you have no economics. Neither global nor national. And that`s it. As expected, they were gravely concerned. Still, their concerns had not fixed anything. The chance to save the planet was gone.'
+      2: 'Under the threat of extinction, global leaders had gathered their wits surprisingly quickly.  They even had developed a strategy. No, no one was going to Mars. Humanity established a new ambitious project–moving to Virtuality.'
+      3: 'The technologies for consciousness digitization were almost ready. We only had to figure out how to decompose and digitize bodies. And voila. Finally, people have learned how to create their perfect digital copies. The only thing, the physical body had to be destroyed on the way. Still, isn`t it a fair price to get to a brave new world?\n“Olav, son, we signed up for digitization...” I`ve heard this phrase when I was 15.\nI still remember how it was, to live in the material world.\nBut you don`t. The first digital generation.'
+      4: 'You have nothing to compare with, so just trust me. We got rid of a shitload of trouble. In Virtuality, there are no wars, no diseases, no violence, no aging, no environmental disasters. On top of that, we don`t even the truly shitty weather. Only some weather changes for the purpose of diversifying your sensations.'
+      5: 'And still, in Virtuality there are people, albeit digital ones. And where there are people, there is ambition. Envy. Cheating. Pain. Loneliness. We digitized all our vices. All flaws and weaknesses, that torment a human being from the cradle to the grave. Wait a second, you have no idea what a grave is, huh? Got it. Nevermind. Just look around. Or look inside yourself, you also feel pretty unsettled, don`t you? Is that why you`re here?'
+      6: 'I am certain that, the current rise of hacking has grown out of exactly these roots. Of course, hackers are the smartest, the most talented youngsters. But none of you went to work for a corporation. Because you were looking for something else. None of the hackers of the First Generation works for L-Ri laboratories, develops for Murum or does PR for Future Sight. I`ll tell you about them, just a little bit later.'
+      7: '7'
+      8: '8'
+    characterHistory:
+      description: "Character's history"
+      techMage:
+        1: '1'
+        2: '2'
+        3: '3'
+        4: '4'
+      cryptoEvangelist:
+        1: '1'
+        2: '2'
+        3: '3'
+        4: '4'
+      cyberWarrior:
+        1: '1'
+        2: '2'
+        3: '3'
+        4: '4'
+      digitalNomad:
+        1: '1'
+        2: '2'
+        3: '3'
+        4: '4'
+      singularityProphet:
+        1: '1'
+        2: '2'
+        3: '3'
+        4: '4'
+
+  quests:
+    xp: 'Experience'
+    tokens: 'Tokens'
+    coins: 'Coins'
+    points: 'points'
+    finishTraining: 'Finish the training'
+    abandonQuest: 'Abandon quest'
+    finishedQuests: 'All quests are already finished'
+    rewardForQuest: 'You gained ${award}'
+    defenceQuest: 'Letter from ServerArmorCo:\nAlert! Alert! Alert! Security compromised! You need to install Antivirus and Firewall modules ASAP!'
+    offenceQuest: "Letter from ServerArmorCo:\nThank You for using our products!\nEncourage your underground neighbors to improve their defences with our products too by hacking some of theirs stuff!Don't forget your penetration testing software. Go down the hatch and hack anything there."
+    introduction:
+      description: "Okay, let's get down to business. I heard about your talents, but you don't know much about hacking yet, huh? Let me show you some basics."
+      seeWhatIFind: "Let's start with a poorly secured server. Take this four programs I've created. This is your weapon.\nI am gonna help you to scan the server and to hack it's module. The rest is up to you.\nTo hack a module you must be on the module you want to hack. Then you press 'Attack' and choose a program created specifically to hack.\n\n\nYour goal is to use 4 hack programs."
+      management: "Now, you need to learn how to use a server. Your server already has a wallet and a storage. You need to buy a *processor* in the shop. It allows to create programs. The shop is down the street.\n\n*Notice*:\n- Wallet (🍯) stores the cryptocurrency. When you hack it (👛️), the amount of the cryptocurrency you stole depends on wallet level and quality.\n- A storage (🗄) is a module which stored programs to allocate memory. When you hack it (🤖️), you can steal half of stored programs."
+      myself: "❌ Thanks, I'll do it myself"
+    fightQuest:
+      andNowWeRun: "Yeah, cool. Let's run away before we're spotted. Hurry up!"
+      finalFightQuest: "Good job! And now, we should attack something better protected. I'll find server that we can hack. Oh, this one! It's ve-e-ery secure...\n *Your current goal*: to get information from storage (🗄) that located in center of server. First, you have to scan server, then attack the storage and steal information. I'll try to help you. You take left modules, I'll take right modules. Let's rock!"
+      ending: "Good! You deal with hacking like a pro! Oh, where are my manners? I told you about myself, but forgot to ask you... tell me something about yourself!"
+      questStartScene:
+        description: 'OK. Your mission is to attack this server with your programs. Good luck!'
+      confirmQuestScene:
+        leaveQuest: 'Are you sure you want leave this quest?'
+        newMember: 'Good job, rookie. We are ${corporation}. Now you are a you are a part of all of us.'
+        selectCharacter: 'You have to select a character class'
+      congratulationQuestScene:
+        regard: "So you've got an information. Do you want to give it to your customer? (Say \"no\" to leak this information)"
+    buyProcessor:
+      intro: "Now, you need to learn how to use a server. Your server already has a wallet and a storage. You need to buy a *processor* in the shop. It allows to create programs. The shop is down the street.\n\n*Notice*:\n- Wallet (🍯) stores the cryptocurrency. When you hack it (👛️), the amount of the cryptocurrency you stole depends on wallet level and quality.\n- A storage (🗄) is a module which stored programs to allocate memory. When you hack it (🤖️), you can steal half of stored programs."
+      description: "*New goal*: buy a processor."
+      success: "Well done."
+    placeProcessor:
+      description: "*New goal*: place the processor on your server."
+      success: "Good!\nProcessor (🎛) (also known as CPU) is a module for creating programs.\nOne processor can create only one program at one time. If you hack a processor (⚙️) at the time it's creating a program, the program will be stolen.\nLet's place the processor on your server!\nGo to empty cell, click `Manage` and choose this module from the inventory."
+    craftProgram:
+      description: "*New goal*: craft a program."
+      success: "Success! You can create programs on your processor. Open processor by `Manage` and choose `Create program`, next choose one of three program types.\n\n*Notice*:\n- Hack programs is needed for enemy's modules hacking. If hacking was successful, you can steal something from the module and/or free path to other modules.\n- Scanner allows to scan enemy's server and disclosure modules. Scan radius depends on player and program level."
+    putProgram:
+      description: "*New goal*: upload a program to the storage."
+      success: 'Good choice! Now save the program in the storage. Go to your storage and open it. Click `Save` and then choose your program.'
+    buyMiner:
+      description: "*New goal*: buy a miner."
+      success: "Well done! Look, I checked your balance. At such amount of money, you won't last long. Let's buy a cryptocurrency miner!\nMiner (🌼) is a module for cryptocurrency mining. When you hack it (🍄️), you stole all cryptocurrency from there."
+    placeMiner:
+      description: "*New goal*: place the miner on your server."
+      success: 'You are doing great! Now you have a miner.'
+    mineCurrency:
+      description: "*New goal*: mine the currency."
+      success: "Success! Now, get rich or die tryin, baby!\n\n*Notice*: you also can to purchase cryptocoin packs through shop in menu."
+    usePrograms:
+      description: "*New goal*: use 4 hack programs."
+      success: "Yeah, cool. Let's run away before we're spotted. Hurry up!"
+    finalFight:
+      description: "*New goal*: Hack server and get information"
+      success: 'Good! You deal with hacking like a pro! Oh, where are my manners? I told you about myself, but forgot to ask you... tell me something about yourself'
+    placeFirewallAntivirus:
+      description: "*New goal*: Buy and place the firewall and antivirus modules."
+      success: "Security level: PASSIBLE\nAntivirus is a module that detects threats.\nFirewall is a wall module\n\nNow encourage your underground neighbors to improve their defences with our defence modules by hacking some of theirs stuff! Don't forget your penetration testing software. Go down the hatch and hack anything there."
+    hackSomething:
+      description: "Hack something underground"
+      success: 'You are such a good person to help'
+
+  startScenes:
+    storyTellingScene:
+      startGame: 'Start a game'
+    teleportScene:
+      goHome: 'Are you sure you want to go home? All your programs will be lost!'
+    languageScene:
+      selectLanguage: 'Please select your language'
+      reward: 'You received 10 tokens.'
+    selectCharacterScene:
+      chooseCharacter: 'Who are you?'
+    confirmScene:
+      welcome: 'Welcome to this brave new world'
+      otherCharacter: 'Other character'
+      readHistory: 'Read the history'
+      descriptionCharacter: |
+        *Class*: ${charClass}
+        *Your nickname*: `${nickname}`
+        *Processing*: ${processing}
+        Processing increases a chance of the successfull hacking.
+        *Speed*: ${speed}
+        Speed of actions.
+        *Logic*: ${logic}
+        Logic insreases an effectiveness of modules exploration. +1 logic gives one more module.
+        *Memory*: ${memory}
+        The programs number that you can carry depends on memory.
+        *Attention*: ${attention}
+        Alertness during a hack, the chance of being caught.
+
+  modulesScenes:
+    selectCreatedProgramLevelScene:
+      selectProgramLevel: 'Please select level of program'
+    createProgramScene:
+      selectTypeProgram: 'Please select the program type'
+      waitTime: 'You need to wait a ${time} seconds to create the program'
+      programComplete: 'Your ${name} program is ready. Do you want to take it away?'
+      memoryOverflow: 'Sorry, your memory is overflow'
+      pickUp: 'Take the program'
+    minerModuleScene:
+      balanceInStorage: 'You have ${balance} Coins at the miner storage'
+      withdraw: 'Withdraw'
+      withdrawn: 'You successfully withdraw ${coins} Coins from your miner'
+    processorModuleScene:
+      payForElectricity: 'Sorry, you cannot use the processor: there is not enough funds on your balance. Please pay for electricity.'
+      createProgram: 'Create a program'
+    transferProgramFromMemoryScene:
+      selectProgramForTransfer: 'Please select the programs you want to pick up from the storage'
+      selectProgramForTransferFromMemory: 'Please select the programs from memory you want to leave in storage. Quantity of programs in the storage: ${programs}.'
+      emptyMemory: 'Your memory is empty'
+      savePrograms: '📥 Save'
+    transferProgramFromStorageScene:
+      selectProgramForTransfer: 'Please select the programs you want to leave in the storage'
+      selectProgramForTransferFromMemory: 'Please select the programs from memory you want to pick up from the storage. Quantity of programs in the memory: ${programs}.'
+      emptyStorage: 'Your storage is empty'
+      loadPrograms: '📤 Load'
+    walletModuleScene:
+      balanceInWallets: 'You are have ${balance} Coins in ${wallets} wallets'
+    manageModuleScene:
+      placeModuleFromInventory: 'Place a module from inventory to this slot'
+      placeModuleToInventory: 'Place a module to inventory'
+    placeModuleScene:
+      noModulesInInventory: "You don't have any modules in your inventory"
+      selectModuleToPlace: 'Select a module to place it in this slot'
+      incorrectData: 'Invalid data is entered. Please enter a valid data'
+      successfulPlaced: 'The module was successfully placed'
+    elevatorModuleScene:
+      selectFloor: 'Please select the floor'
+      upAction: '️⏫ floor ${numberOfFloor}'
+      downAction: '⏬ floor ${numberOfFloor}'
+    relocationMasterScene:
+      cost: 'The cost of relocation is ${price}'
+      relocate: 'Relocate to ${numberOfFloor} floor'
+      relocateOnThisFloor: 'Relocate to another server on this floor'
+      notEnoughFunds: 'There is not enough funds on your balance.'
+
+  shopScenes:
+    selectProgramLevelScene:
+      selectLevel: 'Please select the program level'
+      notEnoughFunds: 'There is not enough funds on your balance'
+      memoryOverflow: 'Sorry, your memory is overflow'
+      boughtProgramSuccess: "You've bought the program. It will be added to your memory"
+    selectProgramPriceScene:
+      incorrectData: 'Please enter correct price'
+      successAddedProgram: 'Your program has been added to the store inventory successfully'
+    sellProgramScene:
+      selectProgram: 'Please select a program'
+      emptyMemory: 'Your memory is empty'
+      enterPrice: 'Please put a price on this program'
+    vendorModuleScene:
+      buyModule: 'Buy a module'
+    vendorProgramScene:
+      buyProgram: 'Buy a program'
+      sellProgram: 'Sell program'
+    buyProgramScene:
+      selectProgramCategory: 'Please select the program category'
+    buyModuleScene:
+      typeOfModule: "Select the type of module. Your balance is ${balance} Coins"
+      modulePurchased: 'The module was successfully purchased'
+      notEnoughFunds: 'There is not enough funds on your balance'
+    donateLink: "[Here your donation link](${link})"
+    donateText: "You can buy our items any time!"
+    moduleCharacteristicsViewerScene:
+      moduleDescription: |
+        *Module:* ${name}, *Level:* ${level}
+
+        *Characteristics*
+        ${characteristics}
+
+  versusScenes:
+    minerDefeatedActionScene:
+      stealMiner: 'You can steal ${coins} Coins from internal storage of this miner'
+      noPrograms: "Sorry, you don't have programs for attack"
+      stealAction: 'Steal'
+      putVirusAction: 'Inject a virus'
+    processorDefeatActionScene:
+      noPrograms: "Sorry, you don't have programs for attack"
+    putVirusToModuleScene:
+      injectVirus: "You don't have programs for an injection"
+      selectVirus: 'Please select a virus'
+    storageDefeatedActionScene:
+      canSteal: 'You can steal the programs.'
+      emptyStorage: 'The storage is empty.'
+    walletDefeatedActionScene:
+      alreadyStolen: 'This wallet was already stolen.'
+      stealAction: 'Steal'
+      canStealCash: 'You can steal ${availableCash} Coins from the wallet'
+    attackScene:
+      waitTime: 'Please wait ${castTime} seconds for launching a program'
+    selectAttackProgramScene:
+      emptyMemory: 'Your memory is empty'
+      selectProgram: 'Please select programs from memory for attack'
+      levelOfProgram: 'lvl'
+      countOfModules: 'modules'
+      success: 'success'
+    processorDefeatedActionScene:
+      putVirusAction: 'Inject a virus'
+
+  ratingScenes:
+    sceneName: 'Ratings'
+    refreshButton: '🔄 Refresh'
+    usersListMessage: "${message}: ${result}\n"
+    youListMessage: "\nYou `${playerID}${ratingType}: ${rating}"
+    userRating: 'Player `'
+    coin:
+      button: 'Coin balances'
+      header: "*Coin balances*"
+      type: 'coin balance'
+    token:
+      button: 'Token balances'
+      header: "*Token balances*"
+      type: 'token balance'
+    level:
+      button: 'Highest level'
+      header: "*Highest level*"
+      type: 'level'
+    infamy:
+      button: 'Highest infamously achieved level'
+      header: "*Highest infamously achieved level*"
+      type: 'infamous level'
+
+  mainScenes:
+    mainScene:
+      haveNoAccess: "You don't have access to this slot"
+      notAllowedDirection: "Sorry, you can't go in this direction"
+    mainMenuScene:
+      comics: 'Comics'
+    comicsListScene:
+      selectComics: "Please select comics"
+    settingScene:
+      invite: 'Invite a friend'
+      language: '🌐 Change language'
+    moduleRouterScene:
+      basementLevel: "You are in the basement"
+      playerLevel: "You are on the street"
+    infoScene:
+      info: 'Help channel: @hackerpunk'
+    characterScene:
+      descriptionCharacter: |
+        *Class*: ${charClass}
+        *Your nickname*: `${nickname}`
+
+        *Level*: ${level}
+        *XP*: ${xp}
+        *Coins*: ${coins}
+        *Tokens* : ${tokens}
+
+        *Skills*: *Processing*: ${processing}, *Speed*: ${speed}, *Logic*: ${logic}, *Memory*: ${memory}, *Attention*: ${attention}
+        Processing increases a chance of the successfull hacking.
+        Speed decreases actions time.
+        Logic insreases an effectiveness of modules exploration.
+        Memory increases number of programms you can carry around.
+        Attention lower chance of being caught.
+
+        *Memory*: (${busy} of ${total}) ${programs}
+
+  programs:
+    hackedModule: 'Congratulations! You have hacked the module.'
+    failAttempt: 'Your attempt to hack the module failed. A chance to hack this module is ${chance}%'
+    moduleAlreadyHacked: 'This module already has been hacked.'
+
+  utils:
+    levelUp: '*Level up! You current level is ${level}*.'
+    discovered: 'You were detected!'
+    serverUnderAttack: 'Your server is under attack!'
+    modulesRepaired: 'All modules are repaired.'
+    info: |
+      You are at this module: ${character} (${moduleName})
+      Owner: ${owner}
+      Hacked: ${hacked}
+      Current quest: ${currentQuest}
+    infoStorage: |
+      You are at this module: ${character} (${moduleName})
+      Owner: ${owner}
+      Hacked: ${hacked}
+      Storage: ${storage}
+      Current quest: ${currentQuest}
+    infoEnemyModule: |
+      Owner: ${owner}
+      Hacked: ${hacked}
+      Current quest: ${currentQuest}
+
+  modules:
+    antivirus: 'Antivirus'
+    firewall: 'Firewall'
+    wallet: 'Wallet'
+    storage: 'Storage'
+    miner: 'Miner'
+    processor: 'Processor'
+    way: 'Way'
+    space: 'Space'
+    availableSpace: 'Available space'
+    sewerHatch: 'Sewer hatch'
+    stairs: 'Stairs'
+    programVendor: 'Program vendor'
+    moduleVendor: 'Module vendor'
+    elevator: 'Elevator'
+    relocationMaster: 'Relocation master'
+    characteristics:
+      defence: 'Defence'
+      resurrection: 'Resurrection'
+      cycle: 'Cycle'
+      size: 'Size'
+      influence: 'Influence'
+      detecting: 'Detecting'
+
+  yes: '✅ Yes'
+  no: '❌ No'
+  back: '↩️ Go back'
+  go: 'GO!'
+  ok: 'OK'
+  selectAction: 'Please select an action'
+  accept: '✅ Accept'
+  decline: '❌ Decline'
+  currency: '💰'
+  settings: 'Settings'
+  you: 'You'
+  system: 'System'
+  hack: 'Hack'
+  scan: 'Scan'
+  virus: 'Virus'
+  information: 'Information'
+  warriorHack: "DDoS"
+  mageHack: "IP-Spoofing"
+  evangelistVirus: "Cryptobomb"
+  prophetScan: "Sniffing"
+  nomadHack: "Exploiting"
+  next: 'Next'
+  restart: 'The quest has been failed.\n↩RESTART?↩'
+
+  betaDisclamer: "*DISCLAMER*\n\nHackerpunk's public *beta test* has started.\nPlease note that all accounts will be reset at the end of the beta test. But, *all donated items will be saved* and transferred after the beta-test to the main game with bonuses for beta test participating!"
+  betaLetBegin: "Let the hacking begin!"
+
+  oopsMessage: "OOPS... it seems, something goes wrong... you can report it [in our official chat](https://t.me/hackerpunk) or/and return to game!"
+
+menu:
+  language:
+    ru: '🇷🇺 Русский'
+    en: '🇺🇸 English'
+    ja: '🇯🇵 日本'
+
+  characters:
+    cyberWarrior: '👨‍🚒 Cyber Warrior'
+    techMage: '👩‍🔧 Tech Mage'
+    cryptoEvangelist: '🕵️ Crypto Evangelist'
+    singularityProphet: '👩‍🔬 Singularity Prophet'
+    digitalNomad: '👨‍🎤 Digital Nomad'
+    defaultCharacter: "Programmer"
+
+  confirm:
+    confirm: '✅ Confirm'
+    back: '↩️ Go back'
+    return: '↩️ Return'
+
+  hack:
+    hack: '⌨️ Hack'
+    back: '↩️ Go back'
+
+  shop:
+    processor: '🎛 Processor'
+    storage: '🗄 Storage'
+    miner: '🌼 Miner'
+    wallet: '🍯 Wallet'
+    antivirus: '🚨 Antivirus'
+    firewall: '🛡 Firewall'
+    back: '↩️ Go back'
+
+  menu: 'Menu'
+  home: 'Go home'
+  credits: 'Credits'
+  up: '⬆️'
+  donate: 'Shop'
+  left: '⬅️'
+  manage: 'Manage'
+  actions: 'Actions'
+  attack: 'Attack'
+  goDown: 'Go down'
+  goUp: 'Go up'
+  right: '➡️'
+  character: '${character} Character'
+  down: '⬇️'
+  info: 'Info'
+  daily: 'Daily quest'
+  weekly: 'Weekly quest'
+  level: 'lvl'
+  talk: 'Talk'

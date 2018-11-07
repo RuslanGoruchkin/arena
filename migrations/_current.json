@@ -1,0 +1,274 @@
+{
+    "tables": {
+        "accesses": {
+            "tableName": "accesses",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "owner": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "mapItemId": {
+                    "name": "mapItemId",
+                    "allowNull": true,
+                    "references": {
+                        "model": "mapItems",
+                        "key": "id"
+                    },
+                    "onDelete": "CASCADE",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.STRING"
+                }
+            },
+            "indexes": []
+        },
+        "donates": {
+            "tableName": "donates",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "user": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.STRING"
+                },
+                "pack": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.STRING"
+                },
+                "quantity": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "invoiceId": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.STRING"
+                },
+                "invoiceExId": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.STRING"
+                },
+                "invoiceDate": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.STRING"
+                },
+                "invoiceMetbhod": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.STRING"
+                },
+                "invoiceAgreement": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.STRING"
+                },
+                "invoiceCurrency": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.STRING"
+                },
+                "invoiceAmount": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "floors": {
+            "tableName": "floors",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "autoIncrement": true,
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "createdAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "seqType": "Sequelize.DATE"
+                },
+                "name": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "floor": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "serverSize": {
+                    "seqType": "Sequelize.INTEGER"
+                }
+            },
+            "indexes": []
+        },
+        "mapItems": {
+            "tableName": "mapItems",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "seqType": "Sequelize.STRING"
+                },
+                "x": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "y": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "floor": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.STRING"
+                },
+                "data": {
+                    "seqType": "Sequelize.JSON"
+                }
+            },
+            "indexes": {
+                "559ce3e190f86bc05afc42eb518cb96bb88ebaca": {
+                    "unique": true,
+                    "fields": [
+                        "x",
+                        "y",
+                        "floor"
+                    ],
+                    "options": {
+                        "indicesType": "UNIQUE"
+                    }
+                }
+            }
+        },
+        "players": {
+            "tableName": "players",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "seqType": "Sequelize.STRING"
+                },
+                "nickname": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "startX": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "startY": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "balanceCoin": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "balanceToken": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "level": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "infamousLevel": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "userDonateLink": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "telegramId": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "data": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "server": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "attackPrograms": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "basement": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "coordinates": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "personalCoordinates": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "currentFloor": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "currentQuest": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "language": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "walletsCount": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "moduleForBuy": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "comics": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "hackStatus": {
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "finalFightWasStarted": {
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "alreadyStolen": {
+                    "seqType": "Sequelize.BOOLEAN"
+                },
+                "selectedCharacter": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "selectedComics": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "corporation": {
+                    "seqType": "Sequelize.STRING"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                }
+            },
+            "indexes": []
+        },
+        "sessions": {
+            "tableName": "sessions",
+            "schema": {
+                "id": {
+                    "primaryKey": true,
+                    "seqType": "Sequelize.STRING"
+                },
+                "session": {
+                    "seqType": "Sequelize.JSON"
+                },
+                "createdAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "updatedAt": {
+                    "allowNull": false,
+                    "seqType": "Sequelize.DATE"
+                },
+                "playerId": {
+                    "allowNull": true,
+                    "references": {
+                        "model": "players",
+                        "key": "id"
+                    },
+                    "onDelete": "SET NULL",
+                    "onUpdate": "CASCADE",
+                    "seqType": "Sequelize.STRING"
+                }
+            },
+            "indexes": []
+        }
+    },
+    "revision": 3
+}

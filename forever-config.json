@@ -1,0 +1,22 @@
+{
+  "id": "hackerpunk",
+  "uid": "hackerpunk",
+  "max": 5,
+  // restart the app successively maximum of 5 times
+  "spinSleepTime": 100,
+  // time to wait until a next restart is attempted (in ms)
+  "minUpTime": 1,
+  "debug": true,
+  "append": true,
+  // append the logs, do not overwrite
+  "watch": true,
+  // watch for changes and restart if they occur
+  "script": "starter.js",
+  // main startup script (almost like issuing node server.js)
+  "sourceDir": ".",
+  "workingDir": ".",
+  "command": "node -r dotenv/config"
+  // the dir where your entire app code resides (dir structure is recursively traversed)
+
+  // pass any arguments to your app
+}

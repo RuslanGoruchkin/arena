@@ -1,6 +1,3 @@
-import _ from "lodash";
-import { gameModules } from "../gameModules";
-import { getModule, getPlayer } from "../helpers/ctx";
 import { translate } from "../helpers/ctx";
 
 export let rooms = {
@@ -12,7 +9,8 @@ export let rooms = {
             "action.drink":{"scene":"drinkingScene"},
             "action.sleep":{"scene":"sleepingScene"},
             "leaveCell":{"room":"hallway"}
-        }
+        },
+        message: "room.cell"
     },
     hallway:{
         buttons:[[translate(state, "goToCell"), translate(state, "arena")],
@@ -22,6 +20,7 @@ export let rooms = {
             "arena":{"scene":"drinkingScene"},
             "training":{"room":"sleepingScene"},
             "talk":{"room":"hallway"}
-        }
+        },
+        message: "room.hallway"
     }
 };

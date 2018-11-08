@@ -28,7 +28,7 @@ confirmScene.enter(ctx =>
             `http://hackerpunk.s3.amazonaws.com/characters/${selectedCharacter.class}.png`,
             [
                 [translate(state, "texts.startScenes.confirmScene.otherCharacter")],
-                [translate(state, "texts.startScenes.confirmScene.readHistory")]
+                [translate(state, "texts.ok")]
             ],
             { playerId: state.player.id }
         );
@@ -38,9 +38,8 @@ confirmScene.enter(ctx =>
 confirmScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         switch (ctx.update.message.text) {
-            case translate(state, "texts.startScenes.confirmScene.readHistory"):
-                state.player.selectedComics = "characterHistory";
-                enterScene(ctx, "storyTellingScene", state);
+            case translate(state, "texts.ok"):
+                enterScene(ctx, "mainScene", state);
                 break;
             case translate(state, "texts.startScenes.confirmScene.otherCharacter"):
                 enterScene(ctx, "selectCharacterScene", state);

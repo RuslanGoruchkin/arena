@@ -70,12 +70,12 @@ import dailyIntroScene from "./game/scenes/quests/dailyQuests/dailyIntroScene";
 import dailyOutroScene from "./game/scenes/quests/dailyQuests/dailyOutroScene";
 import rewardScene from "./game/scenes/quests/rewardScene";
 import rewardSceneB from "./game/scenes/quests/rewardSceneB";
-// import weeklyMentorScene from "./game/scenes/quests/weeklyQuests/weeklyMentorScene";
-// import weeklyNPCScene from "./game/scenes/quests/weeklyQuests/weeklyNPCScene";
-// import weeklyIntroScene from "./game/scenes/quests/weeklyQuests/weeklyIntroScene";
-// import weeklyOutroScene from "./game/scenes/quests/weeklyQuests/weeklyOutroScene";
-// import weeklyQuestScene from "./game/scenes/quests/weeklyQuests/weeklyQuestScene";
-// import weeklyTimeoutScene from "./game/scenes/quests/weeklyQuests/weeklyTimeoutScene";
+// import weeklyMentorScene from "./game/scenes/rooms/weeklyQuests/weeklyMentorScene";
+// import weeklyNPCScene from "./game/scenes/rooms/weeklyQuests/weeklyNPCScene";
+// import weeklyIntroScene from "./game/scenes/rooms/weeklyQuests/weeklyIntroScene";
+// import weeklyOutroScene from "./game/scenes/rooms/weeklyQuests/weeklyOutroScene";
+// import weeklyQuestScene from "./game/scenes/rooms/weeklyQuests/weeklyQuestScene";
+// import weeklyTimeoutScene from "./game/scenes/rooms/weeklyQuests/weeklyTimeoutScene";
 
 export const stage = new Stage([
     languageScene,

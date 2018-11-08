@@ -10,7 +10,7 @@ const weeklyMentorScene = new Scene("weeklyMentorScene");
 
 weeklyMentorScene.enter(ctx => {
     stateWrapper(ctx, (ctx, state) => {
-        return keyboard(ctx, translate(state, "texts.quests.weeklyMentorScene"), [translate(state, "texts.go")], {
+        return keyboard(ctx, translate(state, "texts.rooms.weeklyMentorScene"), [translate(state, "texts.go")], {
             playerId: state.player.id
         });
     });

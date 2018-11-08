@@ -8,7 +8,7 @@ const defenseQuestScene = new Scene("defenseQuestScene");
 
 defenseQuestScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
-        return keyboard(translate(state, "texts.quests.defenceQuest"), [[translate(state, "texts.ok")]], params);
+        return keyboard(translate(state, "texts.rooms.defenceQuest"), [[translate(state, "texts.ok")]], params);
     })
 );
 

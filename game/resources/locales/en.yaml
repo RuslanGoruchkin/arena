@@ -45,7 +45,7 @@ texts:
     points: 'points'
     finishTraining: 'Finish the training'
     abandonQuest: 'Abandon quest'
-    finishedQuests: 'All quests are already finished'
+    finishedQuests: 'All rooms are already finished'
     rewardForQuest: 'You gained ${award}'
     defenceQuest: 'Letter from ServerArmorCo:\nAlert! Alert! Alert! Security compromised! You need to install Antivirus and Firewall modules ASAP!'
     offenceQuest: "Letter from ServerArmorCo:\nThank You for using our products!\nEncourage your underground neighbors to improve their defences with our products too by hacking some of theirs stuff!Don't forget your penetration testing software. Go down the hatch and hack anything there."

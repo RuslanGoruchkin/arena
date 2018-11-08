@@ -9,7 +9,7 @@ const finalFightQuest = new Scene("finalFightQuest");
 
 finalFightQuest.enter(ctx => {
     let state = { ...ctx.state };
-    return keyboard(translate(state, "texts.quests.fightQuest.finalFightQuest"), [[translate(state, "texts.go")]], {
+    return keyboard(translate(state, "texts.rooms.fightQuest.finalFightQuest"), [[translate(state, "texts.go")]], {
         playerId: state.player.id
     });
 });

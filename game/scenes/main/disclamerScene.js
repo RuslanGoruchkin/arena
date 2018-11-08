@@ -21,7 +21,7 @@ disclamerScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         switch (ctx.update.message.text) {
             case translate(state, "menu.confirm.confirm"):
-                enterScene(ctx, "questStartScene", state);
+                enterScene(ctx, "selectCharacterScene", state);
                 break;
             default:
                 redirectToOopsScene(ctx);

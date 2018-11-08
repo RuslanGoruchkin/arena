@@ -9,15 +9,6 @@ const selectCharacterScene = new Scene("selectCharacterScene");
 
 selectCharacterScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
-        let player = state.player;
-        let startServer = [
-            [gameModules.availableSpace, gameModules.availableSpace, gameModules.miner, gameModules.availableSpace],
-            [gameModules.availableSpace, gameModules.firewall, gameModules.wallet, gameModules.miner],
-            [gameModules.processor, gameModules.storage, gameModules.antivirus, gameModules.availableSpace],
-            [gameModules.availableSpace, gameModules.processor, gameModules.availableSpace, gameModules.availableSpace]
-        ];
-        player.server = createServerFromTemplate(startServer);
-
         return keyboard(
             translate(state, "texts.startScenes.selectCharacterScene.chooseCharacter"),
             [

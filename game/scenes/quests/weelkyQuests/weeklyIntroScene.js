@@ -12,7 +12,7 @@ const weeklyIntroScene = new Scene("weeklyIntroScene");
 
 weeklyIntroScene.enter(ctx => {
     stateWrapper(ctx, (ctx, state) => {
-        return keyboard(ctx, translate(state, "texts.quests.weeklyIntroScene"), [translate(state, "texts.go")], {
+        return keyboard(ctx, translate(state, "texts.rooms.weeklyIntroScene"), [translate(state, "texts.go")], {
             playerId: state.player.id
         });
     });

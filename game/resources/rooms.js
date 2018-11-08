@@ -1,9 +1,11 @@
-import { translate } from "../helpers/ctx";
+import { getModule, getPlayer, translate } from "../helpers/ctx";
 
 export let rooms = {
     cell:{
-        buttons:[[translate(state, "action.eat"), translate(state, "action.drink"),translate(state, "action.sleep")],
-            [translate(state, "leaveCell")]],
+        buttons: (state) => {
+            return [[translate(state, "action.eat"), translate(state, "action.drink"),translate(state, "action.sleep")],
+                [translate(state, "leaveCell")]]
+        },
         actions:{
             "action.eat":{"scene":"eatingScene"},
             "action.drink":{"scene":"drinkingScene"},
@@ -13,8 +15,10 @@ export let rooms = {
         message: "room.cell"
     },
     hallway:{
-        buttons:[[translate(state, "goToCell"), translate(state, "arena")],
-            [translate(state, "training"), translate(state, "talk")]],
+        buttons: (state) => {
+            return [[translate(state, "goToCell"), translate(state, "arena")],
+            [translate(state, "training"), translate(state, "talk")]]
+        },
         actions:{
             "goToCell":{"room":"eatingScene"},
             "arena":{"scene":"drinkingScene"},

@@ -3,8 +3,8 @@ import _ from "lodash";
 export let defaultPlayer = {
     data: {
         tick: 0,
-        hungerTick: 0,
-        thirstTick: 0,
+        hungryTick: 0,
+        thirstyTick: 0,
         sleepyTick: 0,
         trainTick:{
             strength: 0,
@@ -42,6 +42,12 @@ export let defaultPlayer = {
             tokens: 0
         }
     },
+    sleepy: false,
+    hungry: false,
+    thirsty: false,
+    thirstyTime: 200,
+    hungryTime: 400,
+    sleepyTime: 600,
     language: "ru",
     walletsCount: 0,
     balanceCoin: 0,

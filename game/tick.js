@@ -5,8 +5,8 @@ import { programs } from "./resources/programs";
 import { quests } from "./resources/quests";
 import { questRestartScene } from "./scenes/quests/questRestartScene";
 import { outroScene } from "./scenes/quests/outroScene";
-import { getPlayer } from "./helpers/ctx";
-import { enterScene } from "./helpers/TelegramApiHelpers";
+import { getPlayer, translate } from "./helpers/ctx";
+import { enterScene, replyWithMarkdown } from "./helpers/TelegramApiHelpers";
 const debug = require("debug")("bot:tick");
 
 export const tick = state => {
@@ -16,6 +16,19 @@ export const tick = state => {
     _.each(players, player => {
         debug(`Tick for ${player.id}`);
         let params = { playerId: player.id };
+        if (state.currentTick-player.sleepyTime > player.data.sleepyTick){
+            player.sleepy=true;
+            replyWithMarkdown(translate(state, "condition.sleepy"), params);
+        }
+        if (state.currentTick-player.thirstyTime > player.data.thirstyTick){
+            player.thirsty=true;
+            replyWithMarkdown(translate(state, "condition.sleepy"), params);
+        }
+        if (state.currentTick-player.hungryTime > player.data.hungryTick){
+            player.hungry=true;
+            replyWithMarkdown(translate(state, "condition.sleepy"), params);
+        }
+
 
         _.each(characters, item => {
             if (item.onTick) {
@@ -23,21 +36,8 @@ export const tick = state => {
             }
         });
 
-        _.each(gameModules, item => {
-            if (item.onTick) {
-                state = item.onTick(state, params);
-            }
-        });
-
-        _.each(programs, item => {
-            if (item.onTick) {
-                state = item.onTick(state, params);
-            }
-        });
-
         _.each(quests, (quest, key) => {
             let player = getPlayer(state, params);
-
             if (player && _.get(player, "currentQuest.name") === key) {
                 if (quest.fail(state, params)) {
                     enterScene(null, { ...params, scene: "questRestartScene" }, state);

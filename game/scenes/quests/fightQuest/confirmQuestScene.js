@@ -9,7 +9,7 @@ const confirmQuestScene = new Scene("confirmQuestScene");
 confirmQuestScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         return keyboard(
-            translate(state, "texts.quests.fightQuest.confirmQuestScene.leaveQuest"),
+            translate(state, "texts.rooms.fightQuest.confirmQuestScene.leaveQuest"),
             [[translate(state, "texts.yes")], [translate(state, "texts.no")]],
             { playerId: state.player.id }
         );
@@ -31,10 +31,10 @@ confirmQuestScene.on("text", ctx =>
                     enterScene(ctx, "congratulationQuestScene", state);
                 } else {
                     state.corporation = "Resistance";
-                    let newMemberText = translate(state, "texts.quests.fightQuest.confirmQuestScene.newMember", {
+                    let newMemberText = translate(state, "texts.rooms.fightQuest.confirmQuestScene.newMember", {
                         corporation: player.corporation
                     });
-                    let selectCharacterText = translate(state, "texts.quests.fightQuest.confirmQuestScene.selectCharacter");
+                    let selectCharacterText = translate(state, "texts.rooms.fightQuest.confirmQuestScene.selectCharacter");
                     replyWithMarkdown(newMemberText, { playerId: state.player.id })
                         .then(replyWithMarkdown(selectCharacterText, { playerId: state.player.id }))
                         .then(enterScene(ctx, "selectCharacterScene", state));

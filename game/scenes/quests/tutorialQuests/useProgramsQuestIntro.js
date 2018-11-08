@@ -17,7 +17,7 @@ useProgramsQuestIntro.enter(ctx =>
         data.programsInMemory.push(programs.cheatHack, programs.cheatHack, programs.cheatHack, programs.cheatHack);
         ctx.session.alreadyStolen = false;
         state = createQuestFromTemplate(state, { ...params, questTemplate: useProgramsQuestIntroTemplate, fog: false, coins: 100 });
-        let seeWhatIFindText = translate(state, "texts.quests.introduction.seeWhatIFind");
+        let seeWhatIFindText = translate(state, "texts.rooms.introduction.seeWhatIFind");
         replyWithMarkdown(seeWhatIFindText, { playerId: state.player.id });
         enterScene(ctx, "mainScene", state);
     })

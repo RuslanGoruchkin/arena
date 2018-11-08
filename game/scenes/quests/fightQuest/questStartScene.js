@@ -10,9 +10,9 @@ const questStartScene = new Scene("questStartScene");
 questStartScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         return replyWithPhotoAndKeyboard(
-            translate(state, "texts.quests.introduction.description"),
+            translate(state, "texts.rooms.introduction.description"),
             "http://hackerpunk.s3.amazonaws.com/characters/friend.png",
-            [[translate(state, "texts.accept")], [translate(state, "texts.quests.introduction.myself")]],
+            [[translate(state, "texts.accept")], [translate(state, "texts.rooms.introduction.myself")]],
             { playerId: state.player.id }
         );
     })
@@ -28,7 +28,7 @@ questStartScene.on("text", ctx =>
                 player.currentQuest.introPlayed = false;
                 enterScene(ctx, "questScene", state);
                 break;
-            case translate(state, "texts.quests.introduction.myself"):
+            case translate(state, "texts.rooms.introduction.myself"):
                 enterScene(ctx, "selectCharacterScene", state);
                 break;
             default:

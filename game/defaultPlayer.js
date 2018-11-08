@@ -3,31 +3,28 @@ import _ from "lodash";
 export let defaultPlayer = {
     data: {
         tick: 0,
-        dailyTick: 0,
+        hungerTick: 0,
+        thirstTick: 0,
+        sleepyTick: 0,
+        trainTick:{
+            strength: 0,
+            dexterity: 0,
+            intellect: 0,
+            wisdom: 0,
+            vitality:0
+        },
         gameSpeed: 1000,
         gameSpeedMultiplier: 1,
         gamePaused: true,
         coinsPerTick: 42,
         wallets: [],
-        programsInMemory: [],
-        hackStatus: false,
         inventory: [],
-        baseHack: 100,
         coins: 50,
         tokens: 0,
-        electricityTotalPrice: 0,
-        isOrderPaid: true,
-        antivirusQuest: false,
-        totalInfluence: 0,
         completedQuests: {},
         droppedQuests: {}
     },
-    currentFloor: {},
-    personalCoordinates: {
-        floor: "",
-        xPos: "",
-        yPos: ""
-    },
+    currentRoom: "cell",
     currentQuest: {
         //introPlayed: false,
         name: "",
@@ -37,18 +34,12 @@ export let defaultPlayer = {
         award: {
             XP: 0,
             coins: 0,
-            tokens: 0,
-            programs: [],
-            modules: [],
-            drugs: []
+            tokens: 0
         },
         award2: {
             XP: 0,
             coins: 0,
-            tokens: 0,
-            programs: [],
-            modules: [],
-            drugs: []
+            tokens: 0
         }
     },
     language: "ru",
@@ -58,23 +49,9 @@ export let defaultPlayer = {
     level: 1,
     infamousLevel: 0,
     XP: 0,
-    moduleForBuy: {
-        name: {},
-        level: 0,
-        price: 0
-    },
-    attackPrograms: [],
-    attackProgram: {
-        isCasting: false,
-        name: ""
-    },
-
     nickname: "",
     selectedCharacter: "",
     selectedComics: "characterHistory",
-    corporation: "Resistance",
-    finalFightWasStarted: false,
-    alreadyStolen: false,
     comics: ["worldHistory"]
 };
 

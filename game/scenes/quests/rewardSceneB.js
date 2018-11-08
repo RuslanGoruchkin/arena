@@ -18,23 +18,23 @@ rewardScene.enter(ctx =>
         data.completedQuests[player.currentQuest.name] = true;
         if (award.XP) {
             state = addXPToPlayer(state, { playerId: player.id, XP: award.XP });
-            awardText += `${translate(state, "texts.quests.xp")}: ${player.currentQuest.XP} ${translate(state, "texts.quests.points")}\n`;
+            awardText += `${translate(state, "texts.rooms.xp")}: ${player.currentQuest.XP} ${translate(state, "texts.rooms.points")}\n`;
         };
         if (award.coins) {
             data.coins += award.coins;
-            awardText += `${translate(state, "texts.quests.coins")}: ${award.coins}\n`;
+            awardText += `${translate(state, "texts.rooms.coins")}: ${award.coins}\n`;
         };
         if (award.tokens) {
             data.tokens += award.tokens;
-            awardText += `${translate(state, "texts.quests.tokens")}: ${award.tokens}\n`;
+            awardText += `${translate(state, "texts.rooms.tokens")}: ${award.tokens}\n`;
         };
         if (award.modules) {
             data.inventory.push(award.modules);
-            awardText += `${translate(state, "texts.quests.modules")}: ${award.modules}\n`;
+            awardText += `${translate(state, "texts.rooms.modules")}: ${award.modules}\n`;
         };
         if (award.programs) {
             data.programsInMemory.push(award.programs);
-            awardText += `${translate(state, "texts.quests.programs")}: ${award.programs}\n`;
+            awardText += `${translate(state, "texts.rooms.programs")}: ${award.programs}\n`;
         };
         let rewardForQuestText = translate(state, `texts.quests.rewardForQuest`, { award: awardText });
         replyWithMarkdown(rewardForQuestText, { playerId: state.player.id }).then(() => {

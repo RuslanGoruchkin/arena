@@ -13,8 +13,8 @@ finalFightQuestOutro.enter(ctx =>
         createServerFromInventory(data.inventory);
         data.programsInMemory = [];
         data.coins += 450;
-        let endingText = translate(state, "texts.quests.fightQuest.ending");
-        let andNowWeRunText = translate(state, "texts.quests.fightQuest.andNowWeRun");
+        let endingText = translate(state, "texts.rooms.fightQuest.ending");
+        let andNowWeRunText = translate(state, "texts.rooms.fightQuest.andNowWeRun");
         replyWithMarkdown(endingText, { playerId: state.player.id });
         replyWithMarkdown(andNowWeRunText, { playerId: state.player.id });
         enterScene(ctx, "congratulationQuestScene", state);

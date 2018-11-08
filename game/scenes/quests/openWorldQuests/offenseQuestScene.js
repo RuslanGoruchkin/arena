@@ -8,7 +8,7 @@ const offenseQuestScene = new Scene("offenseQuestScene");
 
 offenseQuestScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
-        return keyboard(translate(state, "texts.quests.offenceQuest"), [[translate(state, "texts.ok")]], { playerId: state.player.id });
+        return keyboard(translate(state, "texts.rooms.offenceQuest"), [[translate(state, "texts.ok")]], { playerId: state.player.id });
     })
 );
 

@@ -8,7 +8,7 @@ const congratulationQuestScene = new Scene("congratulationQuestScene");
 congratulationQuestScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         return keyboard(
-            translate(state, "texts.quests.fightQuest.congratulationQuestScene.regard"),
+            translate(state, "texts.rooms.fightQuest.congratulationQuestScene.regard"),
             [[translate(state, "texts.yes")], [translate(state, "texts.no")]],
             { playerId: state.player.id }
         );
@@ -30,8 +30,8 @@ congratulationQuestScene.on("text", ctx =>
                 redirectToOopsScene(ctx);
                 break;
         }
-        let newMemberText = translate(state, "texts.quests.fightQuest.confirmQuestScene.newMember", { corporation: player.corporation });
-        let selectCharacterText = translate(state, "texts.quests.fightQuest.confirmQuestScene.selectCharacter");
+        let newMemberText = translate(state, "texts.rooms.fightQuest.confirmQuestScene.newMember", { corporation: player.corporation });
+        let selectCharacterText = translate(state, "texts.rooms.fightQuest.confirmQuestScene.selectCharacter");
         replyWithMarkdown(newMemberText, { playerId: state.player.id })
             .then(replyWithMarkdown(selectCharacterText, { playerId: state.player.id }))
             .then(enterScene(ctx, "selectCharacterScene", state));

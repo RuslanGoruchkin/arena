@@ -361,7 +361,7 @@ const getAdditionalInformation = (state, params) => {
     let owner = ownerId === player.id ? translate(state, "texts.you") : translate(state, "texts.system");
     let currentQuest = _.get(player, "currentQuest.name")
         ? translate(state, `texts.quests.${player.currentQuest.name}.description`)
-        : translate(state, "texts.quests.finishedQuests");
+        : translate(state, "texts.rooms.finishedQuests");
     let information = {
         character: module.character,
         moduleName: translate(state, `texts.modules.${module.name}`),

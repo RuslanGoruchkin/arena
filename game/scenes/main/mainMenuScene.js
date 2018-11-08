@@ -35,9 +35,9 @@ mainMenuScene.enter(ctx =>
             ]
         ];
         if (player.selectedCharacter.class === "defaultCharacter") {
-            buttons.push([translate(state, "texts.quests.finishTraining")]);
+            buttons.push([translate(state, "texts.rooms.finishTraining")]);
         } else {
-            buttons.push([translate(state, "texts.quests.abandonQuest")]);
+            buttons.push([translate(state, "texts.rooms.abandonQuest")]);
             buttons.push([translate(state, "menu.weekly"), translate(state, "menu.daily")]);
         }
         buttons.push([translate(state, "menu.home"), translate(state, "texts.back")]);
@@ -104,7 +104,7 @@ mainMenuScene.on("text", ctx =>
                     enterScene(ctx, "weeklyTimeoutScene", state);
                 }
                 break;
-            case translate(state, "texts.quests.finishTraining"):
+            case translate(state, "texts.rooms.finishTraining"):
                 if (player.currentFloor === `${player.id}_quest`) {
                     player.currentQuest = undefined;
                     player.data.inventory = [];
@@ -113,7 +113,7 @@ mainMenuScene.on("text", ctx =>
                     redirectToOopsScene(ctx);
                 }
                 break;
-            case translate(state, "texts.quests.abandonQuest"):
+            case translate(state, "texts.rooms.abandonQuest"):
                 if (player.currentQuest) {
                     player.data.droppedQuests[player.currentQuest] = true;
                     player.currentQuest = undefined;

@@ -1,6 +1,5 @@
 const express = require("express");
 const fs = require("fs");
-const variables = require("./game/variables");
 
 const app = express();
 let mapInstance = "";

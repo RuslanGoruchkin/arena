@@ -7,13 +7,13 @@ export let quests = {
         name: "usePrograms",
         nextQuest: "buyProcessor",
         introScene: "useProgramsQuestIntro",
-        award:{
+        award: {
             coins: 300,
             XP: 20
         },
         goal: (state, params) => {
             let player = getPlayer(state, params);
-            return !!(_.isEmpty(player.data.programsInMemory) && player.data.coins > 50);
+            return _.isEmpty(player.attackPrograms) && _.isEmpty(player.data.programsInMemory) && player.data.coins >= 50;
         },
         fail: (state, params) => {
             return false;
@@ -23,7 +23,7 @@ export let quests = {
         name: "buyProcessor",
         nextQuest: "placeProcessor",
         introScene: "buyProcessorQuestIntro",
-        award:{
+        award: {
             coins: 100,
             XP: 20
         },
@@ -43,7 +43,7 @@ export let quests = {
     placeProcessor: {
         name: "placeProcessor",
         nextQuest: "craftProgram",
-        award:{
+        award: {
             coins: 0,
             XP: 20
         },
@@ -69,7 +69,7 @@ export let quests = {
     craftProgram: {
         name: "craftProgram",
         nextQuest: "putProgram",
-        award:{
+        award: {
             coins: 100,
             XP: 20
         },
@@ -84,7 +84,7 @@ export let quests = {
     putProgram: {
         name: "putProgram",
         nextQuest: "buyMiner",
-        award:{
+        award: {
             coins: 100,
             XP: 20
         },
@@ -110,7 +110,7 @@ export let quests = {
     buyMiner: {
         name: "buyMiner",
         nextQuest: "placeMiner",
-        award:{
+        award: {
             coins: 100,
             XP: 20
         },
@@ -129,7 +129,7 @@ export let quests = {
     placeMiner: {
         name: "placeMiner",
         nextQuest: "mineCurrency",
-        award:{
+        award: {
             XP: 20
         },
         goal: (state, params) => {
@@ -152,7 +152,7 @@ export let quests = {
     mineCurrency: {
         name: "mineCurrency",
         nextQuest: "finalFight",
-        award:{
+        award: {
             XP: 20
         },
         goal: (state, params) => {
@@ -167,7 +167,7 @@ export let quests = {
         name: "finalFight",
         introScene: "finalFightQuestIntro",
         outroScene: "finalFightQuestOutro",
-        award:{},
+        award: {},
         coins: 0,
         XP: 20,
         goal: (state, params) => {
@@ -188,7 +188,7 @@ export let quests = {
     placeFirewallAntivirus: {
         name: "placeFirewallAntivirus",
         nextQuest: "hackSomething",
-        award:{
+        award: {
             coins: 100,
             XP: 20
         },
@@ -220,7 +220,7 @@ export let quests = {
     },
     hackSomething: {
         name: "hackSomething",
-        award:{
+        award: {
             coins: 100,
             XP: 20
         },
@@ -241,11 +241,11 @@ export let quests = {
     daily1: {
         name: "daily1",
         introScene: "daily1Scene",
-        award:{
+        award: {
             coins: 1000,
             XP: 20
         },
-        award2:{
+        award2: {
             tokens: 10,
             XP: 20
         },
@@ -257,52 +257,52 @@ export let quests = {
             return false;
         }
     },
-    daily2:{
-        name:"daily2",
-        introScene:'dailyIntroScene',
-        outroScene:'dailyOutroScene',
-        award:{
+    daily2: {
+        name: "daily2",
+        introScene: "dailyIntroScene",
+        outroScene: "dailyOutroScene",
+        award: {
             coins: 1000,
             XP: 20
         },
-        award2:{
+        award2: {
             tokens: 10,
             XP: 20
         },
         goal: ctx => {
             let success = false;
-            if ((_.findIndex(ctx.session.player.state.data.programsInMemory, {key: 'daily2'})).toString() !== '-1'){
+            if (_.findIndex(ctx.session.player.state.data.programsInMemory, { key: "daily2" }).toString() !== "-1") {
                 success = true;
             }
             return success;
         },
         fail: ctx => {
             let fail = false;
-            return fail ;
+            return fail;
         }
     },
-    daily3:{
-        name:"daily3",
-        introScene:'dailyIntroScene',
-        outroScene:'dailyOutroScene',
-        award:{
+    daily3: {
+        name: "daily3",
+        introScene: "dailyIntroScene",
+        outroScene: "dailyOutroScene",
+        award: {
             coins: 1000,
             XP: 20
         },
-        award2:{
+        award2: {
             tokens: 10,
             XP: 20
         },
         goal: ctx => {
             let success = false;
-            if ((_.findIndex(ctx.session.player.state.data.programsInMemory, {key: 'daily3'})).toString() !== '-1'){
+            if (_.findIndex(ctx.session.player.state.data.programsInMemory, { key: "daily3" }).toString() !== "-1") {
                 success = true;
             }
             return success;
         },
         fail: ctx => {
             let fail = false;
-            return fail ;
+            return fail;
         }
     }
 };

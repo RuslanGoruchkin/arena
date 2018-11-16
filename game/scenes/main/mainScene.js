@@ -1,60 +1,51 @@
-import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { rooms } from "../../resources/rooms";
-import { getPlayerScreen, heightOfScreen, widthOfScreen } from "../../util";
-import { gameModules } from "../../gameModules";
-import { getModule, getPlayer, stateWrapper, translate } from "../../helpers/ctx";
-import stateManager from "../../stateManager";
-import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
+import { stateWrapper, t } from "../../helpers/ctx";
+import { enterScene, keyboard, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
 
 let debug = require("debug")("bot:mainScene");
 
 const mainScene = new Scene("mainScene");
-mainScene.enter(ctx =>
-    stateWrapper(ctx, (ctx, state) => {
-        let player = state.player;
-        let room = _.get(rooms, player.currentRoom);
-        let message = translate(state, room.message);
+mainScene.enter(ctx => {
+    return stateWrapper(ctx, (ctx, state) => {
+        let message =
+            "You are in your cell. You are sitting on your bed. There is a table nearby. You can see a glass of bits and a cybermeal, programmed not to induce vomit, on it. You can smell cybervomit though";
         let buttons = [];
-        buttons.push(room.buttons);
-        buttons.push([
-            translate(state, "character"),
-            translate(state, "inventory"),
-            translate(state, "menu")]);
-
+        buttons.push([t(state, "menu.action.eat"), t(state, "menu.action.drink"), t(state, "menu.action.sleep")]);
+        buttons.push([t(state, "menu.inventory"), t(state, "menu.leaveCell")]);
+        //any scene
+        buttons.push([t(state, "menu.character"), t(state, "menu.menu")]);
         return keyboard(message, buttons, { playerId: state.player.id });
-    })
-);
-
+    });
+});
 
 mainScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
-        let player = state.player;
-        let room = _.get(rooms, player.currentRoom);
-        let action = _.get(room, text);
-        if(action){
-            if (_.has(action, "scene")){
-                let scene = _.get(action, "scene");
-                enterScene(ctx, scene, state);
-            } else if (_.has(action, "room")){
-                player.currentRoom = _.get(action, "room");
-                enterScene(ctx, "mainScene", state);
-            }
-        } else {
-            switch (text) {
-                case translate(state, "character"):
-                    enterScene(ctx, "characterScene", state);
-                    break;
-                case translate(state, "inventory"):
-                    enterScene(ctx, "inventoryScene", state);
-                    break;
-                case translate(state, "menu"):
-                    enterScene(ctx, "mainMenuScene", state);
-                    break;
-                default:
-                    redirectToOopsScene(ctx);
-                    break;
-            }
+        switch (ctx.update.message.text) {
+            case t(state, "menu.action.eat"):
+                return enterScene(ctx, "drinkingScene", state);
+                break;
+            case t(state, "menu.action.drink"):
+                return enterScene(ctx, "eatingScene", state);
+                break;
+            case t(state, "menu.leaveCell"):
+                return enterScene(ctx, "hallwayRoomScene", state);
+                break;
+            case t(state, "menu.action.sleep"):
+                return enterScene(ctx, "sleepingScene", state);
+                break;
+            case t(state, "menu.inventory"):
+                return enterScene(ctx, "inventoryScene", state);
+                break;
+            //any scene
+            case t(state, "menu.character"):
+                return enterScene(ctx, "characterScene", state);
+                break;
+            case t(state, "menu.menu"):
+                return enterScene(ctx, "mainMenuScene", state);
+                break;
+            default:
+                return redirectToOopsScene(ctx);
+                break;
         }
     })
 );

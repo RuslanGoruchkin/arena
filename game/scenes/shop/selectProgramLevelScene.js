@@ -1,7 +1,7 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
 import { calculateProgramCount, goods } from "../../util";
-import { stateWrapper, translate } from "../../helpers/ctx";
+import { stateWrapper, t } from "../../helpers/ctx";
 import { enterScene, keyboard, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
 
 const selectProgramLevelScene = new Scene("selectProgramLevelScene");
@@ -29,8 +29,8 @@ selectProgramLevelScene.enter(ctx =>
             });
             options.add(`${bestProgram.level} level: ${bestProgram.price} 💰`);
         });
-        options.add(translate(state, "texts.back"));
-        return keyboard(translate(state, "texts.shopScenes.selectProgramLevelScene.selectLevel"), [...options], {
+        options.add(t(state, "texts.back"));
+        return keyboard(t(state, "texts.shopScenes.selectProgramLevelScene.selectLevel"), [...options], {
             playerId: state.player.id
         });
     })
@@ -42,7 +42,7 @@ selectProgramLevelScene.on("text", ctx =>
         let price = parseInt(text[2]);
         let player = state.player;
         let data = player.data;
-        if (text[0] === translate(state, "texts.back")) {
+        if (text[0] === t(state, "texts.back")) {
             enterScene(ctx, "buyProgramScene", state);
         }
         if (data.programsInMemory.length < calculateProgramCount(player.selectedCharacter.memory)) {
@@ -55,17 +55,17 @@ selectProgramLevelScene.on("text", ctx =>
                 if (~element) {
                     goods[ctx.session.buyProgram].splice(element, 1);
                     data.programsInMemory.push(program);
-                    let boughtProgramSuccessText = translate(state, "texts.shopScenes.selectProgramLevelScene.boughtProgramSuccess");
+                    let boughtProgramSuccessText = t(state, "texts.shopScenes.selectProgramLevelScene.boughtProgramSuccess");
                     replyWithMarkdown(boughtProgramSuccessText, { playerId: state.player.id }).then(
                         enterScene(ctx, "selectProgramLevelScene", state)
                     );
                 }
             } else {
-                let notEnoughFundsText = translate(state, "texts.shopScenes.selectProgramLevelScene.notEnoughFunds");
+                let notEnoughFundsText = t(state, "texts.shopScenes.selectProgramLevelScene.notEnoughFunds");
                 replyWithMarkdown(notEnoughFundsText, { playerId: state.player.id }).then(enterScene(ctx, "buyProgramScene", state));
             }
         } else {
-            let memoryOverflowText = translate(state, "texts.shopScenes.selectProgramLevelScene.memoryOverflow");
+            let memoryOverflowText = t(state, "texts.shopScenes.selectProgramLevelScene.memoryOverflow");
             replyWithMarkdown(memoryOverflowText, { playerId: state.player.id }).then(enterScene(ctx, "buyProgramScene", state));
         }
     })

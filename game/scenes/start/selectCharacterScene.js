@@ -2,7 +2,7 @@ import { keyboard } from "../../helpers/TelegramApiHelpers";
 import Scene from "telegraf/scenes/base";
 import { createServerFromTemplate } from "../../server";
 import { gameModules } from "../../gameModules";
-import { stateWrapper, translate } from "../../helpers/ctx";
+import { stateWrapper, t } from "../../helpers/ctx";
 import { enterScene } from "../../helpers/TelegramApiHelpers";
 
 const selectCharacterScene = new Scene("selectCharacterScene");
@@ -10,11 +10,11 @@ const selectCharacterScene = new Scene("selectCharacterScene");
 selectCharacterScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         return keyboard(
-            translate(state, "texts.startScenes.selectCharacterScene.chooseCharacter"),
+            t(state, "texts.startScenes.selectCharacterScene.chooseCharacter"),
             [
-                [translate(state, "menu.characters.cyberWarrior"), translate(state, "menu.characters.techMage")],
-                [translate(state, "menu.characters.cryptoEvangelist"), translate(state, "menu.characters.singularityProphet")],
-                [translate(state, "menu.characters.digitalNomad")]
+                [t(state, "menu.characters.cyberWarrior"), t(state, "menu.characters.techMage")],
+                [t(state, "menu.characters.cryptoEvangelist"), t(state, "menu.characters.singularityProphet")],
+                [t(state, "menu.characters.digitalNomad")]
             ],
             { playerId: state.player.id }
         );
@@ -25,19 +25,19 @@ selectCharacterScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let text = ctx.update.message.text;
         switch (text) {
-            case translate(state, "menu.characters.cyberWarrior"):
+            case t(state, "menu.characters.cyberWarrior"):
                 ctx.session.character = "cyberWarrior";
                 break;
-            case translate(state, "menu.characters.techMage"):
+            case t(state, "menu.characters.techMage"):
                 ctx.session.character = "techMage";
                 break;
-            case translate(state, "menu.characters.cryptoEvangelist"):
+            case t(state, "menu.characters.cryptoEvangelist"):
                 ctx.session.character = "cryptoEvangelist";
                 break;
-            case translate(state, "menu.characters.singularityProphet"):
+            case t(state, "menu.characters.singularityProphet"):
                 ctx.session.character = "singularityProphet";
                 break;
-            case translate(state, "menu.characters.digitalNomad"):
+            case t(state, "menu.characters.digitalNomad"):
                 ctx.session.character = "digitalNomad";
                 break;
         }

@@ -1,6 +1,6 @@
 import Scene from "telegraf/scenes/base";
 import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, translate } from "../../helpers/ctx";
+import { stateWrapper, t } from "../../helpers/ctx";
 import { enterScene, redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
 
 const mainMenuScene = new Scene("mainMenuScene");
@@ -25,22 +25,22 @@ Game Designer: Ilya Ulyanov
 mainMenuScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
-        let message = translate(state, "texts.mainScenes.infoScene.info");
+        let message = t(state, "texts.mainScenes.infoScene.info");
         let buttons = [
-            [translate(state, "menu.credits"), translate(state, "texts.settings")],
-            [translate(state, "texts.ratingScenes.sceneName"), translate(state, "menu.donate")],
+            [t(state, "menu.credits"), t(state, "texts.settings")],
+            [t(state, "texts.ratingScenes.sceneName"), t(state, "menu.donate")],
             [
-                translate(state, "texts.mainScenes.mainMenuScene.comics"),
-                translate(state, "menu.character", { character: player.selectedCharacter.character })
+                t(state, "texts.mainScenes.mainMenuScene.comics"),
+                t(state, "menu.character", { character: player.selectedCharacter.character })
             ]
         ];
         if (player.selectedCharacter.class === "defaultCharacter") {
-            buttons.push([translate(state, "texts.rooms.finishTraining")]);
+            buttons.push([t(state, "texts.rooms.finishTraining")]);
         } else {
-            buttons.push([translate(state, "texts.rooms.abandonQuest")]);
-            buttons.push([translate(state, "menu.weekly"), translate(state, "menu.daily")]);
+            buttons.push([t(state, "texts.rooms.abandonQuest")]);
+            buttons.push([t(state, "menu.weekly"), t(state, "menu.daily")]);
         }
-        buttons.push([translate(state, "menu.home"), translate(state, "texts.back")]);
+        buttons.push([t(state, "menu.home"), t(state, "texts.back")]);
         return keyboard(message, buttons, { playerId: state.player.id });
     })
 );
@@ -60,20 +60,20 @@ mainMenuScene.on("text", ctx =>
         let weeklyDelta = 60;
 
         switch (text) {
-            case translate(state, "menu.credits"):
+            case t(state, "menu.credits"):
                 replyWithMarkdown(credits, { playerId: state.player.id });
                 enterScene(ctx, "mainMenuScene", state);
                 break;
-            case translate(state, "texts.back"):
+            case t(state, "texts.back"):
                 enterScene(ctx, "mainScene", state);
                 break;
-            case translate(state, "menu.character", { character: player.selectedCharacter.character }):
+            case t(state, "menu.character", { character: player.selectedCharacter.character }):
                 enterScene(ctx, "characterScene", state);
                 break;
-            case translate(state, "menu.donate"):
+            case t(state, "menu.donate"):
                 enterScene(ctx, "storeDisclamerScene", state);
                 break;
-            case translate(state, "menu.home"):
+            case t(state, "menu.home"):
                 if (state.player.finalFightWasStarted || ctx.session.firstFightWasStarted) {
                     ctx.session.firstFightWasStarted = false;
                     state.finalFightWasStarted = false;
@@ -82,13 +82,13 @@ mainMenuScene.on("text", ctx =>
                     enterScene(ctx, "teleportScene", state);
                 }
                 break;
-            case translate(state, "texts.settings", { character: player.selectedCharacter.character }):
+            case t(state, "texts.settings", { character: player.selectedCharacter.character }):
                 enterScene(ctx, "settingScene", state);
                 break;
-            case translate(state, "texts.ratingScenes.sceneName"):
+            case t(state, "texts.ratingScenes.sceneName"):
                 enterScene(ctx, "ratingScene", state);
                 break;
-            case translate(state, "menu.daily"):
+            case t(state, "menu.daily"):
                 if (dailyTickDifference >= dailyDelta) {
                     state.player.data.dailyTick = currentTick;
                     enterScene(ctx, "dailyQuestScene", state);
@@ -96,7 +96,7 @@ mainMenuScene.on("text", ctx =>
                     enterScene(ctx, "dailyTimeoutScene", state);
                 }
                 break;
-            case translate(state, "menu.weekly"):
+            case t(state, "menu.weekly"):
                 if (weeklyTickDifference >= weeklyDelta) {
                     state.player.data.dailyTick = currentTick;
                     enterScene(ctx, "weeklyQuestScene", state);
@@ -104,7 +104,7 @@ mainMenuScene.on("text", ctx =>
                     enterScene(ctx, "weeklyTimeoutScene", state);
                 }
                 break;
-            case translate(state, "texts.rooms.finishTraining"):
+            case t(state, "texts.rooms.finishTraining"):
                 if (player.currentFloor === `${player.id}_quest`) {
                     player.currentQuest = undefined;
                     player.data.inventory = [];
@@ -113,13 +113,13 @@ mainMenuScene.on("text", ctx =>
                     redirectToOopsScene(ctx);
                 }
                 break;
-            case translate(state, "texts.rooms.abandonQuest"):
+            case t(state, "texts.rooms.abandonQuest"):
                 if (player.currentQuest) {
                     player.data.droppedQuests[player.currentQuest] = true;
                     player.currentQuest = undefined;
                 }
                 break;
-            case translate(state, "texts.mainScenes.mainMenuScene.comics"):
+            case t(state, "texts.mainScenes.mainMenuScene.comics"):
                 enterScene(ctx, "comicsListScene", state);
                 break;
             default:

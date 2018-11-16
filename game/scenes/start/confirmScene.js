@@ -1,6 +1,6 @@
 import { getItemByClassCaption, startNewGame } from "../../util";
 import Scene from "telegraf/scenes/base";
-import { stateWrapper, translate } from "../../helpers/ctx";
+import { stateWrapper, t } from "../../helpers/ctx";
 import { characters } from "../../resources/characters";
 import { enterScene, redirectToOopsScene, replyWithPhotoAndKeyboard } from "../../helpers/TelegramApiHelpers";
 
@@ -13,22 +13,22 @@ confirmScene.enter(ctx =>
         player.selectedCharacter = getItemByClassCaption(ctx.session.character, characters);
         let selectedCharacter = player.selectedCharacter;
         player.data.inventory = [];
-        let message = translate(state, "texts.startScenes.confirmScene.descriptionCharacter", {
-            charClass: translate(state, `menu.characters.${selectedCharacter.class}`),
+        let message = t(state, "texts.startScenes.confirmScene.descriptionCharacter", {
+            charClass: t(state, `menu.characters.${selectedCharacter.class}`),
             description: selectedCharacter.description,
             nickname: player.nickname,
-            processing: selectedCharacter.processing,
-            speed: selectedCharacter.speed,
-            logic: selectedCharacter.logic,
-            memory: selectedCharacter.memory,
-            attention: selectedCharacter.attention
+            strength: player.strength,
+            dexterity: player.dexterity,
+            intelligence: player.intelligence,
+            wisdom: player.wisdom,
+            vitality: player.vitality
         });
         return replyWithPhotoAndKeyboard(
             message,
             `http://hackerpunk.s3.amazonaws.com/characters/${selectedCharacter.class}.png`,
             [
-                [translate(state, "texts.startScenes.confirmScene.otherCharacter")],
-                [translate(state, "texts.ok")]
+                [t(state, "texts.startScenes.confirmScene.otherCharacter")],
+                [t(state, "texts.ok")]
             ],
             { playerId: state.player.id }
         );
@@ -38,14 +38,14 @@ confirmScene.enter(ctx =>
 confirmScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         switch (ctx.update.message.text) {
-            case translate(state, "texts.ok"):
-                enterScene(ctx, "mainScene", state);
+            case t(state, "texts.ok"):
+                return enterScene(ctx, "mainScene", state);
                 break;
-            case translate(state, "texts.startScenes.confirmScene.otherCharacter"):
-                enterScene(ctx, "selectCharacterScene", state);
+            case t(state, "texts.startScenes.confirmScene.otherCharacter"):
+                return enterScene(ctx, "selectCharacterScene", state);
                 break;
             default:
-                redirectToOopsScene(ctx);
+                return redirectToOopsScene(ctx);
                 break;
         }
     })

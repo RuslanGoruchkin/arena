@@ -1,6 +1,4 @@
-'use strict';
-
-var Sequelize = require('sequelize');
+var Sequelize = require("sequelize");
 
 /**
  * Actions summary:
@@ -23,19 +21,20 @@ var Sequelize = require('sequelize');
  **/
 
 var info = {
-    "revision": 3,
-    "name": "noname",
-    "created": "2018-10-31T09:54:27.472Z",
-    "comment": ""
+    revision: 3,
+    name: "noname",
+    created: "2018-10-31T09:54:27.472Z",
+    comment: ""
 };
 
-var migrationCommands = [{
+var migrationCommands = [
+    {
         fn: "changeColumn",
         params: [
             "players",
             "corporation",
             {
-                "type": Sequelize.STRING
+                type: Sequelize.STRING
             }
         ]
     },
@@ -45,7 +44,7 @@ var migrationCommands = [{
             "players",
             "selectedComics",
             {
-                "type": Sequelize.STRING
+                type: Sequelize.STRING
             }
         ]
     },
@@ -55,7 +54,7 @@ var migrationCommands = [{
             "players",
             "walletsCount",
             {
-                "type": Sequelize.INTEGER
+                type: Sequelize.INTEGER
             }
         ]
     },
@@ -65,7 +64,7 @@ var migrationCommands = [{
             "players",
             "language",
             {
-                "type": Sequelize.STRING
+                type: Sequelize.STRING
             }
         ]
     },
@@ -75,7 +74,7 @@ var migrationCommands = [{
             "players",
             "currentFloor",
             {
-                "type": Sequelize.STRING
+                type: Sequelize.STRING
             }
         ]
     },
@@ -85,7 +84,7 @@ var migrationCommands = [{
             "players",
             "telegramId",
             {
-                "type": Sequelize.STRING
+                type: Sequelize.STRING
             }
         ]
     },
@@ -95,7 +94,7 @@ var migrationCommands = [{
             "players",
             "startX",
             {
-                "type": Sequelize.INTEGER
+                type: Sequelize.INTEGER
             }
         ]
     },
@@ -105,7 +104,7 @@ var migrationCommands = [{
             "players",
             "infamousLevel",
             {
-                "type": Sequelize.INTEGER
+                type: Sequelize.INTEGER
             }
         ]
     },
@@ -115,7 +114,7 @@ var migrationCommands = [{
             "players",
             "level",
             {
-                "type": Sequelize.INTEGER
+                type: Sequelize.INTEGER
             }
         ]
     },
@@ -125,7 +124,7 @@ var migrationCommands = [{
             "players",
             "balanceToken",
             {
-                "type": Sequelize.INTEGER
+                type: Sequelize.INTEGER
             }
         ]
     },
@@ -135,7 +134,7 @@ var migrationCommands = [{
             "players",
             "balanceCoin",
             {
-                "type": Sequelize.INTEGER
+                type: Sequelize.INTEGER
             }
         ]
     },
@@ -145,7 +144,7 @@ var migrationCommands = [{
             "players",
             "startY",
             {
-                "type": Sequelize.INTEGER
+                type: Sequelize.INTEGER
             }
         ]
     },
@@ -155,7 +154,7 @@ var migrationCommands = [{
             "players",
             "nickname",
             {
-                "type": Sequelize.STRING
+                type: Sequelize.STRING
             }
         ]
     },
@@ -165,7 +164,7 @@ var migrationCommands = [{
             "players",
             "userDonateLink",
             {
-                "type": Sequelize.STRING
+                type: Sequelize.STRING
             }
         ]
     }
@@ -173,20 +172,16 @@ var migrationCommands = [{
 
 module.exports = {
     pos: 0,
-    up: function(queryInterface, Sequelize)
-    {
+    up: function(queryInterface, Sequelize) {
         var index = this.pos;
         return new Promise(function(resolve, reject) {
             function next() {
-                if (index < migrationCommands.length)
-                {
+                if (index < migrationCommands.length) {
                     let command = migrationCommands[index];
-                    console.log("[#"+index+"] execute: " + command.fn);
+                    console.log("[#" + index + "] execute: " + command.fn);
                     index++;
                     queryInterface[command.fn].apply(queryInterface, command.params).then(next, reject);
-                }
-                else
-                    resolve();
+                } else resolve();
             }
             next();
         });

@@ -4,7 +4,6 @@ const path = require("path");
 const Sequelize = require("sequelize");
 const config = require("../config/config");
 const basename = path.basename(__filename);
-const env = process.env.NODE_ENV || "development";
 const db = {};
 let sequelize;
 sequelize = new Sequelize(
@@ -20,7 +19,7 @@ sequelize = new Sequelize(
             idle: 30000,
             acquire: 60000
         },
-        logging: false,
+        // logging: false,
         logging: function(str) {
             debug(str);
         },

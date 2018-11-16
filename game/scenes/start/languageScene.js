@@ -2,7 +2,7 @@ import _ from "lodash";
 import { startNewGame } from "../../util";
 import Scene from "telegraf/scenes/base";
 import { gameModules } from "../../gameModules";
-import { stateWrapper, translate } from "../../helpers/ctx";
+import { stateWrapper, t } from "../../helpers/ctx";
 import stateManager from "../../stateManager";
 import { enterScene, keyboard, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
 
@@ -10,12 +10,6 @@ const languageScene = new Scene("languageScene");
 
 languageScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
-        ctx.session.startServer = [
-            [gameModules.availableSpace, gameModules.storage, gameModules.wallet, gameModules.availableSpace],
-            [gameModules.availableSpace, gameModules.availableSpace, gameModules.availableSpace, gameModules.availableSpace],
-            [gameModules.availableSpace, gameModules.availableSpace, gameModules.availableSpace, gameModules.availableSpace],
-            [gameModules.availableSpace, gameModules.availableSpace, gameModules.availableSpace, gameModules.availableSpace]
-        ];
         let date = new Date();
         let dateLog = `${date.getDate()}.${date.getMonth() + 1}.${date.getFullYear()} 
         ${date.getHours()}:${date.getMinutes()}:${date.getSeconds()}`;
@@ -30,14 +24,14 @@ languageScene.enter(ctx =>
                     player.state.tokens += 50;
                 }
             });
-            ctx.telegram.sendMessage(telegramId, translate(state, "texts.startScenes.languageScene.reward"));
+            ctx.telegram.sendMessage(telegramId, t(state, "texts.startScenes.languageScene.reward"));
         }
         let params = {};
 
         params = { ...params, playerId: ctx.from.id };
         return keyboard(
-            translate(state, "texts.startScenes.languageScene.selectLanguage"),
-            [[translate(state, "menu.language.ru")], [translate(state, "menu.language.en")]],
+            t(state, "texts.startScenes.languageScene.selectLanguage"),
+            [[t(state, "menu.language.ru")], [t(state, "menu.language.en")]],
             params
         );
     })
@@ -46,20 +40,19 @@ languageScene.enter(ctx =>
 languageScene.on("text", ctx =>
     stateWrapper(ctx, async (ctx, state) => {
         let text = ctx.update.message.text;
-        let locales = [translate(state, "menu.language.ru"), translate(state, "menu.language.en")];
+        let locales = [t(state, "menu.language.ru"), t(state, "menu.language.en")];
         if (_.includes(locales, text)) {
-            if (text === translate(state, "menu.language.ru")) {
+            if (text === t(state, "menu.language.ru")) {
                 state.language = "ru";
-            } else if (text === translate(state, "menu.language.en")) {
+            } else if (text === t(state, "menu.language.en")) {
                 state.language = "en";
             }
             ctx.session.__language_code = ctx.session.language;
             state = await startNewGame(state, { ctx });
-            ctx.session.startServer = null;
             return await enterScene(ctx, "disclamerScene", state);
         } else {
             let selectLangtext = "Введите корректный язык";
-            replyWithMarkdown(selectLangtext, { playerId: state.player.id });
+            //replyWithMarkdown(selectLangtext, { playerId: state.player.id });
             return enterScene(ctx, "languageScene", state);
         }
     })

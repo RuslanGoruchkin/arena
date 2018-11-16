@@ -1,3 +1,4 @@
+/* eslint-disable destructuring/no-rename */
 import _ from "lodash";
 
 export const difference = (object, base) =>
@@ -30,6 +31,7 @@ export const mapMatrixToCollection = matrix => {
     let collection = [];
     _.forEach(matrix, (floorValue, floor) => {
         _.forEach(floorValue, (xValue, x) => {
+            // eslint-disable-next-line lodash/prefer-map
             _.forEach(xValue, (data, y) => {
                 collection.push({
                     id: `${floor}--${x}--${y}`,

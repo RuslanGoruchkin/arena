@@ -1,11 +1,10 @@
-import path from "path";
 import Telegraf from "telegraf";
 import { enterScene } from "./game/helpers/TelegramApiHelpers";
 import MySQLSession from "./game/middlewares/mysql-session-middleware";
 import TickMiddleware from "./game/middlewares/tick";
 import DonatesMiddleware from "./game/middlewares/donates";
-import { stage } from "./scenes";
-import { initLoggers } from "./loggers";
+import { stage } from "./game/scenes/scenes";
+import { initLoggers } from "./game/helpers/loggers";
 
 const { Sentry, debug } = initLoggers();
 
@@ -25,10 +24,10 @@ global.bot.use(Donates.middleware());
 global.bot.command("start", ctx => {
     debug("Start session", ctx.session);
     global.bot.telegram.getMe().then(botInfo => {
-        ctx.session.botName = botInfo.username;
+        global.bot.options.username = botInfo.username;
     });
-    global.ctxBase[ctx.update.message.from.id] = ctx;
-    enterScene(ctx, "languageScene", null);
+
+    return enterScene(ctx, "languageScene", null);
 });
 global.bot.catch(err => {
     debug(err);

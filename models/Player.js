@@ -8,31 +8,31 @@ module.exports = (sequelize, DataTypes) => {
             },
 
             nickname: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING
             },
             startX: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.INTEGER
             },
             startY: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.INTEGER
             },
             balanceCoin: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.INTEGER
             },
             balanceToken: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.INTEGER
             },
             level: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.INTEGER
             },
             infamousLevel: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.INTEGER
             },
             userDonateLink: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING
             },
             telegramId: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING
             },
             data: {
                 type: DataTypes.JSON
@@ -53,16 +53,16 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.JSON
             },
             currentFloor: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING
             },
             currentQuest: {
                 type: DataTypes.JSON
             },
             language: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING
             },
             walletsCount: {
-                type: DataTypes.INTEGER,
+                type: DataTypes.INTEGER
             },
             moduleForBuy: {
                 type: DataTypes.JSON
@@ -83,10 +83,10 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.JSON
             },
             selectedComics: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING
             },
             corporation: {
-                type: DataTypes.STRING,
+                type: DataTypes.STRING
             }
         },
         {

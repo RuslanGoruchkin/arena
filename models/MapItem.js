@@ -1,4 +1,4 @@
-const Floor = require("./Floor");
+// const Floor = require("./Floor");
 module.exports = (sequelize, DataTypes) => {
     let MapItem = sequelize.define(
         "mapItem",

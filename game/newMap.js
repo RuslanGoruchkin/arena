@@ -4,12 +4,7 @@ import { gameModules } from "./gameModules";
 const COUNT_OF_PLAYERS_BY_WIDTH = process.env.COUNT_OF_PLAYERS_BY_WIDTH;
 const COUNT_OF_PLAYERS_BY_HEIGHT = process.env.COUNT_OF_PLAYERS_BY_HEIGHT;
 
-let HUB_MODULES = [
-    gameModules.relocationMaster.character,
-    gameModules.moduleVendor.character,
-    gameModules.programVendor.character,
-    gameModules.elevator.character
-];
+let HUB_MODULES = [gameModules.relocationMaster, gameModules.moduleVendor, gameModules.programVendor, gameModules.elevator];
 
 let generateTechFloorModule = (x, size, y) =>
     x % (size + 1) === 0 && y % (size + 1) === 0
@@ -76,7 +71,7 @@ export function createFloor(floor, serverSize, isAccessAddToMapItem = false) {
 }
 
 function generateAccessItem({ module, mapItemId }) {
-    if (!_.includes(HUB_MODULES, module.character)) {
+    if (!_.some(HUB_MODULES, module)) {
         return false;
     }
     return {

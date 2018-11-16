@@ -1,3 +1,4 @@
+/* eslint-disable lodash/chaining,lodash/chain-style */
 let _ = require("lodash");
 _.mixin({
     compactObject: function(input) {

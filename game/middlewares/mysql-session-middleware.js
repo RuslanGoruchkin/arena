@@ -107,6 +107,7 @@ class MySQLSession {
                         sessions[key] = Object.assign({}, newValue);
                     }
                 });
+                // eslint-disable-next-line promise/no-nesting
                 return next().then(() => this.saveSession(key, sessions[key]));
             });
         };

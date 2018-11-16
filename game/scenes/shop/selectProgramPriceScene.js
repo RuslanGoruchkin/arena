@@ -1,7 +1,7 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
 import { goods } from "../../util";
-import { stateWrapper, translate } from "../../helpers/ctx";
+import { stateWrapper, t } from "../../helpers/ctx";
 import { enterScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
 
 const selectProgramPriceScene = new Scene("selectProgramPriceScene");
@@ -14,7 +14,7 @@ selectProgramPriceScene.on("text", ctx =>
         let data = player.data;
         let element = _.indexOf(data.programsInMemory, ctx.session.programForSell);
         if (_.isNaN(price) || price < 0) {
-            let incorrectDataText = translate(state, "texts.shopScenes.selectProgramPriceScene.incorrectData");
+            let incorrectDataText = t(state, "texts.shopScenes.selectProgramPriceScene.incorrectData");
             replyWithMarkdown(incorrectDataText, { playerId: state.player.id }).then(enterScene(ctx, "selectProgramPriceScene", state));
         } else {
             if (~element) {
@@ -26,7 +26,7 @@ selectProgramPriceScene.on("text", ctx =>
                 }
                 goods[program.name].push(_.cloneDeep(program));
                 ctx.session.programForSell = undefined;
-                let successAddedProgramText = translate(state, "texts.shopScenes.selectProgramPriceScene.successAddedProgram");
+                let successAddedProgramText = t(state, "texts.shopScenes.selectProgramPriceScene.successAddedProgram");
                 replyWithMarkdown(successAddedProgramText, { playerId: state.player.id }).then(enterScene(ctx, "sellProgramScene", state));
             }
         }

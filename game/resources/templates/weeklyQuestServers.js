@@ -1,4 +1,4 @@
-import { gameModules } from "../gameModules";
+import { gameModules } from "../../gameModules";
 import _ from "lodash";
 
 let specialStorage1 = _.cloneDeep(gameModules.storage);

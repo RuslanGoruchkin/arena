@@ -1,4 +1,9 @@
-import { accessMatrixToCollection, difference, mapCollectionToMatrixReducer, mapMatrixToCollection } from "./helpers/helpers";
+import {
+    accessMatrixToCollection,
+    difference,
+    mapCollectionToMatrixReducer,
+    mapMatrixToCollection
+} from "./helpers/helpers";
 import _ from "lodash";
 import db from "../models";
 import Promise from "bluebird";
@@ -11,61 +16,9 @@ class StateManager {
         this.client = db;
         this.loading = false;
         this.state = {};
-        this.ctxState = null;
+        this.safePromises = [];
     }
 
-    // static defineStartPosition() {
-    //     if (!_availablePositions.length) {
-    //         return { x: this.getStart(COUNT_OF_PLAYERS_BY_WIDTH), y: this.getStart(COUNT_OF_PLAYERS_BY_HEIGHT) };
-    //     }
-    //     let xStart = this.getStart(_availablePositions.length);
-    //     let yStart = this.getStart(_availablePositions[0].length);
-    //     let xLimit = xStart + 3;
-    //     let yLimit = yStart + 3;
-    //     for (let x = xStart; x < xLimit; x++) {
-    //         for (let y = yStart; y < yLimit; y++) {
-    //             if (_.get(_availablePositions, `[${x}][${y}]`) === "") {
-    //                 return { x, y };
-    //             }
-    //             if (x === xLimit - 1 && y === yLimit - 1 && xLimit < _availablePositions.length && yLimit < _availablePositions[x].length) {
-    //                 xLimit++;
-    //                 yLimit++;
-    //                 xStart--;
-    //                 x = xStart;
-    //                 yStart--;
-    //                 y = yStart;
-    //             }
-    //         }
-    //     }
-    // }
-    // static getStart(size) {
-    //     return _.floor(size / 2);
-    // }
-    // generateAvaiblePositions(arrayOfPlayers = []) {
-    //     let availablePositions = [];
-    //     for (let startX = 0; startX < COUNT_OF_PLAYERS_BY_WIDTH; startX++) {
-    //         availablePositions[startX] = [];
-    //         for (let startY = 0; startY < COUNT_OF_PLAYERS_BY_HEIGHT; startY++) {
-    //             let owner = _.get(_.find(arrayOfPlayers, { startX: startX, startY: startY }), "id", "");
-    //             availablePositions[startX][startY] = owner;
-    //         }
-    //     }
-    //     return availablePositions;
-    // }
-    // defineAvailablePositions() {
-    //     Object.defineProperty(global._hackerpunk, "availablePositions", {
-    //         get: () => {
-    //             debug(`Get _avaiblePositions ${_availablePositions}`);
-    //             return _availablePositions;
-    //         }
-    //         // set: newValue => {
-    //         //   // let diff = difference(newValue, _players);
-    //         //   // debug(`Changed map ${diff}`);
-    //         //   // this.setMaps(diff);
-    //         //   return newValue;
-    //         // }
-    //     });
-    // }
     getCtxState(params) {
         this.ctxState = _.cloneDeep(this.state);
         if (_.get(params, "playerId")) {
@@ -78,14 +31,11 @@ class StateManager {
     }
 
     getState(params) {
-        let state = { ...this.state };
+        let state = _.cloneDeep(this.state);
         if (_.get(params, "playerId")) {
             let player = getPlayer(state, params);
             if (player) {
-                state = {
-                    ...state,
-                    player
-                };
+                state.player = player;
             }
         }
         return state;
@@ -95,7 +45,7 @@ class StateManager {
         let diff = difference(_.omit(state, ["currentTick"]), this.state);
         let player = _.get(state, "player");
         if (!_.isEmpty(diff)) {
-            return this.saveDiff(state, diff);
+            this.saveDiff(state, diff);
         }
         if (player && player.id) {
             state = { ...state, players: { ...state.players, [player.id]: { ...player } } };
@@ -108,16 +58,16 @@ class StateManager {
         _.each(diff, (value, key) => {
             switch (key) {
                 case "map": {
-                    promises.push(this.setMaps(value));
+                    this.safePromises.push(this.setMaps(value));
                     break;
                 }
                 case "access": {
-                    promises.push(this.setAccess(value));
+                    this.safePromises.push(this.setAccess(value));
                     break;
                 }
                 case "player": {
                     let player = { ...state.player };
-                    promises.push(this.setPlayers([{ ...player }]));
+                    this.safePromises.push(this.setPlayers([{ ...player }]));
                     this.state = {
                         ...state,
                         players: {
@@ -129,25 +79,22 @@ class StateManager {
                 }
 
                 case "players": {
-                    promises.push(this.setPlayers(value));
+                    this.safePromises.push(this.setPlayers(value));
                     break;
                 }
                 default: {
                 }
             }
         });
-        return Promise.all(promises).then(() => {
-            debug("Changes saves", this.state.currentTick, diff);
-        });
+        // return Promise.all(promises).then(() => {
+        //     debug("Changes saves", this.state.currentTick, diff);
+        //     return diff;
+        // });
+        return this.safePromises;
     }
 
     sync(newState) {
-        let diff = difference(_.omit(newState || this.ctxState, ["currentTick"]), _.omit(this.state, ["currentTick"]));
-        if (!_.isEmpty(diff)) {
-            this.saveDiff(newState || this.ctxState, diff);
-            this.state = _.merge(this.state, _.omit(this.ctxState, ["currentTick"]));
-        }
-        return diff;
+        return Promise.all(this.safePromises);
     }
 
     getStateFromDb() {

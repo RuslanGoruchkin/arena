@@ -1,7 +1,4 @@
-const dotenv = require("dotenv").config();
-const debug = require("debug")("bot:app");
-debug("process.env.RDS_DB", process.env.RDS_DB);
-debug("process.env.NODE_ENV", process.env.NODE_ENV);
+require('dotenv').config({ debug: process.env.DEBUG })
 module.exports = {
     development: {
         database: process.env.RDS_DB,

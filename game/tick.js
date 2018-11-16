@@ -3,32 +3,19 @@ import { gameModules } from "./gameModules";
 import { characters } from "./resources/characters";
 import { programs } from "./resources/programs";
 import { quests } from "./resources/quests";
-import { questRestartScene } from "./scenes/quests/questRestartScene";
-import { outroScene } from "./scenes/quests/outroScene";
-import { getPlayer, translate } from "./helpers/ctx";
+import { generateUpdateFromState, getPlayer, t } from "./helpers/ctx";
 import { enterScene, replyWithMarkdown } from "./helpers/TelegramApiHelpers";
+import stateManager from "./stateManager";
+
 const debug = require("debug")("bot:tick");
 
-export const tick = state => {
+export const tick = async state => {
     let { players } = state;
     state.currentTick = state.currentTick || 1;
-    debug(`Start tick ${state.currentTick}`);
+    // debug(`Start tick ${state.currentTick}`);
     _.each(players, player => {
-        debug(`Tick for ${player.id}`);
+        // debug(`Tick for ${player.id}`);
         let params = { playerId: player.id };
-        if (state.currentTick-player.sleepyTime > player.data.sleepyTick){
-            player.sleepy=true;
-            replyWithMarkdown(translate(state, "condition.sleepy"), params);
-        }
-        if (state.currentTick-player.thirstyTime > player.data.thirstyTick){
-            player.thirsty=true;
-            replyWithMarkdown(translate(state, "condition.sleepy"), params);
-        }
-        if (state.currentTick-player.hungryTime > player.data.hungryTick){
-            player.hungry=true;
-            replyWithMarkdown(translate(state, "condition.sleepy"), params);
-        }
-
 
         _.each(characters, item => {
             if (item.onTick) {
@@ -36,20 +23,56 @@ export const tick = state => {
             }
         });
 
+        if (state.player.sleepy === false && state.currentTick - player.sleepyTime > player.data.sleepyTick) {
+            state.player.sleepy = true;
+            replyWithMarkdown(t(state, "texts.condition.sleepy"), params);
+        }
+        if (state.player.thirsty === false && state.currentTick - player.thirstyTime > player.data.thirstyTick) {
+            state.player.thirsty = true;
+            replyWithMarkdown(t(state, "texts.condition.thirsty"), params);
+        }
+        if (state.player.hungry === false && state.currentTick - player.hungryTime > player.data.hungryTick) {
+            state.player.hungry = true;
+            //t(state, "texts.condition.hungry")
+            replyWithMarkdown(t(state, "texts.condition.hungry"), params);
+        }
+
+        if (player.data.timeoutStatus === true && player.data.timeout > state.currentTick) {
+            switch (player.data.activity) {
+                case "eating":
+                    replyWithMarkdown("You are no longer hungry. Your stats have been restored", params);
+                    break;
+                case "drinking":
+                    replyWithMarkdown("You are no longer thirsty. Your stats have been restored", params);
+                    break;
+                case "sleeping":
+                    replyWithMarkdown("You are no longer sleepy. Your stats have been restored", params);
+                    break;
+                default:
+                    break;
+            }
+            player.data.timeout = 0;
+            player.data.activity = "";
+            player.data.timeoutStatus = false;
+            enterScene(null, { ...params, scene: "mainScene" }, state);
+        }
+
         _.each(quests, (quest, key) => {
             let player = getPlayer(state, params);
+
             if (player && _.get(player, "currentQuest.name") === key) {
+                const ctx = generateUpdateFromState(state, params);
                 if (quest.fail(state, params)) {
-                    enterScene(null, { ...params, scene: "questRestartScene" }, state);
+                    enterScene(ctx, "questRestartScene", state);
                 }
-                if (quest.goal(state, params)) {
-                    enterScene(null, { ...params, scene: "outroScene" }, state);
+                if (quest.goal(state, params) && !_.get(player, "currentQuest.status")) {
+                    enterScene(ctx, "outroScene", state);
                 }
             }
         });
     });
-    debug(`End tick ${state.currentTick}`);
+    // debug(`End tick ${state.currentTick}`);
     state.currentTick++;
-
+    stateManager.setState(state);
     return state;
 };

@@ -33,7 +33,7 @@ describe("Util tests", () => {
     });
 
     describe("Add xp to player tests", function() {
-        it("Should add 10 xp to player", (done) => {
+        it("Should add 10 xp to player", done => {
             stateWrapper(done, (ctx, state) => {
                 let player = { XP: 0, playerId: "test" };
                 _.set(state, "players.test", player);
@@ -42,7 +42,7 @@ describe("Util tests", () => {
                 done();
             });
         });
-        it("Should add 100 xp to player", (done) => {
+        it("Should add 100 xp to player", done => {
             stateWrapper(done, (ctx, state) => {
                 let player = { XP: 0, playerId: "test" };
                 _.set(state, "players.test", player);

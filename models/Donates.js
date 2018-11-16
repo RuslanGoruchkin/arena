@@ -3,9 +3,9 @@ module.exports = (sequelize, DataTypes) => {
         "donates",
         {
             id: {
-              type: DataTypes.INTEGER,
-              primaryKey: true,
-              autoIncrement: true
+                type: DataTypes.INTEGER,
+                primaryKey: true,
+                autoIncrement: true
             },
             user: {
                 type: DataTypes.STRING,

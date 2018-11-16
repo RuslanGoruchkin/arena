@@ -1,6 +1,6 @@
 import Scene from "telegraf/scenes/base";
 import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, translate } from "../../helpers/ctx";
+import { stateWrapper, t } from "../../helpers/ctx";
 import _ from "lodash";
 import { enterScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
 
@@ -9,8 +9,8 @@ const teleportScene = new Scene("teleportScene");
 teleportScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         return keyboard(
-            translate(state, "texts.startScenes.teleportScene.goHome"),
-            [[translate(state, "texts.accept")], [translate(state, "texts.decline")]],
+            t(state, "texts.startScenes.teleportScene.goHome"),
+            [[t(state, "texts.accept")], [t(state, "texts.decline")]],
             { playerId: state.player.id }
         );
     })
@@ -21,7 +21,7 @@ teleportScene.on("text", ctx =>
         let text = ctx.update.message.text;
         let player = state.player;
         switch (text) {
-            case translate(state, "texts.accept"):
+            case t(state, "texts.accept"):
                 player.data.programsInMemory = [];
                 player.coordinates.xPos = player.personalCoordinates.xPos;
                 player.coordinates.yPos = player.personalCoordinates.yPos;
@@ -34,7 +34,7 @@ teleportScene.on("text", ctx =>
                 player.currentFloor = player.personalCoordinates.floor;
                 enterScene(ctx, "mainScene", state);
                 break;
-            case translate(state, "texts.decline"):
+            case t(state, "texts.decline"):
                 enterScene(ctx, "mainMenuScene", state);
                 break;
         }

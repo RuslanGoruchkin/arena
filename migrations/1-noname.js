@@ -1,6 +1,4 @@
-'use strict';
-
-var Sequelize = require('sequelize');
+var Sequelize = require("sequelize");
 
 /**
  * Actions summary:
@@ -16,61 +14,62 @@ var Sequelize = require('sequelize');
  **/
 
 var info = {
-    "revision": 1,
-    "name": "noname",
-    "created": "2018-10-25T07:17:40.289Z",
-    "comment": ""
+    revision: 1,
+    name: "noname",
+    created: "2018-10-25T07:17:40.289Z",
+    comment: ""
 };
 
-var migrationCommands = [{
+var migrationCommands = [
+    {
         fn: "createTable",
         params: [
             "donates",
             {
-                "id": {
-                    "type": Sequelize.INTEGER,
-                    "autoIncrement": true,
-                    "primaryKey": true
+                id: {
+                    type: Sequelize.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
                 },
-                "user": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                user: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "pack": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                pack: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "quantity": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                quantity: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "invoiceId": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                invoiceId: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "invoiceExId": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                invoiceExId: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "invoiceDate": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                invoiceDate: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "invoiceMetbhod": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                invoiceMetbhod: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "invoiceAgreement": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                invoiceAgreement: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "invoiceCurrency": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                invoiceCurrency: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "invoiceAmount": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                invoiceAmount: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 }
             },
             {}
@@ -81,25 +80,25 @@ var migrationCommands = [{
         params: [
             "floors",
             {
-                "id": {
-                    "type": Sequelize.INTEGER,
-                    "autoIncrement": true,
-                    "primaryKey": true
+                id: {
+                    type: Sequelize.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
                 },
-                "createdAt": {
-                    "type": Sequelize.DATE
+                createdAt: {
+                    type: Sequelize.DATE
                 },
-                "updatedAt": {
-                    "type": Sequelize.DATE
+                updatedAt: {
+                    type: Sequelize.DATE
                 },
-                "name": {
-                    "type": Sequelize.STRING
+                name: {
+                    type: Sequelize.STRING
                 },
-                "floor": {
-                    "type": Sequelize.STRING
+                floor: {
+                    type: Sequelize.STRING
                 },
-                "serverSize": {
-                    "type": Sequelize.INTEGER
+                serverSize: {
+                    type: Sequelize.INTEGER
                 }
             },
             {}
@@ -110,24 +109,24 @@ var migrationCommands = [{
         params: [
             "mapItems",
             {
-                "id": {
-                    "type": Sequelize.STRING,
-                    "primaryKey": true
+                id: {
+                    type: Sequelize.STRING,
+                    primaryKey: true
                 },
-                "x": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                x: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "y": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                y: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "floor": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                floor: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "data": {
-                    "type": Sequelize.JSON
+                data: {
+                    type: Sequelize.JSON
                 }
             },
             {}
@@ -138,109 +137,175 @@ var migrationCommands = [{
         params: [
             "players",
             {
-                "id": {
-                    "type": Sequelize.STRING,
-                    "primaryKey": true
+                id: {
+                    type: Sequelize.STRING,
+                    primaryKey: true
                 },
-                "nickname": {
-                    "type": Sequelize.STRING,
-                    "allowNull": false
+                nickname: {
+                    type: Sequelize.STRING,
+                    allowNull: false
                 },
-                "startX": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                startX: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "startY": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                startY: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "balanceCoin": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                currentRoom: {
+                    type: Sequelize.STRING,
+                    allowNull: true
                 },
-                "balanceToken": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                sleepy: {
+                    type: Sequelize.BOOLEAN
                 },
-                "level": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                hungry: {
+                    type: Sequelize.BOOLEAN
                 },
-                "infamousLevel": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                thirsty: {
+                    type: Sequelize.BOOLEAN
                 },
-                "userDonateLink": {
-                    "type": Sequelize.STRING,
-                    "allowNull": true
+                sleepyTime: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "telegramId": {
-                    "type": Sequelize.STRING,
-                    "allowNull": true
+                hungryTime: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "data": {
-                    "type": Sequelize.JSON
+                thirstyTime: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "server": {
-                    "type": Sequelize.JSON
+                strength: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "attackPrograms": {
-                    "type": Sequelize.JSON
+                dexterity: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "basement": {
-                    "type": Sequelize.JSON
+                intelligence: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "personalCoordinates": {
-                    "type": Sequelize.JSON
+                wisdom: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "currentFloor": {
-                    "type": Sequelize.STRING,
-                    "allowNull": true
+                vitality: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "currentQuest": {
-                    "type": Sequelize.JSON
+                balanceCoin: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "language": {
-                    "type": Sequelize.STRING,
-                    "allowNull": true
+                balanceToken: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "walletsCount": {
-                    "type": Sequelize.INTEGER,
-                    "allowNull": false
+                level: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "moduleForBuy": {
-                    "type": Sequelize.JSON
+                infamousLevel: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
                 },
-                "comics": {
-                    "type": Sequelize.JSON
+                userDonateLink: {
+                    type: Sequelize.STRING,
+                    allowNull: true
                 },
-                "hackStatus": {
-                    "type": Sequelize.BOOLEAN
+                telegramId: {
+                    type: Sequelize.STRING,
+                    allowNull: true
                 },
-                "finalFightWasStarted": {
-                    "type": Sequelize.BOOLEAN
+                inventory: {
+                    type: Sequelize.JSON
                 },
-                "alreadyStolen": {
-                    "type": Sequelize.BOOLEAN
+                fastEquipItem: {
+                    type: Sequelize.JSON
                 },
-                "selectedCharacter": {
-                    "type": Sequelize.JSON
+                rightHand: {
+                    type: Sequelize.JSON
                 },
-                "selectedComics": {
-                    "type": Sequelize.STRING,
-                    "allowNull": true
+                leftHand: {
+                    type: Sequelize.JSON
                 },
-                "corporation": {
-                    "type": Sequelize.STRING,
-                    "allowNull": true
+                armor: {
+                    type: Sequelize.JSON
                 },
-                "createdAt": {
-                    "type": Sequelize.DATE,
-                    "allowNull": false
+                scrolls: {
+                    type: Sequelize.JSON
                 },
-                "updatedAt": {
-                    "type": Sequelize.DATE,
-                    "allowNull": false
+                potions: {
+                    type: Sequelize.JSON
+                },
+                data: {
+                    type: Sequelize.JSON
+                },
+                server: {
+                    type: Sequelize.JSON
+                },
+                attackPrograms: {
+                    type: Sequelize.JSON
+                },
+                basement: {
+                    type: Sequelize.JSON
+                },
+                personalCoordinates: {
+                    type: Sequelize.JSON
+                },
+                currentFloor: {
+                    type: Sequelize.STRING,
+                    allowNull: true
+                },
+                currentQuest: {
+                    type: Sequelize.JSON
+                },
+                language: {
+                    type: Sequelize.STRING,
+                    allowNull: true
+                },
+                walletsCount: {
+                    type: Sequelize.INTEGER,
+                    allowNull: false
+                },
+                moduleForBuy: {
+                    type: Sequelize.JSON
+                },
+                comics: {
+                    type: Sequelize.JSON
+                },
+                hackStatus: {
+                    type: Sequelize.BOOLEAN
+                },
+                finalFightWasStarted: {
+                    type: Sequelize.BOOLEAN
+                },
+                alreadyStolen: {
+                    type: Sequelize.BOOLEAN
+                },
+                selectedCharacter: {
+                    type: Sequelize.JSON
+                },
+                selectedComics: {
+                    type: Sequelize.STRING,
+                    allowNull: true
+                },
+                corporation: {
+                    type: Sequelize.STRING,
+                    allowNull: true
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false
                 }
             },
             {}
@@ -251,24 +316,24 @@ var migrationCommands = [{
         params: [
             "accesses",
             {
-                "id": {
-                    "type": Sequelize.INTEGER,
-                    "autoIncrement": true,
-                    "primaryKey": true
+                id: {
+                    type: Sequelize.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
                 },
-                "owner": {
-                    "type": Sequelize.STRING
+                owner: {
+                    type: Sequelize.STRING
                 },
-                "mapItemId": {
-                    "type": Sequelize.STRING,
-                    "onUpdate": "CASCADE",
-                    "onDelete": "CASCADE",
-                    "references": {
-                        "model": "mapItems",
-                        "key": "id"
+                mapItemId: {
+                    type: Sequelize.STRING,
+                    onUpdate: "CASCADE",
+                    onDelete: "CASCADE",
+                    references: {
+                        model: "mapItems",
+                        key: "id"
                     },
-                    "allowNull": true,
-                    "name": "mapItemId"
+                    allowNull: true,
+                    name: "mapItemId"
                 }
             },
             {}
@@ -279,30 +344,30 @@ var migrationCommands = [{
         params: [
             "sessions",
             {
-                "id": {
-                    "type": Sequelize.STRING,
-                    "primaryKey": true
+                id: {
+                    type: Sequelize.STRING,
+                    primaryKey: true
                 },
-                "session": {
-                    "type": Sequelize.JSON
+                session: {
+                    type: Sequelize.JSON
                 },
-                "createdAt": {
-                    "type": Sequelize.DATE,
-                    "allowNull": false
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false
                 },
-                "updatedAt": {
-                    "type": Sequelize.DATE,
-                    "allowNull": false
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false
                 },
-                "playerId": {
-                    "type": Sequelize.STRING,
-                    "onUpdate": "CASCADE",
-                    "onDelete": "SET NULL",
-                    "references": {
-                        "model": "players",
-                        "key": "id"
+                playerId: {
+                    type: Sequelize.STRING,
+                    onUpdate: "CASCADE",
+                    onDelete: "SET NULL",
+                    references: {
+                        model: "players",
+                        key: "id"
                     },
-                    "allowNull": true
+                    allowNull: true
                 }
             },
             {}
@@ -314,7 +379,7 @@ var migrationCommands = [{
             "mapItems",
             ["x", "y", "floor"],
             {
-                "indicesType": "UNIQUE"
+                indicesType: "UNIQUE"
             }
         ]
     }
@@ -322,20 +387,16 @@ var migrationCommands = [{
 
 module.exports = {
     pos: 0,
-    up: function(queryInterface, Sequelize)
-    {
+    up: function(queryInterface, Sequelize) {
         var index = this.pos;
         return new Promise(function(resolve, reject) {
             function next() {
-                if (index < migrationCommands.length)
-                {
+                if (index < migrationCommands.length) {
                     let command = migrationCommands[index];
-                    console.log("[#"+index+"] execute: " + command.fn);
+                    console.log("[#" + index + "] execute: " + command.fn);
                     index++;
                     queryInterface[command.fn].apply(queryInterface, command.params).then(next, reject);
-                }
-                else
-                    resolve();
+                } else resolve();
             }
             next();
         });

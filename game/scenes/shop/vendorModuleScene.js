@@ -1,6 +1,6 @@
 import Scene from "telegraf/scenes/base";
 import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, translate } from "../../helpers/ctx";
+import { stateWrapper, t } from "../../helpers/ctx";
 import { enterScene } from "../../helpers/TelegramApiHelpers";
 
 const vendorModuleScene = new Scene("vendorModuleScene");
@@ -8,8 +8,8 @@ const vendorModuleScene = new Scene("vendorModuleScene");
 vendorModuleScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         return keyboard(
-            translate(state, "texts.selectAction"),
-            [[translate(state, "texts.shopScenes.vendorModuleScene.buyModule")], [translate(state, "texts.back")]],
+            t(state, "texts.selectAction"),
+            [[t(state, "texts.shopScenes.vendorModuleScene.buyModule")], [t(state, "texts.back")]],
             { playerId: state.player.id }
         );
     })
@@ -18,9 +18,9 @@ vendorModuleScene.enter(ctx =>
 vendorModuleScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let text = ctx.update.message.text;
-        if (text === translate(state, "texts.back")) {
+        if (text === t(state, "texts.back")) {
             enterScene(ctx, "mainScene", state);
-        } else if (text === translate(state, "texts.shopScenes.vendorModuleScene.buyModule")) {
+        } else if (text === t(state, "texts.shopScenes.vendorModuleScene.buyModule")) {
             enterScene(ctx, "buyModuleScene", state);
         }
     })

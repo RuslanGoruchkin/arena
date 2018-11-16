@@ -1,17 +1,17 @@
 import _ from "lodash";
 import { addXPToPlayerByProgramLevel, detect, hackModule } from "../util";
 import { gameModules } from "../gameModules";
-import { getModule, getPlayer, setModule, translate } from "../helpers/ctx";
+import { generateUpdateFromState, getModule, getPlayer, setModule, t } from "../helpers/ctx";
 import { enterScene, replyWithMarkdown } from "../helpers/TelegramApiHelpers";
 
-let hack = function(state, params) {
-    let { player, program, module, data } = params;
-    let attack = data.baseHack + (program.level - 1) * 10 + player.selectedCharacter.processing * 10;
+const hack = async (state, params) => {
+    const { player, program, module, data } = params;
+    const attack = data.baseHack + (program.level - 1) * 10 + player.selectedCharacter.processing * 10;
     let defence = module.defence;
     let multiplier = 0;
     for (let x = program.module.x - 1; x < program.module.x + 2; x++) {
         for (let y = program.module.y - 1; y < program.module.y + 2; y++) {
-            let areaModule = getModule(state, { ...params, floor: program.module.currentFloor, x, y });
+            const areaModule = getModule(state, { ...params, floor: program.module.currentFloor, x, y });
             if (
                 (x === program.module.x && y === program.module.y) ||
                 areaModule.character === gameModules.space.character ||
@@ -28,20 +28,20 @@ let hack = function(state, params) {
     if (_.random(0, attack) > _.random(0, defence)) {
         state = hackModule(state, { ...params, program });
         state = detect(state, ...params, program);
-        let hackedModuleText = translate(state, "texts.programs.hackedModule");
-        replyWithMarkdown(hackedModuleText, params);
+        const hackedModuleText = t(state, "texts.programs.hackedModule");
+        replyWithMarkdown(hackedModuleText, params, state);
     } else {
-        let chance = (attack / (attack + defence)) * 100;
-        let failAttemptText = translate(state, "texts.programs.failAttempt", {
+        const chance = (attack / (attack + defence)) * 100;
+        const failAttemptText = t(state, "texts.programs.failAttempt", {
             ...params,
             chance: chance.toFixed(2)
         });
-        replyWithMarkdown(failAttemptText, params);
+        replyWithMarkdown(failAttemptText, params, state);
     }
 };
 
-let expandModules = function(state, params) {
-    let { program, player } = params;
+const expandModules = (state, params) => {
+    const { program, player } = params;
     let potential = program.level + player.selectedCharacter.logic;
     let startX = program.module.x - 1;
     let startY = program.module.y - 1;
@@ -50,7 +50,7 @@ let expandModules = function(state, params) {
         let isNeedExpand = true;
         for (let i = startX; i < startX + size + 1; i++) {
             for (let j = startY; j < startY + size + 1; j++) {
-                let module = getModule(state, { ...params, floor: player.currentFloor, x: i, y: j });
+                const module = getModule(state, { ...params, floor: player.currentFloor, x: i, y: j });
                 if (!module.isVisible) {
                     isNeedExpand = false;
                 }
@@ -61,9 +61,9 @@ let expandModules = function(state, params) {
             startX--;
             startY--;
         }
-        let x = _.random(startX, startX + size);
-        let y = _.random(startY, startY + size);
-        let module = getModule(state, { ...params, floor: player.currentFloor, x, y });
+        const x = _.random(startX, startX + size);
+        const y = _.random(startY, startY + size);
+        const module = getModule(state, { ...params, floor: player.currentFloor, x, y });
         if (!module.isVisible) {
             state = setModule(state, { ...module, isVisible: true }, { ...params, floor: player.currentFloor, x, y });
             potential--;
@@ -71,7 +71,7 @@ let expandModules = function(state, params) {
     }
     return state;
 };
-export let programs = {
+export const programs = {
     cheatHack: {
         key: "hack",
         name: "Hack",
@@ -81,13 +81,13 @@ export let programs = {
         isCasting: false,
         onTick: (state, params) => {
             let player = getPlayer(state, params);
-            let data = player.data;
+            let { data } = player;
             if (!(player && player.personalCoordinates)) return state;
-            let currentTick = state.currentTick;
+            const { currentTick } = state;
             if (!data) return state;
             for (let i = player.attackPrograms.length - 1; i >= 0; i--) {
                 if (player.attackPrograms[i].name === programs.hack.name) {
-                    let program = player.attackPrograms[i];
+                    const program = player.attackPrograms[i];
                     if (program.isCasting) {
                         program.startCastingTimer = true;
                     }
@@ -100,11 +100,11 @@ export let programs = {
                         };
                     }
                     if (program.endCastingTime === currentTick) {
-                        let element = _.indexOf(player.attackPrograms, program);
+                        const element = _.indexOf(player.attackPrograms, program);
                         if (~element) {
                             player.attackPrograms.splice(element, 1);
                         }
-                        let module = getModule(state, {
+                        const module = getModule(state, {
                             ...params,
                             floor: program.module.currentFloor,
                             x: program.module.x,
@@ -114,15 +114,16 @@ export let programs = {
                             state = hackModule(state, { ...params, program });
                             state = detect(state, { ...params, program });
                             player.data.hackStatus++;
-                            let hackedModuleText = translate(state, "texts.programs.hackedModule", params);
-                            replyWithMarkdown(hackedModuleText, params);
+                            const hackedModuleText = t(state, "texts.programs.hackedModule", params);
+                            replyWithMarkdown(hackedModuleText, params, state);
                         } else {
-                            let moduleAlreadyHacked = translate(state, "texts.programs.moduleAlreadyHacked", params);
-                            replyWithMarkdown(moduleAlreadyHacked, params);
+                            const moduleAlreadyHacked = t(state, "texts.programs.moduleAlreadyHacked", params);
+                            replyWithMarkdown(moduleAlreadyHacked, params, state);
                         }
                         program.isCasting = false;
-                        program.endCastingTime = undefined;
-                        enterScene(state, { ...params, scene: "mainScene" }, state);
+                        program.endCastingTime = null;
+                        const ctx = generateUpdateFromState(state, params);
+                        enterScene(ctx, "mainScene", state);
                     }
                 }
             }
@@ -137,13 +138,13 @@ export let programs = {
         noise: 200,
         isCasting: false,
         onTick: (state, params) => {
-            let player = getPlayer(state, params);
+            const player = getPlayer(state, params);
             if (!(player && player.personalCoordinates)) return state;
-            let data = player.data;
+            let { data } = player;
             let currentTick = state.currentTick;
             for (let i = player.attackPrograms.length - 1; i >= 0; i--) {
                 if (player.attackPrograms[i].name === programs.hack.name) {
-                    let program = player.attackPrograms[i];
+                    const program = player.attackPrograms[i];
                     if (program.isCasting) {
                         program.startCastingTimer = true;
                     }
@@ -156,11 +157,11 @@ export let programs = {
                         };
                     }
                     if (program.endCastingTime === currentTick) {
-                        let element = _.indexOf(player.attackPrograms, program);
+                        const element = _.indexOf(player.attackPrograms, program);
                         if (~element) {
                             player.attackPrograms.splice(element, 1);
                         }
-                        let module = getModule(state, ...params, {
+                        const module = getModule(state, ...params, {
                             floor: program.module.currentFloor,
                             x: program.module.x,
                             y: program.module.y
@@ -168,12 +169,13 @@ export let programs = {
                         if (!module.isBroken) {
                             state = hack(state, { ...params, player, program, module, data });
                         } else {
-                            let moduleAlreadyHackedText = translate(state, "texts.programs.moduleAlreadyHacked", params);
-                            replyWithMarkdown(moduleAlreadyHackedText, params);
+                            const moduleAlreadyHackedText = t(state, "texts.programs.moduleAlreadyHacked", params);
+                            replyWithMarkdown(moduleAlreadyHackedText, params, state);
                         }
                         program.isCasting = false;
-                        program.endCastingTime = undefined;
-                        enterScene(state, { ...params, scene: "mainScene" }, state);
+                        program.endCastingTime = null;
+                        const ctx = generateUpdateFromState(state, params);
+                        enterScene(ctx, "mainScene", state);
                     }
                 }
             }
@@ -188,12 +190,12 @@ export let programs = {
         noise: 50,
         isCasting: false,
         onTick: (state, params) => {
-            let player = getPlayer(state, params);
+            const player = getPlayer(state, params);
             if (!(player && player.personalCoordinates)) return state;
-            let currentTick = state.currentTick;
+            const { currentTick } = state;
             for (let i = player.attackPrograms.length - 1; i >= 0; i--) {
                 if (player.attackPrograms[i].name === programs.scan.name) {
-                    let program = player.attackPrograms[i];
+                    const program = player.attackPrograms[i];
                     if (program.isCasting) {
                         program.startCastingTimer = true;
                     }
@@ -206,7 +208,7 @@ export let programs = {
                         };
                     }
                     if (program.endCastingTime === currentTick) {
-                        let element = _.indexOf(player.attackPrograms, program);
+                        const element = _.indexOf(player.attackPrograms, program);
                         if (~element) {
                             player.attackPrograms.splice(element, 1);
                         }
@@ -214,8 +216,9 @@ export let programs = {
                         state = expandModules(state, { ...params, program });
                         state = addXPToPlayerByProgramLevel(state, { ...params, program: player.attackProgram });
                         program.isCasting = false;
-                        program.endCastingTime = undefined;
-                        enterScene(state, { ...params, scene: "mainScene" }, state);
+                        program.endCastingTime = null;
+                        const ctx = generateUpdateFromState(state, params);
+                        enterScene(ctx, "mainScene", state);
                     }
                 }
             }
@@ -230,7 +233,7 @@ export let programs = {
         noise: 100,
         isCasting: false,
         onTick: (state, params) => {
-            let player = getPlayer(state, params);
+            const player = getPlayer(state, params);
             if (!(player && player.personalCoordinates)) return state;
             let program;
             for (let i = player.attackPrograms.length - 1; i >= 0; i--) {
@@ -253,13 +256,13 @@ export let programs = {
         noise: 300,
         isCasting: false,
         onTick: (state, params) => {
-            let player = getPlayer(state, params);
+            const player = getPlayer(state, params);
             if (!(player && player.personalCoordinates)) return state;
-            let data = player.data;
+            let { data } = player;
             let currentTick = state.currentTick;
             for (let i = player.attackPrograms.length - 1; i >= 0; i--) {
                 if (player.attackPrograms[i].name === programs.warriorHack.name) {
-                    let program = player.attackPrograms[i];
+                    const program = player.attackPrograms[i];
                     if (program.isCasting) {
                         program.startCastingTimer = true;
                     }
@@ -272,11 +275,11 @@ export let programs = {
                         };
                     }
                     if (program.endCastingTime === currentTick) {
-                        let element = _.indexOf(player.attackPrograms, program);
+                        const element = _.indexOf(player.attackPrograms, program);
                         if (~element) {
                             player.attackPrograms.splice(element, 1);
                         }
-                        let module = getModule(state, {
+                        const module = getModule(state, {
                             ...params,
                             floor: program.module.currentFloor,
                             x: program.module.x,
@@ -285,12 +288,13 @@ export let programs = {
                         if (!module.isBroken) {
                             hack(state, { ...params, player, program, module, data });
                         } else {
-                            let moduleAlreadyHackedText = translate(state, "texts.programs.moduleAlreadyHacked", params);
-                            replyWithMarkdown(moduleAlreadyHackedText, params);
+                            const moduleAlreadyHackedText = t(state, "texts.programs.moduleAlreadyHacked", params);
+                            replyWithMarkdown(moduleAlreadyHackedText, params, state);
                         }
                         program.isCasting = false;
-                        program.endCastingTime = undefined;
-                        enterScene(state, { ...params, scene: "mainScene" }, state);
+                        program.endCastingTime = null;
+                        const ctx = generateUpdateFromState(state, params);
+                        enterScene(ctx, "mainScene", state);
                     }
                 }
             }
@@ -305,13 +309,13 @@ export let programs = {
         noise: 150,
         isCasting: false,
         onTick: (state, params) => {
-            let player = getPlayer(state, params);
+            const player = getPlayer(state, params);
             if (!(player && player.personalCoordinates)) return state;
-            let data = player.data;
+            let { data } = player;
             let currentTick = state.currentTick;
             for (let i = player.attackPrograms.length - 1; i >= 0; i--) {
                 if (player.attackPrograms[i].name === programs.mageHack.name) {
-                    let program = player.attackPrograms[i];
+                    const program = player.attackPrograms[i];
                     if (program.isCasting) {
                         program.startCastingTimer = true;
                     }
@@ -324,11 +328,11 @@ export let programs = {
                         };
                     }
                     if (program.endCastingTime === currentTick) {
-                        let element = _.indexOf(player.attackPrograms, program);
+                        const element = _.indexOf(player.attackPrograms, program);
                         if (~element) {
                             player.attackPrograms.splice(element, 1);
                         }
-                        let module = getModule(state, {
+                        const module = getModule(state, {
                             ...params,
                             floor: program.module.currentFloor,
                             x: program.module.x,
@@ -337,12 +341,13 @@ export let programs = {
                         if (!module.isBroken) {
                             hack(state, { ...params, player, program, module, data });
                         } else {
-                            let moduleAlreadyHackedText = translate(state, "texts.programs.moduleAlreadyHacked", params);
-                            replyWithMarkdown(moduleAlreadyHackedText, params);
+                            const moduleAlreadyHackedText = t(state, "texts.programs.moduleAlreadyHacked", params);
+                            replyWithMarkdown(moduleAlreadyHackedText, params, state);
                         }
                         program.isCasting = false;
-                        program.endCastingTime = undefined;
-                        enterScene(state, { ...params, scene: "mainScene" }, state);
+                        program.endCastingTime = null;
+                        const ctx = generateUpdateFromState(state, params);
+                        enterScene(ctx, "mainScene", state);
                     }
                 }
             }
@@ -367,12 +372,12 @@ export let programs = {
         castingTime: 20,
         isCasting: false,
         onTick: (state, params) => {
-            let player = getPlayer(state, params);
+            const player = getPlayer(state, params);
             if (!(player && player.personalCoordinates)) return state;
-            let currentTick = state.currentTick;
+            const { currentTick } = state;
             for (let i = player.attackPrograms.length - 1; i >= 0; i--) {
                 if (player.attackPrograms[i].name === programs.prophetScan.name) {
-                    let program = player.attackPrograms[i];
+                    const program = player.attackPrograms[i];
                     if (program.isCasting) {
                         program.startCastingTimer = true;
                     }
@@ -385,7 +390,7 @@ export let programs = {
                         };
                     }
                     if (program.endCastingTime === currentTick) {
-                        let element = _.indexOf(player.attackPrograms, program);
+                        const element = _.indexOf(player.attackPrograms, program);
                         if (~element) {
                             player.attackPrograms.splice(element, 1);
                         }
@@ -393,8 +398,9 @@ export let programs = {
                         state = expandModules(state, { ...params, program, player });
                         state = addXPToPlayerByProgramLevel(state, { ...params, program: player.attackProgram });
                         program.isCasting = false;
-                        program.endCastingTime = undefined;
-                        enterScene(state, { ...params, scene: "mainScene" }, state);
+                        program.endCastingTime = null;
+                        const ctx = generateUpdateFromState(state, params);
+                        enterScene(ctx, "mainScene", state);
                     }
                 }
             }
@@ -409,14 +415,13 @@ export let programs = {
         noise: 150,
         isCasting: false,
         onTick: (state, params) => {
-            let player = getPlayer(state, params);
+            const player = getPlayer(state, params);
             if (!(player && player.personalCoordinates)) return state;
-            let data = player.data;
+            let { data } = player;
             let currentTick = state.currentTick;
-
             for (let i = player.attackPrograms.length - 1; i >= 0; i--) {
                 if (player.attackPrograms[i].name === programs.nomadHack.name) {
-                    let program = player.attackPrograms[i];
+                    const program = player.attackPrograms[i];
                     if (program.isCasting) {
                         program.startCastingTimer = true;
                     }
@@ -429,11 +434,11 @@ export let programs = {
                         };
                     }
                     if (program.endCastingTime === currentTick) {
-                        let element = _.indexOf(player.attackPrograms, program);
+                        const element = _.indexOf(player.attackPrograms, program);
                         if (~element) {
                             player.attackPrograms.splice(element, 1);
                         }
-                        let module = getModule(state, {
+                        const module = getModule(state, {
                             ...params,
                             floor: program.module.currentFloor,
                             x: program.module.x,
@@ -442,12 +447,13 @@ export let programs = {
                         if (!module.isBroken) {
                             state = hack(state, { ...params, player, program, module, data });
                         } else {
-                            let moduleAlreadyHackedText = translate(state, "texts.programs.moduleAlreadyHacked", params);
-                            replyWithMarkdown(moduleAlreadyHackedText, params);
+                            const moduleAlreadyHackedText = t(state, "texts.programs.moduleAlreadyHacked", params);
+                            replyWithMarkdown(moduleAlreadyHackedText, params, state);
                         }
                         program.isCasting = false;
-                        program.endCastingTime = undefined;
-                        enterScene(state, { ...params, scene: "mainScene" }, state);
+                        program.endCastingTime = null;
+                        const ctx = generateUpdateFromState(state, params);
+                        enterScene(ctx, "mainScene", state);
                     }
                 }
             }

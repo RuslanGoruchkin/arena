@@ -1,12 +1,6 @@
 import _ from "lodash";
 import { getServerSizeFromFloor, isNeedFog } from "./util";
-import { gameModules } from "./gameModules";
 import { getPlayer, setModule } from "./helpers/ctx";
-
-let debug = require("debug")("bot:map");
-
-export let widthOfScreen = 3;
-export let heightOfScreen = 3;
 
 export function addPlayerToFloor(state, params) {
     let player = state.player || {};

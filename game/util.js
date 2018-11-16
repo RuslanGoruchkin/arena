@@ -1,3 +1,4 @@
+/* eslint-disable destructuring/no-rename */
 import _ from "lodash";
 import { createServerFromInventory, createServerFromTemplate } from "./server";
 import { characters } from "./resources/characters";
@@ -7,10 +8,10 @@ import { gameModules } from "./gameModules";
 import { basementServers } from "./resources/templates/basementServers";
 import { programs } from "./resources/programs";
 import execPromise from "@chmontgomery/exec-promise";
-import { getModule, getPlayer, isPlayerHaveAccess, setModule, translate } from "./helpers/ctx";
+import { getModule, getPlayer, isPlayerHaveAccess, setModule, t } from "./helpers/ctx";
 import { questTemplate } from "./resources/templates/questTemplate";
 import stateManager from "./stateManager";
-import { enterScene, replyWithMarkdown } from "./helpers/TelegramApiHelpers";
+import { replyWithMarkdown } from "./helpers/TelegramApiHelpers";
 
 let uniqid = require("uniqid");
 let debug = require("debug")("bot:util");
@@ -20,8 +21,7 @@ export let basements = ["dangerousProcessors", "valleyOfMoney", "programParadise
 export let widthOfScreen = 3;
 export let heightOfScreen = 3;
 export const NICKNAME_LENGTH = 8;
-const COUNT_OF_PLAYERS_BY_WIDTH = process.env.COUNT_OF_PLAYERS_BY_WIDTH;
-const COUNT_OF_PLAYERS_BY_HEIGHT = process.env.COUNT_OF_PLAYERS_BY_HEIGHT;
+const { COUNT_OF_PLAYERS_BY_WIDTH, COUNT_OF_PLAYERS_BY_HEIGHT } = process.env;
 
 export const getData = () => {
     return {};
@@ -66,7 +66,6 @@ export const startNewGame = async (state, params) => {
     let character = ctx.session.character || characters.defaultCharacter.class;
     state = { ...state, player: getDefaultPlayer() };
     let player = state.player;
-    let serverSize = 4;
 
     player.id = ctx.from.id;
     params = { ...params, playerId: player.id };
@@ -76,38 +75,8 @@ export const startNewGame = async (state, params) => {
     };
     player.nickname = generatePlayerNickname();
     player.selectedCharacter = getItemByClassCaption(character, characters);
-    player.server = createServerFromTemplate(player.selectedCharacter.server);
-    player.currentFloor = "4x4";
     player.telegramId = ctx.from.id;
-
-    if (_.get(player, "data.inventory") && _.get(player, "data.inventory").length !== 0) {
-        player.server = createServerFromInventory(player.data.inventory);
-    }
-    player.basement = {};
-    player.basement.archetype = getItemByClassCaption(_.sample(basements), basementServers);
-    player.basement.server = createServerFromTemplate(player.basement.archetype.server);
-    let { coordinates, position } = defineStartCoordinates(state, { playerId: player.id, serverSize });
-    player.startX = position.x;
-    player.startY = position.y;
-
-    player.personalCoordinates = coordinates;
-    player.personalCoordinates.floor = `${serverSize}x${serverSize}`;
-
-    player.coordinates = {
-        xPos: player.personalCoordinates.xPos,
-        yPos: player.personalCoordinates.yPos
-    };
-    params = {
-        ...params,
-        x: player.personalCoordinates.xPos,
-        y: player.personalCoordinates.yPoss,
-        floor: player.currentFloor
-    };
     player.userDonateLink = await userLink(player.id);
-    state = grantAccess(state, params);
-    state = grantAccess(state, { ...params, floor: "4x4_tech", playerId: uniqid(`basement-${player.id}`) });
-    state = addPlayerToFloor(state, { ...params });
-    state = addPlayerToFloor(state, { ...params, floor: "4x4_tech" });
     return state;
 };
 
@@ -142,7 +111,7 @@ export const placeModuleToInventory = (state, params) => {
         data.inventory.push(_.cloneDeep(module));
         setModule(state, _.cloneDeep(gameModules.availableSpace), null);
     }
-    enterScene(ctx, "mainScene", state);
+    return state;
 };
 
 export function setupStartQuest(state, params) {
@@ -162,13 +131,12 @@ export function setupStartQuest(state, params) {
     quest.server = createServerFromTemplate(player.server);
     player.quest = quest;
     state = grantAccess(state, { ...params, ...player.coordinates });
-    enterScene(ctx, "mainScene", state);
     return state;
 }
 export function getOwnerModule(state, params) {
     let { floor, x, y } = params;
     let ownerId;
-    const access = state.access;
+    const { access } = state;
     _.forOwn(access[floor], (value, playerId) => {
         if (_.get(access, `${floor}[${playerId}][${x}][${y}]`)) {
             ownerId = playerId;
@@ -225,9 +193,9 @@ export function defineStartPosition(state, params) {
 }
 
 export function grantAccess(state, params) {
-    let { floor, playerId, xPos, yPos } = params;
-    let serverSize = getServerSizeFromFloor(floor);
-    let access = state.access;
+    const { floor, playerId, xPos, yPos } = params;
+    const serverSize = getServerSizeFromFloor(floor);
+    const access = state.access;
     if (!_.has(access, floor)) {
         access[floor] = {};
     }
@@ -241,11 +209,11 @@ export function grantAccess(state, params) {
 }
 
 export const assembleServerToInventory = (state, params) => {
-    let player = state.player;
-    let personalCoordinates = player.personalCoordinates;
-    let data = player.data;
-    let floor = personalCoordinates.floor;
-    let numberOfFloor = floor.match(/(.*)x/) ? parseInt(floor.match(/(.*)x/)[1]) : 4;
+    const { player } = state;
+    const personalCoordinates = player.personalCoordinates;
+    const { data } = player;
+    const floor = personalCoordinates.floor;
+    const numberOfFloor = floor.match(/(.*)x/) ? parseInt(floor.match(/(.*)x/)[1]) : 4;
     for (let x = personalCoordinates.xPos; x < personalCoordinates.xPos + numberOfFloor; x++) {
         for (let y = personalCoordinates.yPos; y < personalCoordinates.yPos + numberOfFloor; y++) {
             let module = getModule(state, { floor, x, y });
@@ -259,7 +227,7 @@ export const assembleServerToInventory = (state, params) => {
                 data.inventory.push(_.cloneDeep(module));
             }
             state = setModule(state, { ...gameModules.space }, { floor, x, y });
-            state.access[floor][player.id][x][y] = undefined;
+            state.access[floor][player.id][x][y] = null;
         }
     }
     stateManager.setState(state);
@@ -275,8 +243,8 @@ export const generatePlayerNickname = () => {
 };
 
 export const getPlayerScreen = (state, params) => {
-    let player = state.player;
-    let coordinates = player.coordinates;
+    const { player } = state;
+    const coordinates = player.coordinates;
     let screen = "```\n";
     for (let x = coordinates.xPos - widthOfScreen; x <= coordinates.xPos + widthOfScreen; x++) {
         for (let y = coordinates.yPos - heightOfScreen; y <= coordinates.yPos + heightOfScreen; y++) {
@@ -330,11 +298,11 @@ export function generateBorders(enemyServer) {
 }
 
 const getAdditionalInformation = (state, params) => {
-    let player = state.player;
-    let floor = player.currentFloor;
-    let coordinates = player.coordinates;
-    let x = coordinates.xPos;
-    let y = coordinates.yPos;
+    const { player } = state;
+    const floor = player.currentFloor;
+    const coordinates = player.coordinates;
+    const x = coordinates.xPos;
+    const y = coordinates.yPos;
     params = { ...params, floor, x, y };
 
     let module = getModule(state, params);
@@ -358,20 +326,20 @@ const getAdditionalInformation = (state, params) => {
             availableCash = module.volume;
         }
     }
-    let owner = ownerId === player.id ? translate(state, "texts.you") : translate(state, "texts.system");
+    let owner = ownerId === player.id ? t(state, "texts.you") : t(state, "texts.system");
     let currentQuest = _.get(player, "currentQuest.name")
-        ? translate(state, `texts.quests.${player.currentQuest.name}.description`)
-        : translate(state, "texts.rooms.finishedQuests");
+        ? t(state, `texts.quests.${player.currentQuest.name}.description`)
+        : t(state, "texts.quests.finishedQuests");
     let information = {
         character: module.character,
-        moduleName: translate(state, `texts.modules.${module.name}`),
+        moduleName: t(state, `texts.modules.${module.name}`),
         owner: owner,
-        hacked: module.isBroken ? translate(state, "texts.yes") : translate(state, "texts.no"),
+        hacked: module.isBroken ? t(state, "texts.yes") : t(state, "texts.no"),
         currentQuest: currentQuest
     };
     let isThisPlayerServer = isPlayerHaveAccess(state, { ...params, x, y }) || false;
     if (isNeedFog(state, { ...params, x, y }) && !isThisPlayerServer) {
-        response += translate(state, "texts.utils.infoEnemyModule", information);
+        response += t(state, "texts.utils.infoEnemyModule", information);
     } else {
         if (
             module.character === gameModules.wallet.character ||
@@ -383,9 +351,9 @@ const getAdditionalInformation = (state, params) => {
             } else {
                 information.storage = `${module.programs.length} programs`;
             }
-            response += translate(state, "texts.utils.infoStorage", information);
+            response += t(state, "texts.utils.infoStorage", information);
         } else {
-            response += translate(state, "texts.utils.info", information);
+            response += t(state, "texts.utils.info", information);
         }
     }
     return response;
@@ -393,7 +361,7 @@ const getAdditionalInformation = (state, params) => {
 
 export const isNeedFog = (ctx, currentFloor, x, y) => {
     let ignoredModules = [gameModules.space, gameModules.way, gameModules.availableSpace, gameModules.denied];
-    return !_.includes(ignoredModules, getModule(ctx, { floor: currentFloor, x, y }));
+    return !_.some(ignoredModules, getModule(ctx, { floor: currentFloor, x, y }));
 };
 
 export const hackModule = (state, params) => {
@@ -423,15 +391,15 @@ export const calculateLevelOfPlayer = (state, params) => {
     let player = getPlayer(state, params);
     if (player.XP >= (2 ** player.level - 1) * 100) {
         player.level++;
-        let levelUpText = translate(state, "texts.utils.levelUp", { level: player.level }, params);
-        replyWithMarkdown(levelUpText, params);
+        let levelUpText = t(state, "texts.utils.levelUp", { level: player.level }, params);
+        replyWithMarkdown(levelUpText, params, state);
     }
     return state;
 };
 
 export const detect = (state, params) => {
     //todo check is it work correctly
-    if (!_.isObject(params, "program.module")) {
+    if (!_.isObject(params)) {
         return state;
     }
     let { currentFloor, x, y } = params.program.module;
@@ -447,7 +415,7 @@ export const detect = (state, params) => {
     if (_.get(owner, "server")) {
         _.each(owner.server, serverRow => {
             _.each(serverRow, module => {
-                if (translate(state, `texts.modules.${module.name}`).toUpperCase() === gameModules.antivirus.name.toUpperCase()) {
+                if (t(state, `texts.modules.${module.name}`).toUpperCase() === gameModules.antivirus.name.toUpperCase()) {
                     detecting += module.detecting;
                 }
             });
@@ -455,11 +423,11 @@ export const detect = (state, params) => {
     }
 
     if (_.random(0, programs.hack.noise) < _.random(0, detecting)) {
-        let discoveredText = translate(state, "texts.utils.discovered");
-        replyWithMarkdown(discoveredText, params);
+        let discoveredText = t(state, "texts.utils.discovered");
+        replyWithMarkdown(discoveredText, params, state);
         if (currentFloor.match(/(.*)x/)) {
             // if (owner.telegramId) {
-            //     ctx.telegram.sendMessage(owner.telegramId, translate(state, "texts.utils.serverUnderAttack"));
+            //     ctx.telegram.sendMessage(owner.telegramId, t(state, "texts.utils.serverUnderAttack"));
             // }
         } else if (_.includes(currentFloor, "fight")) {
             //todo replace this without settimeout
@@ -485,7 +453,7 @@ export const detect = (state, params) => {
             //             module.isStolen = false;
             //         }
             //     }
-            //     replyWithMarkdown(translate(state, "texts.utils.modulesRepaired"));
+            //     replyWithMarkdown(t(state, "texts.utils.modulesRepaired"));
             // }, 60000);
         } else {
             state.player.infamousLevel++;
@@ -498,12 +466,13 @@ export const calculateProgramCount = playerMemory => {
     return 10 + (playerMemory * (playerMemory + 1)) / 2;
 };
 
-export const showFloor = floor => {
+export const showFloor = (state, params) => {
+    let { floor } = params;
     // let res = `${floor}:\n`;
     let res = "<p>";
-    for (let i = 0; i < map[floor].length; i++) {
-        for (let j = 0; j < map[floor][i].length; j++) {
-            res += map[floor][i][j].character;
+    for (let i = 0; i < state.map[floor].length; i++) {
+        for (let j = 0; j < state.map[floor][i].length; j++) {
+            res += state.map[floor][i][j].character;
         }
         res += "<br>";
     }
@@ -512,7 +481,7 @@ export const showFloor = floor => {
 };
 
 export const createQuestFromTemplate = (state, params) => {
-    let { questTemplate, fog, coins, playerId } = params;
+    let { questTemplate, fog, coins } = params;
     let player = getPlayer(state, params);
 
     player.quest = {};
@@ -530,4 +499,9 @@ export const createQuestFromTemplate = (state, params) => {
         state = createFogOfWar(state, params);
     }
     return state;
+};
+
+export const addMenuButtons = (buttons) => {
+    buttons.push([t(state, "menu.character"), t(state, "menu.inventory"), t(state, "menu.menu")]);
+    return buttons;
 };

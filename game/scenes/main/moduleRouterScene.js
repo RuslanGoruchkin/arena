@@ -1,7 +1,7 @@
 import Scene from "telegraf/scenes/base";
 import { gameModules } from "../../gameModules";
 import { enterScene } from "../../helpers/TelegramApiHelpers";
-import { getModule, stateWrapper, translate } from "../../helpers/ctx";
+import { getModule, stateWrapper, t } from "../../helpers/ctx";
 import { redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
 
 const moduleRouterScene = new Scene("moduleRouterScene");
@@ -35,12 +35,12 @@ moduleRouterScene.enter(ctx =>
                 break;
             case gameModules.sewerHatch.character:
                 player.currentFloor = "4x4_tech";
-                let basementLevelText = translate(state, "texts.mainScenes.moduleRouterScene.basementLevel");
+                let basementLevelText = t(state, "texts.mainScenes.moduleRouterScene.basementLevel");
                 replyWithMarkdown(basementLevelText, { playerId: state.player.id }).then(enterScene(ctx, "mainScene", state));
                 break;
             case gameModules.stairs.character:
                 player.currentFloor = "4x4";
-                let playerLevelText = translate(state, "texts.mainScenes.moduleRouterScene.playerLevel");
+                let playerLevelText = t(state, "texts.mainScenes.moduleRouterScene.playerLevel");
                 replyWithMarkdown(playerLevelText, { playerId: state.player.id }).then(enterScene(ctx, "mainScene", state));
                 break;
             case gameModules.programVendor.character:

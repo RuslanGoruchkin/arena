@@ -40,20 +40,26 @@ export const tick = async state => {
         if (player.data.timeoutStatus === true && player.data.timeout > state.currentTick) {
             switch (player.data.activity) {
                 case "eating":
+                    state.player.data.hungryTick = state.currentTick;
+                    state.player.hungry = false;
                     replyWithMarkdown("You are no longer hungry. Your stats have been restored", params);
                     break;
                 case "drinking":
+                    state.player.data.thirstyTick = state.currentTick;
+                    state.player.thirsty = false;
                     replyWithMarkdown("You are no longer thirsty. Your stats have been restored", params);
                     break;
                 case "sleeping":
+                    state.player.data.sleepyTick = state.currentTick;
+                    state.player.sleepy = false;
                     replyWithMarkdown("You are no longer sleepy. Your stats have been restored", params);
                     break;
                 default:
                     break;
             }
-            player.data.timeout = 0;
-            player.data.activity = "";
-            player.data.timeoutStatus = false;
+            state.player.data.timeout = 0;
+            state.player.data.activity = "";
+            state.player.data.timeoutStatus = false;
             enterScene(null, { ...params, scene: "mainScene" }, state);
         }
 

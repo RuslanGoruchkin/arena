@@ -2,6 +2,13 @@ texts:
 
   equip: 'Equip'
   unequip: 'Unequip'
+  seconds: 'seconds'
+
+  needs:
+    eating: 'You are eating. This will take 360 seconds'
+    drinking: 'You are drinking. This will take 36 seconds'
+    sleeping: 'You are sleeping. This will take 3600 seconds'
+    timeLeft: 'Time left:'
 
   message:
     cell: 'You are in your cell. You are sitting on your bed. There is a table nearby. You can see a glass of bits and a cybermeal programmed not to induce vomit on it and a cybervomit under it'
@@ -121,28 +128,34 @@ texts:
         *Coins*: ${coins}
         *Tokens* : ${tokens}
 
-        *Skills*: *Strength*: ${strength}, *Dexterity*: ${dexterity}, *Intelligence*: ${intelligence}, *Wisdom*: ${wisdom}, *Vitality*: ${vitality}
+        *Skills*: *Strength*: ${strength}
+        *Dexterity*: ${dexterity}
+        *Intelligence*: ${intelligence}
+        *Wisdom*: ${wisdom}
+        *Vitality*: ${vitality}
+        *Right Hand*: ${rightHand}
+        *Left Hand*: ${leftHand}
 
     inventoryScene:
-          descriptionCharacter: |
-            *Class*: ${charClass}
-            *Your nickname*: `${nickname}`
+      descriptionCharacter: |
+        *Class*: ${charClass}
+        *Your nickname*: `${nickname}`
 
-            *Level*: ${level}
-            *XP*: ${xp}
-            *Coins*: ${coins}
-            *Tokens* : ${tokens}
+        *Level*: ${level}
+        *XP*: ${xp}
+        *Coins*: ${coins}
+        *Tokens* : ${tokens}
 
-            *Skills*:
-            *Strength*: ${strength},
-            *Dexterity*: ${dexterity},
-            *Intelligence*: ${intelligence},
-            *Wisdom*: ${wisdom},
-            *Vitality*: ${vitality}
-            *Right Hand*: ${rightHand}
-            *Left Hand*: ${leftHand}
-            *Inventory*:
-            ${inventory}
+        *Skills*:
+        *Strength*: ${strength},
+        *Dexterity*: ${dexterity},
+        *Intelligence*: ${intelligence},
+        *Wisdom*: ${wisdom},
+        *Vitality*: ${vitality}
+        *Right Hand*: ${rightHand}
+        *Left Hand*: ${leftHand}
+        *Inventory*:
+        ${inventory}
 
   utils:
     levelUp: '*Level up! You current level is ${level}*.'
@@ -201,6 +214,10 @@ menu:
     ru: '🇷🇺 Русский'
     en: '🇺🇸 English'
     ja: '🇯🇵 日本'
+
+  needs:
+    status: 'Status'
+    stop: 'Stop'
 
   room:
     market: 'Market'

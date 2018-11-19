@@ -22,10 +22,10 @@ mainScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         switch (ctx.update.message.text) {
             case t(state, "menu.action.eat"):
-                return enterScene(ctx, "drinkingScene", state);
+                return enterScene(ctx, "eatingScene", state);
                 break;
             case t(state, "menu.action.drink"):
-                return enterScene(ctx, "eatingScene", state);
+                return enterScene(ctx, "drinkingScene", state);
                 break;
             case t(state, "menu.leaveCell"):
                 return enterScene(ctx, "hallwayRoomScene", state);

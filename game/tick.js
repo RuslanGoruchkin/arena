@@ -38,6 +38,7 @@ export const tick = async state => {
         }
 
         if (player.data.timeoutStatus === true && player.data.timeout > state.currentTick) {
+            const ctx = generateUpdateFromState(state, params);
             switch (player.data.activity) {
                 case "eating":
                     state.player.data.hungryTick = state.currentTick;
@@ -60,7 +61,8 @@ export const tick = async state => {
             state.player.data.timeout = 0;
             state.player.data.activity = "";
             state.player.data.timeoutStatus = false;
-            enterScene(null, { ...params, scene: "mainScene" }, state);
+            //enterScene(null, { ...params, scene: "mainScene" }, state);
+            enterScene(ctx, "mainScene", state);
         }
 
         _.each(quests, (quest, key) => {

@@ -12,9 +12,10 @@ eatingScene.enter(ctx =>
         data.timeout = currentTick + eatingTime;
         data.timeoutStatus = true;
         data.activity = "eating";
-        return keyboard(t(state, "texts.needs.eating"), [[t(state, "menu.needs.status")], [t(state, "menu.needs.stop")]], {
+        keyboard(t(state, "texts.needs.eating"), [[t(state, "menu.needs.status")], [t(state, "menu.needs.stop")]], {
             playerId: state.player.id
         });
+        return state;
     })
 );
 
@@ -26,15 +27,15 @@ eatingScene.on("text", ctx =>
             case t(state, "menu.needs.status"):
                 let currentTick = state.currentTick;
                 let delta = timeout - currentTick;
-                replyWithMarkdown(t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"), { playerId: player.id });
+                return replyWithMarkdown(t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"), { playerId: player.id });
                 break;
             case t(state, "menu.needs.stop"):
                 timeout = 0;
                 replyWithMarkdown(t(state, "texts.needs.stopEating"), { playerId: player.id });
-                enterScene(ctx, "mainScene", state);
+                return enterScene(ctx, "mainScene", state);
                 break;
             default:
-                redirectToOopsScene(ctx);
+                return redirectToOopsScene(ctx);
                 break;
         }
     })

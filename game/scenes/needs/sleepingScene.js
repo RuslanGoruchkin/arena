@@ -26,15 +26,15 @@ sleepingScene.on("text", ctx =>
             case t(state, "menu.needs.status"):
                 let currentTick = state.currentTick;
                 let delta = timeout - currentTick;
-                replyWithMarkdown(t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"), { playerId: player.id });
+                return replyWithMarkdown(t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"), { playerId: player.id });
                 break;
             case t(state, "menu.needs.stop"):
                 timeout = 0;
                 replyWithMarkdown(t(state, "texts.needs.stopSleeping"), { playerId: player.id });
-                enterScene(ctx, "mainScene", state);
+                return enterScene(ctx, "mainScene", state);
                 break;
             default:
-                redirectToOopsScene(ctx);
+                return redirectToOopsScene(ctx);
                 break;
         }
     })

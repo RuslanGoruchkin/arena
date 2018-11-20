@@ -20,17 +20,32 @@ mainScene.enter(ctx => {
 
 mainScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
+        let player = state.player;
+        let data = player.data;
+        let currentTick = state.currentTick;
+        let drinkingTime = 36;
+        let sleepingTime = 100;
+        let eatingTime = 100;
         switch (ctx.update.message.text) {
             case t(state, "menu.action.eat"):
+                data.timeout = currentTick + eatingTime;
+                data.timeoutStatus = true;
+                data.activity = "eating";
                 return enterScene(ctx, "eatingScene", state);
                 break;
             case t(state, "menu.action.drink"):
+                data.timeout = currentTick + drinkingTime;
+                data.timeoutStatus = true;
+                data.activity = "drinking";
                 return enterScene(ctx, "drinkingScene", state);
                 break;
             case t(state, "menu.leaveCell"):
                 return enterScene(ctx, "hallwayRoomScene", state);
                 break;
             case t(state, "menu.action.sleep"):
+                data.timeout = currentTick + sleepingTime;
+                data.timeoutStatus = true;
+                data.activity = "sleeping";
                 return enterScene(ctx, "sleepingScene", state);
                 break;
             case t(state, "menu.inventory"):

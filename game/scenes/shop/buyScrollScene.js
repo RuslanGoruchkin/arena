@@ -21,6 +21,7 @@ buyScrollScene.enter(ctx =>
                 message += key.name + "\tPrice: " + key.cost + " coins" + "\tWheight: " + key.load + " pounds\n" + key.text + "\n";
                 buttons += key.name;
             }
+        });
         buttons += t(state, "texts.back");
         return keyboard(message, buttons, { playerId: state.player.id });
     })

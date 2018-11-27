@@ -44,7 +44,7 @@ buyScrollScene.on("text", ctx =>
             case item.name:
                 let data = player.data;
                 if (data.coins - item.cost >= 0) {
-                    if (selectedCharacter.belt.length < 5) {
+                    if (selectedCharacter.belt.length <= 6) {
                         selectedCharacter.belt += item.name;
                         data.coins -= item.cost;
                         return replyWithMarkdown("Purchase success", { playerId: state.player.id }).then(

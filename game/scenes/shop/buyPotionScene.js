@@ -9,7 +9,7 @@ const buyPotionScene = new Scene("buyPotionScene");
 buyPotionScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let data = state.player.data;
-        let selectedCharacter =state.player.selectedCharacter;
+        let selectedCharacter = state.player.selectedCharacter;
         let message = "You can carry 6 items in your belt. Items you have in your belt are:\n";
         _.each(selectedCharacter.belt, item => {
             message += item + " ";
@@ -32,7 +32,7 @@ buyPotionScene.enter(ctx =>
 buyPotionScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
-        let selectedCharacter =state.player.selectedCharacter;
+        let selectedCharacter = state.player.selectedCharacter;
         let text = ctx.update.message.text;
         let item = _.find(consumables, { name: text });
         //let module = _.find(consumables, module => {
@@ -45,7 +45,7 @@ buyPotionScene.on("text", ctx =>
             case item.name:
                 let data = player.data;
                 if (data.coins - item.cost >= 0) {
-                    if (selectedCharacter.belt.length < 5) {
+                    if (selectedCharacter.belt.length <= 6) {
                         selectedCharacter.belt += item.name;
                         data.coins -= item.cost;
                         return replyWithMarkdown("Purchase success", { playerId: state.player.id }).then(

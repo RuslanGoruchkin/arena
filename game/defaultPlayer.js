@@ -30,6 +30,7 @@ export let defaultPlayer = {
         coinsPerTick: 42,
         wallets: [],
         inventory: [],
+        belt: [],
         coins: 50,
         tokens: 0
     },

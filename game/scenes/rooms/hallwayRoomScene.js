@@ -7,20 +7,25 @@ let debug = require("debug")("bot:hallwayRoomScene");
 const hallwayRoomScene = new Scene("hallwayRoomScene");
 hallwayRoomScene.enter(ctx => {
     return stateWrapper(ctx, (ctx, state) => {
+        //Status report start
+
         let player = state.player;
+        let needs = (player.hungry * " hungry " + player.thirsty * "thirsty " + player.sleepy * "sleepy ") | "Fine";
         let status = t(state, "texts.status", {
             charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
             nickname: player.nickname,
+            coins: player.data.coins,
+            tokens: player.data.tokens,
             hp: player.data.hp,
             sp: player.data.sp,
             mp: player.data.mp,
             level: player.level,
             xp: player.XP,
-            hungry: player.hungry * "hungry",
-            thirsty: player.thirsty * "thirsty",
-            sleepy: player.sleepy * "sleepy"
+            needs: needs
         });
         replyWithMarkdown(status, { playerId: state.player.id }, state);
+
+        //Status report end
         let message =
             'You are in a large hallway.\n It has a grandiose staircase in the center with giant floating "ARENA" hologram.\n' +
             'There is a stairway down as well. Weary sign nearby spells "TRAINING".' +

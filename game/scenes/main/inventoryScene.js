@@ -27,7 +27,7 @@ inventoryScene.enter(ctx =>
             inventory += item.name + "\n";
         });
         _.each(player.selectedCharacter.belt, item => {
-            belt += item.name + " ";
+            belt += item + " ";
         });
         let message = t(state, "texts.mainScenes.inventoryScene.descriptionCharacter", {
             charClass: t(state, `menu.characters.${selectedCharacter.class}`),

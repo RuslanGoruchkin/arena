@@ -9,27 +9,32 @@ const buyBuffScene = new Scene("buyBuffScene");
 buyBuffScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let data = state.player.data;
+        let selectedCharacter =state.player.selectedCharacter;
         let message = "Items you have in your belt are:\n";
-        _.each(data.belt, item => {
+        _.each(selectedCharacter.belt, item => {
             message += item + " ";
         });
         message += "\nYou can carry 6 items in your belt.\n\nWhat buff do you want to buy?";
         let buttons = [];
+        buttons[0] = [];
         //Add translates
         _.each(consumables, key => {
             if (key.type === "buffs") {
                 message += key.name + "\tPrice: " + key.cost + " coins" + "\tWheight: " + key.load + " pounds\n" + key.text + "\n";
-                buttons += key.name;
+                buttons[0].push(key.name);
             }
         });
-        buttons += t(state, "texts.back");
-        return keyboard(message, buttons, { playerId: state.player.id });
+        buttons.push(t(state, "texts.back"));
+        return keyboard(message, [["Fire Resin", "Ice Resin"], ["Light Resin", "Dark Resin"], [t(state, "texts.back")]], {
+            playerId: state.player.id
+        });
     })
 );
 
 buyBuffScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
+        let selectedCharacter =state.player.selectedCharacter;
         let text = ctx.update.message.text;
         let item = _.find(consumables, { name: text });
         //let module = _.find(consumables, module => {
@@ -37,13 +42,13 @@ buyBuffScene.on("text", ctx =>
         //});
         switch (text) {
             case t(state, "texts.back"):
-                enterScene(ctx, "vendorScene", state);
+                return enterScene(ctx, "vendorScene", state);
                 break;
             case item.name:
                 let data = player.data;
                 if (data.coins - item.cost >= 0) {
-                    if (data.belt.length < 5) {
-                        data.belt += item.name;
+                    if (selectedCharacter.belt.length < 5) {
+                        selectedCharacter.belt += item.name;
                         data.coins -= item.cost;
                         return replyWithMarkdown("Purchase success", { playerId: state.player.id }).then(
                             enterScene(ctx, "vendorScene", state)

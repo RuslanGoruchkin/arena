@@ -9,8 +9,9 @@ const buyScrollScene = new Scene("buyScrollScene");
 buyScrollScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let data = state.player.data;
+        let selectedCharacter =state.player.selectedCharacter;
         let message = "Items you have in your belt are:\n";
-        _.each(data.belt, item => {
+        _.each(selectedCharacter.belt, item => {
             message += item + " ";
         });
         message += "\nYou can carry 6 items in your belt.\n\nWhat scroll do you want to buy?";
@@ -23,13 +24,14 @@ buyScrollScene.enter(ctx =>
             }
         });
         buttons += t(state, "texts.back");
-        return keyboard(message, buttons, { playerId: state.player.id });
+        return keyboard(message, [["Blink Scroll", "Wave Scroll", "Fire Scroll"], [t(state, "texts.back")]], { playerId: state.player.id });
     })
 );
 
 buyScrollScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
+        let selectedCharacter =state.player.selectedCharacter;
         let text = ctx.update.message.text;
         let item = _.find(consumables, { name: text });
         //let module = _.find(consumables, module => {
@@ -42,8 +44,8 @@ buyScrollScene.on("text", ctx =>
             case item.name:
                 let data = player.data;
                 if (data.coins - item.cost >= 0) {
-                    if (data.belt.length < 5) {
-                        data.belt += item.name;
+                    if (selectedCharacter.belt.length < 5) {
+                        selectedCharacter.belt += item.name;
                         data.coins -= item.cost;
                         return replyWithMarkdown("Purchase success", { playerId: state.player.id }).then(
                             enterScene(ctx, "vendorScene", state)

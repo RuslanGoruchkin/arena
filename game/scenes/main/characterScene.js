@@ -12,7 +12,7 @@ characterScene.enter(ctx =>
         let message = "";
         let belt = "";
         _.each(player.selectedCharacter.belt, item => {
-            belt += item.name + " ";
+            belt += item + " ";
         });
         message += t(state, "texts.mainScenes.characterScene.descriptionCharacter", {
             charClass: t(state, `menu.characters.${selectedCharacter.class}`),

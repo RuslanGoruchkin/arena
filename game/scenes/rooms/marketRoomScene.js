@@ -7,27 +7,32 @@ let debug = require("debug")("bot:marketRoomScene");
 const marketRoomScene = new Scene("marketRoomScene");
 marketRoomScene.enter(ctx => {
     return stateWrapper(ctx, (ctx, state) => {
+        //Status report start
+
         let player = state.player;
+        let needs = (player.hungry * " hungry " + player.thirsty * "thirsty " + player.sleepy * "sleepy ") | "Fine";
         let status = t(state, "texts.status", {
             charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
             nickname: player.nickname,
+            coins: player.data.coins,
+            tokens: player.data.tokens,
             hp: player.data.hp,
             sp: player.data.sp,
             mp: player.data.mp,
             level: player.level,
             xp: player.XP,
-            hungry: player.hungry * "hungry",
-            thirsty: player.thirsty * "thirsty",
-            sleepy: player.sleepy * "sleepy"
+            needs: needs
         });
         replyWithMarkdown(status, { playerId: state.player.id }, state);
+
+        //Status report end
         let message =
-            "You come closer and see three tents. One has lots of weapons. Other two sell shields and armor" +
-            'Inbetween them sits a shady man. A tattoo under his eyes spells:"SECOND HAND"' +
-            "Some people are talking about something. Some are playing APPULSE";
+            "You come closer and see three tents. One has lots of weapons. Other two sell shields and armor\n" +
+            'Inbetween them sits a shady man. A tattoo under his eyes spells:"SECOND HAND"\n' +
+            "Some people are talking about something. Some are playing APPULSE\n";
         let buttons = [];
-        buttons.push([t(state, "menu.shop.weapons"), t(state, "menu.shop.shields"), t(state, "menu.shop.armor")]);
-        buttons.push([t(state, "menu.rumors"), t(state, "menu.shop.secondHand"), t(state, "menu.appulse")]);
+        buttons.push([t(state, "menu.shop.consumables"), t(state, "menu.shop.secondHand")]);
+        buttons.push([t(state, "menu.rumors"), t(state, "menu.appulse")]);
         buttons.push([t(state, "menu.hack.back")]);
         //any scene
         buttons.push([t(state, "menu.character"), t(state, "menu.menu")]);
@@ -38,17 +43,8 @@ marketRoomScene.enter(ctx => {
 marketRoomScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         switch (ctx.update.message.text) {
-            case t(state, "menu.shop.weapons"):
-                return enterScene(ctx, "weaponShopScene", state);
-                break;
-            case t(state, "menu.shop.shields"):
-                return enterScene(ctx, "shieldShopScene", state);
-                break;
-            case t(state, "menu.shop.armor"):
-                return enterScene(ctx, "armorShopScene", state);
-                break;
-            case t(state, "menu.rumors"):
-                return enterScene(ctx, "rumorScene", state);
+            case t(state, "menu.shop.consumables"):
+                return enterScene(ctx, "vendorScene", state);
                 break;
             case t(state, "menu.shop.secondHand"):
                 return enterScene(ctx, "secondHandScene", state);

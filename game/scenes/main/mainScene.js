@@ -7,24 +7,28 @@ let debug = require("debug")("bot:mainScene");
 const mainScene = new Scene("mainScene");
 mainScene.enter(ctx => {
     return stateWrapper(ctx, (ctx, state) => {
+        //Status report start
+
         let player = state.player;
+        let needs = (player.hungry * " hungry " + player.thirsty * "thirsty " + player.sleepy * "sleepy ") | "Fine";
         let status = t(state, "texts.status", {
             charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
             nickname: player.nickname,
             coins: player.data.coins,
-            token: player.data.tokens,
+            tokens: player.data.tokens,
             hp: player.data.hp,
             sp: player.data.sp,
             mp: player.data.mp,
             level: player.level,
             xp: player.XP,
-            hungry: player.hungry * "hungry",
-            thirsty: player.thirsty * "thirsty",
-            sleepy: player.sleepy * "sleepy"
+            needs: needs
         });
         replyWithMarkdown(status, { playerId: state.player.id }, state);
+
+        //Status report end
+
         let message =
-            "You are in your cell. You are sitting on your bed. There is a table nearby. You can see a glass of bits and a cybermeal, programmed not to induce vomit, on it. You can smell cybervomit though";
+            "You are in your cell. You are sitting on your bed. There is a table nearby. You can see a glass of bits and a cybermeal on it.";
         let buttons = [];
         buttons.push([t(state, "menu.action.eat"), t(state, "menu.action.drink"), t(state, "menu.action.sleep")]);
         buttons.push([t(state, "menu.inventory"), t(state, "menu.leaveCell")]);

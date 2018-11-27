@@ -9,7 +9,7 @@ texts:
    *Your nickname*: `${nickname}`
    *Level*: ${level}  *XP*: ${xp}
    *Coins*: ${coins}  *Tokens* : ${tokens}
-   *Status*: ${hungry} ${sleepy} ${thirsty}
+   *Status*: ${needs}
 
   needs:
     eating: 'You are eating. This will take 360 seconds'
@@ -71,8 +71,11 @@ texts:
       selectProgram: 'Please select a program'
       emptyMemory: 'Your memory is empty'
       enterPrice: 'Please put a price on this program'
-    vendorModuleScene:
-      buyModule: 'Buy a module'
+    vendorScene:
+      buffs: 'Buffs'
+      potions: 'Potions'
+      projectiles: 'Projectiles'
+      scrolls: 'Scrolls'
     vendorProgramScene:
       buyProgram: 'Buy a program'
       sellProgram: 'Sell program'
@@ -220,6 +223,7 @@ menu:
     armor: 'Armor shop'
     shields: 'Shield shop'
     secondHand: 'Second Hand'
+    consumables: 'Consumables'
 
   rumors: 'rumors'
   enterArena: 'ARENA'

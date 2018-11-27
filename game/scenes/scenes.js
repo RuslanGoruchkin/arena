@@ -24,6 +24,7 @@ import buyScrollScene from "./shop/buyScrollScene";
 import buyBuffScene from "./shop/buyBuffScene";
 import buyProjectileScene from "./shop/buyProjectileScene";
 import buyPotionScene from "./shop/buyPotionScene";
+import vendorScene from "./shop/vendorScene";
 
 export const stage = new Stage([
     languageScene,
@@ -50,7 +51,8 @@ export const stage = new Stage([
     buyScrollScene,
     buyBuffScene,
     buyPotionScene,
-    buyProjectileScene
+    buyProjectileScene,
+    vendorScene
 ]);
 export {
     languageScene,
@@ -77,5 +79,6 @@ export {
     buyScrollScene,
     buyBuffScene,
     buyPotionScene,
-    buyProjectileScene
+    buyProjectileScene,
+    vendorScene
 };

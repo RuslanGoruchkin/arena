@@ -10,11 +10,12 @@ buyBuffScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let data = state.player.data;
         let selectedCharacter = state.player.selectedCharacter;
-        let message = "Items you have in your belt are:\n";
+        let message = "You can carry 6 items in your belt. Items you have in your belt are:\n";
         _.each(selectedCharacter.belt, item => {
             message += item + " ";
         });
-        message += "\nYou can carry 6 items in your belt.\n\nWhat buff do you want to buy?";
+        message += "\nYou have " + data.coins + " coins to spend";
+        message += "\n\nWhat potion do you want to buy?\n";
         let buttons = [];
         buttons[0] = [];
         //Add translates

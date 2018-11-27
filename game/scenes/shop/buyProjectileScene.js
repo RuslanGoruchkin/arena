@@ -8,13 +8,14 @@ const buyProjectileScene = new Scene("buyProjectileScene");
 
 buyProjectileScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
-        let selectedCharacter =state.player.selectedCharacter;
         let data = state.player.data;
-        let message = "Items you have in your belt are:\n";
+        let selectedCharacter = state.player.selectedCharacter;
+        let message = "You can carry 6 items in your belt. Items you have in your belt are:\n";
         _.each(selectedCharacter.belt, item => {
             message += item + " ";
         });
-        message += "\nYou can carry 6 items in your belt.\n\nWhat projectile do you want to buy?";
+        message += "\nYou have " + data.coins + " coins to spend";
+        message += "\n\nWhat potion do you want to buy?\n";
         let buttons = [];
         //Add translates
         _.each(consumables, key => {

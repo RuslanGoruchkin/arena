@@ -14,6 +14,7 @@ buyPotionScene.enter(ctx =>
         _.each(selectedCharacter.belt, item => {
             message += item + " ";
         });
+        message += "\nYou have " + data.coins + " coins to spend";
         message += "\n\nWhat potion do you want to buy?\n";
         let buttons = [];
         //Add translates

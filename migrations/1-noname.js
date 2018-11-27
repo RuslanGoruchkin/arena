@@ -237,19 +237,13 @@ var migrationCommands = [
                 armor: {
                     type: Sequelize.JSON
                 },
-                scrolls: {
-                    type: Sequelize.JSON
-                },
-                potions: {
-                    type: Sequelize.JSON
-                },
                 data: {
                     type: Sequelize.JSON
                 },
                 server: {
                     type: Sequelize.JSON
                 },
-                attackPrograms: {
+                belt: {
                     type: Sequelize.JSON
                 },
                 basement: {

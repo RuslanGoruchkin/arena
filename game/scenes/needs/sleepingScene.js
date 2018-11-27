@@ -26,7 +26,13 @@ sleepingScene.on("text", ctx =>
             case t(state, "menu.needs.status"):
                 let currentTick = state.currentTick;
                 let delta = timeout - currentTick;
-                return replyWithMarkdown(t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"), { playerId: player.id });
+                if (delta > 0) {
+                    return replyWithMarkdown(t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"), {
+                        playerId: player.id
+                    });
+                } else {
+                    return replyWithMarkdown("You have already slept", { playerId: player.id });
+                }
                 break;
             case t(state, "menu.needs.stop"):
                 timeout = 0;

@@ -20,6 +20,10 @@ import marketRoomScene from "./rooms/marketRoomScene";
 import inventoryScene from "./main/inventoryScene";
 import equipScene from "./main/equipScene";
 import unequipScene from "./main/unequipScene";
+import buyScrollScene from "./shop/buyScrollScene";
+import buyBuffScene from "./shop/buyBuffScene";
+import buyProjectileScene from "./shop/buyProjectileScene";
+import buyPotionScene from "./shop/buyPotionScene";
 
 export const stage = new Stage([
     languageScene,
@@ -42,7 +46,11 @@ export const stage = new Stage([
     marketRoomScene,
     inventoryScene,
     equipScene,
-    unequipScene
+    unequipScene,
+    buyScrollScene,
+    buyBuffScene,
+    buyPotionScene,
+    buyProjectileScene
 ]);
 export {
     languageScene,
@@ -65,5 +73,9 @@ export {
     marketRoomScene,
     inventoryScene,
     equipScene,
-    unequipScene
+    unequipScene,
+    buyScrollScene,
+    buyBuffScene,
+    buyPotionScene,
+    buyProjectileScene
 };

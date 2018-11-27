@@ -19,13 +19,15 @@ inventoryScene.enter(ctx =>
         _.each(programsInMemory, program => {
             programs += `\n${t(state, `texts.${program.key}`)}`;
         });
-        let rightHand = player.rightHand.name || "Fist";
-        let leftHand = player.leftHand.name || "Fist";
+        let rightHand = player.selectedCharacter.rightHand.name || "Fist";
+        let leftHand = player.selectedCharacter.leftHand.name || "Fist";
         let inventory = "";
-        _.each(player.inventory, item => {
-            if (!item.equipped) {
-                inventory += item.name + "\n";
-            }
+        let belt = "";
+        _.each(player.selectedCharacter.inventory, item => {
+            inventory += item.name + "\n";
+        });
+        _.each(player.selectedCharacter.belt, item => {
+            belt += item.name + " ";
         });
         let message = t(state, "texts.mainScenes.inventoryScene.descriptionCharacter", {
             charClass: t(state, `menu.characters.${selectedCharacter.class}`),
@@ -34,14 +36,16 @@ inventoryScene.enter(ctx =>
             xp: player.XP,
             coins: player.data.coins,
             tokens: player.data.tokens,
-            strength: player.strength,
-            dexterity: player.dexterity,
-            intelligence: player.intelligence,
-            wisdom: player.wisdom,
-            vitality: player.vitality,
+            strength: player.selectedCharacter.baseStrength,
+            dexterity: player.selectedCharacter.baseDexterity,
+            intelligence: player.selectedCharacter.baseIntelligence,
+            wisdom: player.selectedCharacter.baseWisdom,
+            vitality: player.selectedCharacter.baseVitality,
+            armor: player.selectedCharacter.armor.name,
             rightHand: rightHand,
             leftHand: leftHand,
-            inventory: inventory
+            inventory: inventory,
+            belt: belt
         });
         return keyboard(message, [[t(state, "texts.back")], [t(state, "texts.equip")], [t(state, "texts.unequip")]], {
             playerId: state.player.id

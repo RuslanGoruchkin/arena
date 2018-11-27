@@ -4,6 +4,13 @@ texts:
   unequip: 'Unequip'
   seconds: 'seconds'
 
+  status: |
+   *Class*: ${charClass}
+   *Your nickname*: `${nickname}`
+   *Level*: ${level}  *XP*: ${xp}
+   *Coins*: ${coins}  *Tokens* : ${tokens}
+   *Status*: ${hungry} ${sleepy} ${thirsty}
+
   needs:
     eating: 'You are eating. This will take 360 seconds'
     drinking: 'You are drinking. This will take 36 seconds'
@@ -14,8 +21,8 @@ texts:
     cell: 'You are in your cell. You are sitting on your bed. There is a table nearby. You can see a glass of bits and a cybermeal programmed not to induce vomit on it and a cybervomit under it'
 
   condition:
-    hungry: 'You have forgotten to take your daily cybermeal punishment. Your stats are lowered.'
-    thirsty: 'Your bytes are empty. Put some bits into your bytes to restore stats'
+    hungry: 'You have forgotten to eat your daily cybermeal punishment. Your hp is lowered.'
+    thirsty: 'Your bytes are empty. Drink some bits into your bytes to restore sp'
     sleepy: 'Your traffic quota is met. Your stats would be lowered. Sleep mode is a good way of managing your traffic'
 
   startScenes:
@@ -29,22 +36,27 @@ texts:
     selectCharacterScene:
       chooseCharacter: 'Who are you?'
     confirmScene:
-      welcome: 'Welcome to this brave new world'
+      warrior: "Klaus is strong in fencing. He can hit hard with any weapon."
+      mage: "Nimble Cheer avoids close combat and has excellent magic."
+      evangelist: "Alex combines powerful magic with physical abilities and tactics."
+      prophet: "Full of energy, Margit exhausts the enemy to deliver a final hit."
+      nomad: "Loki went through hell and survived. He is tough as an old boot."
+      welcome: 'Here we go!'
       otherCharacter: 'Other character'
       readHistory: 'Read the history'
       descriptionCharacter: |
         *Class*: ${charClass}
         *Your nickname*: `${nickname}`
         *Strength*: ${strength}
-        Processing increases a chance of the successfull hacking.
+        Strength equals to the amount of mass of your weapon times speed with which you can apply thy weapon to your enemy
         *Dexterity*: ${dexterity}
-        Speed of actions.
+        Dexterity lets you hit more while not being hit thyself
         *Intelligence*: ${intelligence}
-        Logic insreases an effectiveness of modules exploration. +1 logic gives one more module.
+        Let's you win at trivia games and use things more effectively
         *Wisdom*: ${wisdom}
-        The programs number that you can carry depends on memory.
+        Beard growth rate and MP amount
         *Vitality*: ${vitality}
-        Alertness during a hack, the chance of being caught.
+        Hp
 
   shopScenes:
     selectProgramLevelScene:
@@ -117,7 +129,7 @@ texts:
       basementLevel: "You are in the basement"
       playerLevel: "You are on the street"
     infoScene:
-      info: 'Help channel: @hackerpunk'
+      info: 'Help channel: @turingarena_help'
     characterScene:
       descriptionCharacter: |
         *Class*: ${charClass}
@@ -135,6 +147,7 @@ texts:
         *Vitality*: ${vitality}
         *Right Hand*: ${rightHand}
         *Left Hand*: ${leftHand}
+        *Belt*: ${belt}
 
     inventoryScene:
       descriptionCharacter: |
@@ -151,32 +164,13 @@ texts:
         *Dexterity*: ${dexterity},
         *Intelligence*: ${intelligence},
         *Wisdom*: ${wisdom},
-        *Vitality*: ${vitality}
-        *Right Hand*: ${rightHand}
-        *Left Hand*: ${leftHand}
+        *Vitality*: ${vitality},
+        *Armor*: ${armor}
+        *Right Hand*: ${rightHand},
+        *Left Hand*: ${leftHand},
+        *Belt*: ${belt},
         *Inventory*:
         ${inventory}
-
-  utils:
-    levelUp: '*Level up! You current level is ${level}*.'
-    discovered: 'You were detected!'
-    serverUnderAttack: 'Your server is under attack!'
-    modulesRepaired: 'All modules are repaired.'
-    info: |
-      You are at this module: ${character} (${moduleName})
-      Owner: ${owner}
-      Hacked: ${hacked}
-      Current quest: ${currentQuest}
-    infoStorage: |
-      You are at this module: ${character} (${moduleName})
-      Owner: ${owner}
-      Hacked: ${hacked}
-      Storage: ${storage}
-      Current quest: ${currentQuest}
-    infoEnemyModule: |
-      Owner: ${owner}
-      Hacked: ${hacked}
-      Current quest: ${currentQuest}
 
 
 
@@ -198,16 +192,13 @@ texts:
   information: 'Information'
   warriorHack: "DDoS"
   mageHack: "IP-Spoofing"
-  evangelistVirus: "Cryptobomb"
-  prophetScan: "Sniffing"
-  nomadHack: "Exploiting"
   next: 'Next'
   restart: 'The quest has been failed.\n↩RESTART?↩'
 
-  betaDisclamer: "*DISCLAMER*\n\nHackerpunk's public *beta test* has started.\nPlease note that all accounts will be reset at the end of the beta test. But, *all donated items will be saved* and transferred after the beta-test to the main game with bonuses for beta test participating!"
-  betaLetBegin: "Let the hacking begin!"
+  betaDisclamer: "*DISCLAMER*\n\nTuring arena's public *beta test* has started.\nPlease note that all accounts will be reset at the end of the beta test. But, *all donated items will be saved* and transferred after the beta-test to the main game with bonuses for beta test participating!"
+  betaLetBegin: "Let the slashing begin!"
 
-  oopsMessage: "OOPS... it seems, something goes wrong... you can report it [in our official chat](https://t.me/hackerpunk) or/and return to game!"
+  oopsMessage: "OOPS... it seems, something goes wrong... you can report it [in our official chat](https://t.me/turingarena_help) or/and return to game!"
 
 menu:
   language:
@@ -222,7 +213,7 @@ menu:
   room:
     market: 'Market'
     training: 'Training'
-    cell: 'cell'
+    cell: 'Cell'
 
   shop:
     weapons: 'Weapon shop'
@@ -235,11 +226,11 @@ menu:
   appulse: 'APPULSE'
 
   characters:
-    cyberWarrior: '👨‍🚒 Cyber Warrior'
-    techMage: '👩‍🔧 Tech Mage'
-    cryptoEvangelist: '🕵️ Crypto Evangelist'
-    singularityProphet: '👩‍🔬 Singularity Prophet'
-    digitalNomad: '👨‍🎤 Digital Nomad'
+    warrior: '👨‍🚒 Warrior'
+    mage: '👩‍🔧 Mage'
+    evangelist: '🕵️ Evangelist'
+    prophet: '👩‍🔬 Prophet'
+    nomad: '👨‍🎤 Nomad'
     defaultCharacter: "Programmer"
 
   confirm:
@@ -254,7 +245,7 @@ menu:
   action:
     eat: '🍛Eat'
     drink: '🥛Drink'
-    sleep: '✨Sleep'
+    sleep: '😴Sleep'
 
   leaveCell: 'Leave Cell'
   training: 'Training'

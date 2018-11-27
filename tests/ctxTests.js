@@ -9,7 +9,7 @@ describe("Ctx tests", () => {
         it("Should return english string", done => {
             stateWrapper(done, (ctx, state) => {
                 _.set(state, "language", "en");
-                let t = t(state, "menu.characters.singularityProphet");
+                let t = t(state, "menu.characters.prophet");
                 t.should.equal("👩‍🔬 Singularity Prophet");
                 done();
             });
@@ -17,7 +17,7 @@ describe("Ctx tests", () => {
         it("Should return russian string", done => {
             stateWrapper(done, (ctx, state) => {
                 _.set(state, "language", "ru");
-                let t = t(state, "menu.characters.singularityProphet");
+                let t = t(state, "menu.characters.prophet");
                 t.should.equal("👩‍🔬 Пророк Сингулярности");
                 done();
             });

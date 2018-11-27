@@ -76,7 +76,7 @@ export const startNewGame = async (state, params) => {
     player.nickname = generatePlayerNickname();
     player.selectedCharacter = getItemByClassCaption(character, characters);
     player.telegramId = ctx.from.id;
-    player.userDonateLink = await userLink(player.id);
+    //player.userDonateLink = await userLink(player.id);
     return state;
 };
 
@@ -208,31 +208,6 @@ export function grantAccess(state, params) {
     return state;
 }
 
-export const assembleServerToInventory = (state, params) => {
-    const { player } = state;
-    const personalCoordinates = player.personalCoordinates;
-    const { data } = player;
-    const floor = personalCoordinates.floor;
-    const numberOfFloor = floor.match(/(.*)x/) ? parseInt(floor.match(/(.*)x/)[1]) : 4;
-    for (let x = personalCoordinates.xPos; x < personalCoordinates.xPos + numberOfFloor; x++) {
-        for (let y = personalCoordinates.yPos; y < personalCoordinates.yPos + numberOfFloor; y++) {
-            let module = getModule(state, { floor, x, y });
-            if (personalCoordinates.floor.match(/_quest/gi) === null) {
-                if (module.character !== gameModules.availableSpace.character) {
-                    module.id = uniqid("module-");
-                    data.inventory.push(_.cloneDeep(module));
-                }
-            } else {
-                module.id = uniqid("module-");
-                data.inventory.push(_.cloneDeep(module));
-            }
-            state = setModule(state, { ...gameModules.space }, { floor, x, y });
-            state.access[floor][player.id][x][y] = null;
-        }
-    }
-    stateManager.setState(state);
-};
-
 export const generatePlayerNickname = () => {
     let result = "";
     let alphabet = "ABCDEFGHIJKLMNOPQRSTUVWXYZ";
@@ -241,61 +216,6 @@ export const generatePlayerNickname = () => {
     }
     return result;
 };
-
-export const getPlayerScreen = (state, params) => {
-    const { player } = state;
-    const coordinates = player.coordinates;
-    let screen = "```\n";
-    for (let x = coordinates.xPos - widthOfScreen; x <= coordinates.xPos + widthOfScreen; x++) {
-        for (let y = coordinates.yPos - heightOfScreen; y <= coordinates.yPos + heightOfScreen; y++) {
-            if (x === coordinates.xPos && y === coordinates.yPos) {
-                screen += player.selectedCharacter.character;
-            } else {
-                let floor = player.currentFloor;
-                params = { ...params, floor, x, y };
-                let isThisPlayerServer = isPlayerHaveAccess(state, params);
-                let module = getModule(state, params);
-                if (module.isBroken) {
-                    screen += module.characterOfBroken;
-                } else if (!isThisPlayerServer) {
-                    if (module.isVisible) {
-                        screen += module.character;
-                    } else if (isNeedFog(state, params)) {
-                        screen += gameModules.fogged.character;
-                        module.isVisible = false;
-                    } else {
-                        screen += module.character;
-                        module.isVisible = true;
-                    }
-                } else {
-                    screen += module.character;
-                }
-            }
-        }
-        screen += "\n";
-    }
-    screen += "```";
-    screen += getAdditionalInformation(state, params);
-    return screen;
-};
-export function generateBorders(enemyServer) {
-    let mapLength = enemyServer[0].length + 10;
-    let mapWidth = enemyServer.length + 10;
-    let map = [];
-    for (let i = 0; i < mapWidth; i++) {
-        map[i] = [];
-        for (let j = 0; j < mapLength; j++) {
-            if (i >= 5 && i < mapWidth - 5 && j >= 5 && j < mapLength - 5) {
-                map[i][j] = enemyServer[i - 5][j - 5];
-            } else if (i >= 3 && i < mapWidth - 3 && j >= 3 && j < mapLength - 3) {
-                map[i][j] = gameModules.way;
-            } else if (i >= 2 && i < mapWidth - 2 && j >= 2 && j < mapLength - 2) {
-                map[i][j] = gameModules.denied;
-            } else map[i][j] = gameModules.space;
-        }
-    }
-    return map;
-}
 
 const getAdditionalInformation = (state, params) => {
     const { player } = state;
@@ -359,27 +279,6 @@ const getAdditionalInformation = (state, params) => {
     return response;
 };
 
-export const isNeedFog = (ctx, currentFloor, x, y) => {
-    let ignoredModules = [gameModules.space, gameModules.way, gameModules.availableSpace, gameModules.denied];
-    return !_.some(ignoredModules, getModule(ctx, { floor: currentFloor, x, y }));
-};
-
-export const hackModule = (state, params) => {
-    let { currentFloor: floor, x, y } = params.program.module;
-    let module = getModule(state, { ...params, floor, x, y });
-    state = setModule(state, { ...module, isBroken: true }, { ...params, floor, x, y });
-    state = addXPToPlayerByProgramLevel(state, { ...params, ...params.program });
-    return state;
-};
-
-export const addXPToPlayerByProgramLevel = (state, params) => {
-    let player = getPlayer(state, params);
-    let { level } = params.program;
-    player.XP += player.level === level ? 10 : player.level > level ? 5 : 20;
-    calculateLevelOfPlayer(state, params);
-    return state;
-};
-
 export const addXPToPlayer = (state, params) => {
     let player = getPlayer(state, params);
     player.XP += params.XP;
@@ -397,111 +296,11 @@ export const calculateLevelOfPlayer = (state, params) => {
     return state;
 };
 
-export const detect = (state, params) => {
-    //todo check is it work correctly
-    if (!_.isObject(params)) {
-        return state;
-    }
-    let { currentFloor, x, y } = params.program.module;
-    let owner;
-    if (currentFloor === "4x4") {
-        owner = getOwnerModule(state, { floor: currentFloor, x, y });
-    } else if (_.includes(currentFloor, "fight")) {
-        owner = getOwnerModule(state, { floor: currentFloor, x, y });
-    } else {
-        owner = getOwnerModule(state, { floor: currentFloor, x, y });
-    }
-    let detecting = 0;
-    if (_.get(owner, "server")) {
-        _.each(owner.server, serverRow => {
-            _.each(serverRow, module => {
-                if (t(state, `texts.modules.${module.name}`).toUpperCase() === gameModules.antivirus.name.toUpperCase()) {
-                    detecting += module.detecting;
-                }
-            });
-        });
-    }
-
-    if (_.random(0, programs.hack.noise) < _.random(0, detecting)) {
-        let discoveredText = t(state, "texts.utils.discovered");
-        replyWithMarkdown(discoveredText, params, state);
-        if (currentFloor.match(/(.*)x/)) {
-            // if (owner.telegramId) {
-            //     ctx.telegram.sendMessage(owner.telegramId, t(state, "texts.utils.serverUnderAttack"));
-            // }
-        } else if (_.includes(currentFloor, "fight")) {
-            //todo replace this without settimeout
-            // let coordinates = ctx.session.player.personalCoordinates;
-            // let xPos = coordinates.xPos;
-            // let yPos = coordinates.yPos;
-            // let ignoredModules = [gameModules.space, gameModules.way, gameModules.availableSpace, gameModules.denied];
-            // setTimeout(() => {
-            //     for (let x = xPos; x < xPos + 4; x++) {
-            //         for (let y = yPos; y < yPos + 4; y++) {
-            //             let module = ctx.map[currentFloor][x][y];
-            //             if (
-            //                 !(
-            //                     _.includes(ignoredModules, ctx.map[currentFloor][x - 1][y]) ||
-            //                     _.includes(ignoredModules, ctx.map[currentFloor][x + 1][y]) ||
-            //                     _.includes(ignoredModules, ctx.map[currentFloor][x][y - 1]) ||
-            //                     _.includes(ignoredModules, ctx.map[currentFloor][x][y + 1])
-            //                 )
-            //             ) {
-            //                 module.isVisible = false;
-            //             }
-            //             module.isBroken = false;
-            //             module.isStolen = false;
-            //         }
-            //     }
-            //     replyWithMarkdown(t(state, "texts.utils.modulesRepaired"));
-            // }, 60000);
-        } else {
-            state.player.infamousLevel++;
-        }
-    }
-    return state;
-};
-
 export const calculateProgramCount = playerMemory => {
     return 10 + (playerMemory * (playerMemory + 1)) / 2;
 };
 
-export const showFloor = (state, params) => {
-    let { floor } = params;
-    // let res = `${floor}:\n`;
-    let res = "<p>";
-    for (let i = 0; i < state.map[floor].length; i++) {
-        for (let j = 0; j < state.map[floor][i].length; j++) {
-            res += state.map[floor][i][j].character;
-        }
-        res += "<br>";
-    }
-    res += "</p>";
-    return res;
-};
-
-export const createQuestFromTemplate = (state, params) => {
-    let { questTemplate, fog, coins } = params;
-    let player = getPlayer(state, params);
-
-    player.quest = {};
-    player.coordinates = {
-        xPos: 3,
-        yPos: 3
-    };
-    let floor = `${player.id}_quest`;
-    _.set(player, "quest.server.coins", coins);
-    player.currentFloor = floor;
-    state.map[floor] = _.cloneDeep(questTemplate);
-    state = grantAccess(state, { floor: player.currentFloor, playerId: player.id, ...player.coordinates });
-    // idQuest++;
-    if (fog) {
-        state = createFogOfWar(state, params);
-    }
-    return state;
-};
-
-export const addMenuButtons = (buttons) => {
+export const addMenuButtons = buttons => {
     buttons.push([t(state, "menu.character"), t(state, "menu.inventory"), t(state, "menu.menu")]);
     return buttons;
 };

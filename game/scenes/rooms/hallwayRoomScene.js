@@ -1,12 +1,26 @@
 import Scene from "telegraf/scenes/base";
 import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, keyboard, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
 
 let debug = require("debug")("bot:hallwayRoomScene");
 
 const hallwayRoomScene = new Scene("hallwayRoomScene");
 hallwayRoomScene.enter(ctx => {
     return stateWrapper(ctx, (ctx, state) => {
+        let player = state.player;
+        let status = t(state, "texts.status", {
+            charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
+            nickname: player.nickname,
+            hp: player.data.hp,
+            sp: player.data.sp,
+            mp: player.data.mp,
+            level: player.level,
+            xp: player.XP,
+            hungry: player.hungry * "hungry",
+            thirsty: player.thirsty * "thirsty",
+            sleepy: player.sleepy * "sleepy"
+        });
+        replyWithMarkdown(status, { playerId: state.player.id }, state);
         let message =
             'You are in a large hallway.\n It has a grandiose staircase in the center with giant floating "ARENA" hologram.\n' +
             'There is a stairway down as well. Weary sign nearby spells "TRAINING".' +

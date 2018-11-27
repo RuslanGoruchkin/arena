@@ -12,27 +12,27 @@ texts:
       8: '8'
     characterHistory:
       description: "История персонажа"
-      techMage:
+      mage:
         1: '1'
         2: '2'
         3: '3'
         4: '4'
-      cryptoEvangelist:
+      evangelist:
         1: '1'
         2: '2'
         3: '3'
         4: '4'
-      cyberWarrior:
+      warrior:
         1: '1'
         2: '2'
         3: '3'
         4: '4'
-      digitalNomad:
+      nomad:
         1: '1'
         2: '2'
         3: '3'
         4: '4'
-      singularityProphet:
+      prophet:
         1: '1'
         2: '2'
         3: '3'
@@ -366,11 +366,11 @@ menu:
     ja: '🇯🇵 日本'
 
   characters:
-    cyberWarrior: '👨‍🚒 Кибер воин'
-    techMage: '👩‍🔧 Техно-маг'
-    cryptoEvangelist: '🕵️ Крипто Евангелист'
-    singularityProphet: '👩‍🔬 Пророк Сингулярности'
-    digitalNomad: '👨‍🎤 Цифровой бродяга'
+    warrior: '👨‍🚒 Кибер воин'
+    mage: '👩‍🔧 Техно-маг'
+    evangelist: '🕵️ Крипто Евангелист'
+    prophet: '👩‍🔬 Пророк Сингулярности'
+    nomad: '👨‍🎤 Цифровой бродяга'
     defaultCharacter: "Программист"
 
   confirm:

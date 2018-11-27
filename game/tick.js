@@ -33,11 +33,10 @@ export const tick = async state => {
         }
         if (state.player.hungry === false && state.currentTick - player.hungryTime > player.data.hungryTick) {
             state.player.hungry = true;
-            //t(state, "texts.condition.hungry")
             replyWithMarkdown(t(state, "texts.condition.hungry"), params);
         }
 
-        if (player.data.timeoutStatus === true && player.data.timeout > state.currentTick) {
+        if (player.data.timeoutStatus === true && player.data.timeout < state.currentTick) {
             const ctx = generateUpdateFromState(state, params);
             switch (player.data.activity) {
                 case "eating":
@@ -61,7 +60,6 @@ export const tick = async state => {
             state.player.data.timeout = 0;
             state.player.data.activity = "";
             state.player.data.timeoutStatus = false;
-            //enterScene(null, { ...params, scene: "mainScene" }, state);
             enterScene(ctx, "mainScene", state);
         }
 

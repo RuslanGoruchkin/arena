@@ -22,12 +22,18 @@ drinkingScene.enter(ctx =>
 drinkingScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
-        let timeout = player.data.timeout;
         switch (ctx.update.message.text) {
             case t(state, "menu.needs.status"):
                 let currentTick = state.currentTick;
+                let timeout = player.data.timeout;
                 let delta = timeout - currentTick;
-                return replyWithMarkdown(t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"), { playerId: player.id });
+                if (delta > 0) {
+                    return replyWithMarkdown(t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"), {
+                        playerId: player.id
+                    });
+                } else {
+                    return replyWithMarkdown("You have already drunk", { playerId: player.id });
+                }
                 break;
             case t(state, "menu.needs.stop"):
                 timeout = 0;

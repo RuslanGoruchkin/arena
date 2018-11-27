@@ -13,6 +13,14 @@ export let defaultPlayer = {
             wisdom: 0,
             vitality: 0
         },
+        hp: 1,
+        max_hp: 1,
+        sp: 1,
+        max_sp: 1,
+        mp: 1,
+        max_mp: 1,
+        poise: 1,
+        max_poise: 1,
         timeoutStatus: false,
         activity: "",
         timeout: 0,
@@ -23,26 +31,7 @@ export let defaultPlayer = {
         wallets: [],
         inventory: [],
         coins: 50,
-        tokens: 0,
-        completedQuests: {},
-        droppedQuests: {}
-    },
-    currentRoom: "cell",
-    currentQuest: {
-        name: "",
-        introScene: "",
-        outroScene: "",
-        failed: false,
-        award: {
-            XP: 0,
-            coins: 0,
-            tokens: 0
-        },
-        award2: {
-            XP: 0,
-            coins: 0,
-            tokens: 0
-        }
+        tokens: 0
     },
     sleepy: false,
     hungry: false,
@@ -64,52 +53,20 @@ export let defaultPlayer = {
         baseDexterity: 0,
         baseIntelligence: 0,
         baseWisdom: 0,
-        baseVitality: 0
+        baseVitality: 0,
+        belt: [],
+        equipment: [],
+        inventory: [],
+        fastEquipItem: {},
+        rightHand: {},
+        leftHand: {},
+        armor: {}
     },
     strength: 1,
     dexterity: 1,
     intelligence: 1,
     wisdom: 1,
     vitality: 1,
-    inventory: {
-        bigNail: {
-            key: "bigNail",
-            name: "bigNail",
-            type: "weapon",
-            minLvl: 0,
-            minDamage: 1,
-            maxDamage: 3,
-            bonus: {
-                strength: 1
-            },
-            price: 20,
-            shop: true,
-            minSellLvl: 0,
-            maxSellLvl: 5,
-            equipped: true
-        }
-    },
-    fastEquipItem: {},
-    rightHand: {
-        key: "bigNail",
-        name: "bigNail",
-        type: "weapon",
-        minLvl: 0,
-        minDamage: 1,
-        maxDamage: 3,
-        bonus: {
-            strength: 1
-        },
-        price: 20,
-        shop: true,
-        minSellLvl: 0,
-        maxSellLvl: 5,
-        equipped: true
-    },
-    leftHand: {},
-    armor: {},
-    scrolls: {},
-    potions: {},
     selectedComics: "characterHistory",
     comics: ["worldHistory"]
 };

@@ -6,9 +6,29 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.STRING,
                 primaryKey: true
             },
-
             nickname: {
                 type: DataTypes.STRING
+            },
+            sleepy: {
+                type: DataTypes.BOOLEAN
+            },
+            hungry: {
+                type: DataTypes.BOOLEAN
+            },
+            thirsty: {
+                type: DataTypes.BOOLEAN
+            },
+            sleepyTime: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            },
+            hungryTime: {
+                type: DataTypes.INTEGER,
+                allowNull: false
+            },
+            thirstyTime: {
+                type: DataTypes.INTEGER,
+                allowNull: false
             },
             startX: {
                 type: DataTypes.INTEGER
@@ -40,12 +60,6 @@ module.exports = (sequelize, DataTypes) => {
             server: {
                 type: DataTypes.JSON
             },
-            attackPrograms: {
-                type: DataTypes.JSON
-            },
-            basement: {
-                type: DataTypes.JSON
-            },
             coordinates: {
                 type: DataTypes.JSON
             },
@@ -71,9 +85,6 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.JSON
             },
             hackStatus: {
-                type: DataTypes.BOOLEAN
-            },
-            finalFightWasStarted: {
                 type: DataTypes.BOOLEAN
             },
             alreadyStolen: {

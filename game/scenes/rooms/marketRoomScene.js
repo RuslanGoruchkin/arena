@@ -1,12 +1,26 @@
 import Scene from "telegraf/scenes/base";
 import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, keyboard, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
 
 let debug = require("debug")("bot:marketRoomScene");
 
 const marketRoomScene = new Scene("marketRoomScene");
 marketRoomScene.enter(ctx => {
     return stateWrapper(ctx, (ctx, state) => {
+        let player = state.player;
+        let status = t(state, "texts.status", {
+            charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
+            nickname: player.nickname,
+            hp: player.data.hp,
+            sp: player.data.sp,
+            mp: player.data.mp,
+            level: player.level,
+            xp: player.XP,
+            hungry: player.hungry * "hungry",
+            thirsty: player.thirsty * "thirsty",
+            sleepy: player.sleepy * "sleepy"
+        });
+        replyWithMarkdown(status, { playerId: state.player.id }, state);
         let message =
             "You come closer and see three tents. One has lots of weapons. Other two sell shields and armor" +
             'Inbetween them sits a shady man. A tattoo under his eyes spells:"SECOND HAND"' +

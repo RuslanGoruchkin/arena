@@ -12,9 +12,9 @@ selectCharacterScene.enter(ctx =>
         return keyboard(
             t(state, "texts.startScenes.selectCharacterScene.chooseCharacter"),
             [
-                [t(state, "menu.characters.cyberWarrior"), t(state, "menu.characters.techMage")],
-                [t(state, "menu.characters.cryptoEvangelist"), t(state, "menu.characters.singularityProphet")],
-                [t(state, "menu.characters.digitalNomad")]
+                [t(state, "menu.characters.warrior"), t(state, "menu.characters.mage")],
+                [t(state, "menu.characters.evangelist"), t(state, "menu.characters.prophet")],
+                [t(state, "menu.characters.nomad")]
             ],
             { playerId: state.player.id }
         );
@@ -25,23 +25,23 @@ selectCharacterScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let text = ctx.update.message.text;
         switch (text) {
-            case t(state, "menu.characters.cyberWarrior"):
-                ctx.session.character = "cyberWarrior";
+            case t(state, "menu.characters.warrior"):
+                ctx.session.character = "warrior";
                 break;
-            case t(state, "menu.characters.techMage"):
-                ctx.session.character = "techMage";
+            case t(state, "menu.characters.mage"):
+                ctx.session.character = "mage";
                 break;
-            case t(state, "menu.characters.cryptoEvangelist"):
-                ctx.session.character = "cryptoEvangelist";
+            case t(state, "menu.characters.evangelist"):
+                ctx.session.character = "evangelist";
                 break;
-            case t(state, "menu.characters.singularityProphet"):
-                ctx.session.character = "singularityProphet";
+            case t(state, "menu.characters.prophet"):
+                ctx.session.character = "prophet";
                 break;
-            case t(state, "menu.characters.digitalNomad"):
-                ctx.session.character = "digitalNomad";
+            case t(state, "menu.characters.nomad"):
+                ctx.session.character = "nomad";
                 break;
         }
-        enterScene(ctx, "confirmScene", state);
+        return enterScene(ctx, "confirmScene", state);
     })
 );
 

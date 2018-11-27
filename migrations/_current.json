@@ -149,6 +149,15 @@
                 "nickname": {
                     "seqType": "Sequelize.STRING"
                 },
+                "sleepyTime": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "hungryTime": {
+                    "seqType": "Sequelize.INTEGER"
+                },
+                "thirstyTime": {
+                    "seqType": "Sequelize.INTEGER"
+                },
                 "startX": {
                     "seqType": "Sequelize.INTEGER"
                 },

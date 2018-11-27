@@ -9,19 +9,27 @@ characterScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
         let selectedCharacter = player.selectedCharacter;
-        let message = t(state, "texts.mainScenes.characterScene.descriptionCharacter", {
+        let message = "";
+        let belt = "";
+        _.each(player.selectedCharacter.belt, item => {
+            belt += item.name + " ";
+        });
+        message += t(state, "texts.mainScenes.characterScene.descriptionCharacter", {
             charClass: t(state, `menu.characters.${selectedCharacter.class}`),
             nickname: player.nickname,
             level: player.level,
             xp: player.XP,
             coins: player.data.coins,
             tokens: player.data.tokens,
-            strength: player.strength,
-            dexterity: player.dexterity,
-            intelligence: player.intelligence,
-            wisdom: player.wisdom,
-            vitality: player.vitality,
-            rightHandName: player.rightHand.name
+            strength: player.selectedCharacter.baseStrength,
+            dexterity: player.selectedCharacter.baseDexterity,
+            intelligence: player.selectedCharacter.baseIntelligence,
+            wisdom: player.selectedCharacter.baseWisdom,
+            vitality: player.selectedCharacter.baseVitality,
+            rightHandName: player.rightHand.name,
+            hp: player.data.hp,
+            mp: player.data.mp,
+            belt: belt
         });
         return keyboard(message, [[t(state, "texts.back")]], { playerId: state.player.id });
     })
@@ -32,10 +40,10 @@ characterScene.on("text", ctx =>
         let text = ctx.update.message.text;
         switch (text) {
             case t(state, "texts.back"):
-                enterScene(ctx, "mainMenuScene", state);
+                return enterScene(ctx, "mainScene", state);
                 break;
             default:
-                redirectToOopsScene(ctx);
+                return redirectToOopsScene(ctx);
                 break;
         }
     })

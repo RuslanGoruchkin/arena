@@ -1,11 +1,11 @@
+import sha420 from "js-sha420";
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { keyboard } from "../../helpers/TelegramApiHelpers";
-import variables from "../../variables";
-import sha420 from "js-sha420";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, stateWrapper, t } from "../../helpers";
 
+let nicknames = {},
+    ratings = {},
+    users = {};
 const ratingScene = new Scene("ratingScene");
 
 let listMessage;
@@ -37,13 +37,14 @@ ratingScene.enter(ctx =>
         let playerID = playerEncrypted.substring(4, 20);
         let userCount = 10;
         let userRating = {};
-        if (Object.keys(variables.users).length < userCount) {
-            userCount = Object.keys(variables.users).length - 1;
+        //todo need to get data from state
+        if (Object.keys({}).length < userCount) {
+            userCount = Object.keys({}).length - 1;
         }
         for (let i = 0; i < userCount; i++) {
-            let userID = _.map(variables.users)[i];
-            userRating[t(state, "texts.ratingScenes.userRating") + variables.nicknames[userID].toString() + ratingType] =
-                variables.ratings[userID + ratingFilter];
+            let userID = _.map(users)[i];
+            userRating[t(state, "texts.ratingScenes.userRating") + nicknames[userID].toString() + ratingType] =
+                ratings[userID + ratingFilter];
         }
         let ratingObject = _.reduceRight(
             _.invert(_.invert(userRating)),
@@ -60,11 +61,11 @@ ratingScene.enter(ctx =>
             });
         }
         usersListMessage += t(state, "texts.ratingScenes.youListMessage", {
-            playerID: variables.nicknames[playerID].toString(),
+            playerID: state.player.id,
             ratingType: ratingType,
-            rating: variables.ratings[playerID + ratingFilter]
+            rating: ratings[playerID + ratingFilter]
         });
-        return keyboard(usersListMessage, buttons, { playerId: state.player.id });
+        return keyboard(usersListMessage, buttons, { playerId: state.player.id }, state);
     })
 );
 
@@ -72,38 +73,37 @@ ratingScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         switch (ctx.update.message.text) {
             case t(state, "texts.ratingScenes.refreshButton"):
-                enterScene(ctx, "ratingScene", state);
-                break;
+                return enterScene(ctx, "ratingScene", state);
+
             case t(state, "texts.ratingScenes.coin.button"):
                 listMessage = t(state, "texts.ratingScenes.coin.header") + "\n\n";
                 ratingType = "` " + t(state, "texts.ratingScenes.coin.type");
                 ratingFilter = "-balanceCoin";
-                enterScene(ctx, "ratingScene", state);
-                break;
+                return enterScene(ctx, "ratingScene", state);
+
             case t(state, "texts.ratingScenes.token.button"):
                 listMessage = t(state, "texts.ratingScenes.token.header") + "\n\n";
                 ratingType = "` " + t(state, "texts.ratingScenes.token.type");
                 ratingFilter = "-balanceToken";
-                enterScene(ctx, "ratingScene", state);
-                break;
+                return enterScene(ctx, "ratingScene", state);
+
             case t(state, "texts.ratingScenes.level.button"):
                 listMessage = t(state, "texts.ratingScenes.level.header") + "\n\n";
                 ratingType = "` " + t(state, "texts.ratingScenes.level.type");
                 ratingFilter = "-level";
-                enterScene(ctx, "ratingScene", state);
-                break;
+                return enterScene(ctx, "ratingScene", state);
+
             case t(state, "texts.ratingScenes.infamy.button"):
                 listMessage = t(state, "texts.ratingScenes.infamy.header") + "\n\n";
                 ratingType = "` " + t(state, "texts.ratingScenes.infamy.type");
                 ratingFilter = "-infamousLevel";
-                enterScene(ctx, "ratingScene", state);
-                break;
+                return enterScene(ctx, "ratingScene", state);
+
             case t(state, "menu.confirm.back"):
-                enterScene(ctx, "mainMenuScene", state);
-                break;
+                return enterScene(ctx, "mainMenuScene", state);
+
             default:
-                redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

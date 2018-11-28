@@ -1,8 +1,6 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, stateWrapper, t } from "../../helpers";
 
 const changeLanguageScene = new Scene("changeLanguageScene");
 
@@ -10,11 +8,9 @@ changeLanguageScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         return keyboard(
             t(state, "texts.startScenes.languageScene.selectLanguage"),
-            [
-                [t(state, "menu.language.ru"), t(state, "menu.language.en"), t(state, "menu.language.ja")],
-                [t(state, "texts.back")]
-            ],
-            { playerId: state.player.id }
+            [[t(state, "menu.language.ru"), t(state, "menu.language.en"), t(state, "menu.language.ja")], [t(state, "texts.back")]],
+            { playerId: state.player.id },
+            state
         );
     })
 );
@@ -25,13 +21,13 @@ changeLanguageScene.on("text", ctx =>
         let locales = [t(state, "menu.language.ru"), t(state, "menu.language.en"), t(state, "menu.language.ja")];
         if (_.includes(locales, text) || text === t(state, "texts.back")) {
             if (text === t(state, "menu.language.ru")) {
-                state.language = "ru";
+                state.player.language = "ru";
             } else if (text === t(state, "menu.language.en")) {
-                state.language = "en";
+                state.player.language = "en";
             } else {
-                redirectToOopsScene(ctx);
+                return redirectToOopsScene(ctx, state);
             }
-            enterScene(ctx, "mainScene", state);
+            return enterScene(ctx, "mainScene", state);
         }
     })
 );

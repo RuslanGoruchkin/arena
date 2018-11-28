@@ -1,4 +1,4 @@
-require('dotenv').config({ debug: process.env.DEBUG })
+require("dotenv").config({ debug: process.env.DEBUG });
 module.exports = {
     development: {
         database: process.env.RDS_DB,

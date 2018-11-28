@@ -1,5 +1,4 @@
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, replyWithMarkdown, stateWrapper, redirectToOopsScene, t } from "../../helpers";
 import Scene from "telegraf/scenes/base";
 
 const drinkingScene = new Scene("drinkingScene");
@@ -12,10 +11,14 @@ drinkingScene.enter(ctx =>
         data.timeout = currentTick + drinkingTime;
         data.timeoutStatus = true;
         data.activity = "drinking";
-        keyboard(t(state, "texts.needs.drinking"), [[t(state, "menu.needs.status")], [t(state, "menu.needs.stop")]], {
-            playerId: state.player.id
-        });
-        return state;
+        return keyboard(
+            t(state, "texts.needs.drinking"),
+            [[t(state, "menu.needs.status")], [t(state, "menu.needs.stop")]],
+            {
+                playerId: state.player.id
+            },
+            state
+        );
     })
 );
 
@@ -28,21 +31,22 @@ drinkingScene.on("text", ctx =>
                 let timeout = player.data.timeout;
                 let delta = timeout - currentTick;
                 if (delta > 0) {
-                    return replyWithMarkdown(t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"), {
-                        playerId: player.id
-                    });
+                    return replyWithMarkdown(
+                        t(state, "texts.needs.timeLeft") + " " + delta + " " + t(state, "texts.seconds"),
+                        {
+                            playerId: player.id
+                        },
+                        state
+                    );
                 } else {
-                    return replyWithMarkdown("You have already drunk", { playerId: player.id });
+                    return replyWithMarkdown("You have already drunk", { playerId: player.id }, state);
                 }
-                break;
             case t(state, "menu.needs.stop"):
                 timeout = 0;
-                replyWithMarkdown(t(state, "texts.needs.stopDrinking"), { playerId: player.id });
+                replyWithMarkdown(t(state, "texts.needs.stopDrinking"), { playerId: player.id }, state);
                 return enterScene(ctx, "mainScene", state);
-                break;
             default:
-                return redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

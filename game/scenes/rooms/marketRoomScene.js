@@ -1,8 +1,7 @@
 import Scene from "telegraf/scenes/base";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, replyWithMarkdown, stateWrapper, redirectToOopsScene, t } from "../../helpers";
 
-let debug = require("debug")("bot:marketRoomScene");
+// let debug = require("debug")("bot:marketRoomScene");
 
 const marketRoomScene = new Scene("marketRoomScene");
 marketRoomScene.enter(ctx => {
@@ -36,7 +35,7 @@ marketRoomScene.enter(ctx => {
         buttons.push([t(state, "menu.hack.back")]);
         //any scene
         buttons.push([t(state, "menu.character"), t(state, "menu.menu")]);
-        return keyboard(message, buttons, { playerId: state.player.id });
+        return keyboard(message, buttons, { playerId: state.player.id }, state);
     });
 });
 
@@ -45,26 +44,25 @@ marketRoomScene.on("text", ctx =>
         switch (ctx.update.message.text) {
             case t(state, "menu.shop.consumables"):
                 return enterScene(ctx, "vendorScene", state);
-                break;
+
             case t(state, "menu.shop.secondHand"):
                 return enterScene(ctx, "secondHandScene", state);
-                break;
+
             case t(state, "menu.appulse"):
                 return enterScene(ctx, "appulseScene", state);
-                break;
+
             case t(state, "menu.hack.back"):
                 return enterScene(ctx, "hallwayRoomScene", state);
-                break;
+
             //any scene
             case t(state, "menu.character"):
                 return enterScene(ctx, "characterScene", state);
-                break;
+
             case t(state, "menu.menu"):
                 return enterScene(ctx, "mainMenuScene", state);
-                break;
+
             default:
-                return redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

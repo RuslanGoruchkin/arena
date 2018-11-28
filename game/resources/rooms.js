@@ -1,4 +1,4 @@
-import { t } from "../helpers/ctx";
+import { t } from "../helpers";
 
 export let rooms = {
     cell: {

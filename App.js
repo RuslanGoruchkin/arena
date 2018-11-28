@@ -1,37 +1,36 @@
 import Telegraf from "telegraf";
-import { enterScene } from "./game/helpers/TelegramApiHelpers";
+import { enterScene, errorHandler, initLoggers } from "./game/helpers";
+import DonatesMiddleware from "./game/middlewares/donates";
 import MySQLSession from "./game/middlewares/mysql-session-middleware";
 import TickMiddleware from "./game/middlewares/tick";
-import DonatesMiddleware from "./game/middlewares/donates";
 import { stage } from "./game/scenes/scenes";
-import { initLoggers } from "./game/helpers/loggers";
 
 const { Sentry, debug } = initLoggers();
 
 const BOT_TOKEN = process.env.BOT_TOKEN;
 debug(`Bot ${BOT_TOKEN} runs in production mode`);
-global.ctxBase = {};
 
-global.bot = new Telegraf(BOT_TOKEN, { telegram: { webhookReply: true } });
+const bot = new Telegraf(BOT_TOKEN, { telegram: { webhookReply: true } });
 export const Session = new MySQLSession();
 export const Tick = new TickMiddleware();
 export const Donates = new DonatesMiddleware();
 
-global.bot.use(Tick.middleware());
-global.bot.use(Session.middleware());
-global.bot.use(stage.middleware());
-global.bot.use(Donates.middleware());
-global.bot.command("start", ctx => {
+bot.use(Tick.middleware());
+bot.use(Session.middleware());
+bot.use(stage.middleware());
+bot.use(Donates.middleware());
+bot.command("start", ctx => {
     debug("Start session", ctx.session);
-    global.bot.telegram.getMe().then(botInfo => {
-        global.bot.options.username = botInfo.username;
-    });
+    bot.telegram
+        .getMe()
+        .then(botInfo => {
+            bot.options.username = botInfo.username;
+            return botInfo.username;
+        })
+        .catch(e => errorHandler(e, ctx, null));
 
     return enterScene(ctx, "languageScene", null);
 });
-global.bot.catch(err => {
-    debug(err);
-    Sentry.captureException(err);
-});
-
-global.bot.startPolling();
+bot.catch(errorHandler);
+bot.startPolling();
+global.bot = bot;

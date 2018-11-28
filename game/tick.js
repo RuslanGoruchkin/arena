@@ -1,10 +1,6 @@
 import _ from "lodash";
-import { gameModules } from "./gameModules";
+import { enterScene, generateUpdateFromState, getPlayer, replyWithMarkdown, t } from "./helpers";
 import { characters } from "./resources/characters";
-import { programs } from "./resources/programs";
-import { quests } from "./resources/quests";
-import { generateUpdateFromState, getPlayer, t } from "./helpers/ctx";
-import { enterScene, replyWithMarkdown } from "./helpers/TelegramApiHelpers";
 import stateManager from "./stateManager";
 
 const debug = require("debug")("bot:tick");
@@ -23,59 +19,63 @@ export const tick = async state => {
             }
         });
 
-        if (state.player.sleepy === false && state.currentTick - player.sleepyTime > player.data.sleepyTick) {
-            state.player.sleepy = true;
-            replyWithMarkdown(t(state, "texts.condition.sleepy"), params);
+        if (player.sleepy === false && state.currentTick - player.sleepyTime > player.data.sleepyTick) {
+            player.sleepy = true;
+            stateManager.queue.add(() => {
+                replyWithMarkdown(t(state, "texts.condition.sleepy"), params);
+            });
         }
-        if (state.player.thirsty === false && state.currentTick - player.thirstyTime > player.data.thirstyTick) {
-            state.player.thirsty = true;
-            replyWithMarkdown(t(state, "texts.condition.thirsty"), params);
+        if (player.thirsty === false && state.currentTick - player.thirstyTime > player.data.thirstyTick) {
+            player.thirsty = true;
+
+            stateManager.queue.add(() => {
+                replyWithMarkdown(t(state, "texts.condition.thirsty"), params);
+            });
         }
-        if (state.player.hungry === false && state.currentTick - player.hungryTime > player.data.hungryTick) {
-            state.player.hungry = true;
-            replyWithMarkdown(t(state, "texts.condition.hungry"), params);
+        if (player.hungry === false && state.currentTick - player.hungryTime > player.data.hungryTick) {
+            player.hungry = true;
+            stateManager.queue.add(() => {
+                replyWithMarkdown(t(state, "texts.condition.hungry"), params);
+            });
         }
 
         if (player.data.timeoutStatus === true && player.data.timeout < state.currentTick) {
             const ctx = generateUpdateFromState(state, params);
             switch (player.data.activity) {
                 case "eating":
-                    state.player.data.hungryTick = state.currentTick;
-                    state.player.hungry = false;
-                    replyWithMarkdown("You are no longer hungry. Your stats have been restored", params);
+                    player.data.hungryTick = state.currentTick;
+                    player.hungry = false;
+                    stateManager.queue.add(() => {
+                        replyWithMarkdown("You are no longer hungry. Your stats have been restored", params);
+                    });
+
                     break;
                 case "drinking":
-                    state.player.data.thirstyTick = state.currentTick;
-                    state.player.thirsty = false;
-                    replyWithMarkdown("You are no longer thirsty. Your stats have been restored", params);
+                    player.data.thirstyTick = state.currentTick;
+                    player.thirsty = false;
+                    stateManager.queue.add(() => {
+                        replyWithMarkdown("You are no longer thirsty. Your stats have been restored", params);
+                    });
+
                     break;
                 case "sleeping":
-                    state.player.data.sleepyTick = state.currentTick;
-                    state.player.sleepy = false;
-                    replyWithMarkdown("You are no longer sleepy. Your stats have been restored", params);
+                    player.data.sleepyTick = state.currentTick;
+                    player.sleepy = false;
+                    stateManager.queue.add(() => {
+                        replyWithMarkdown("You are no longer sleepy. Your stats have been restored", params);
+                    });
+
                     break;
                 default:
                     break;
             }
-            state.player.data.timeout = 0;
-            state.player.data.activity = "";
-            state.player.data.timeoutStatus = false;
-            enterScene(ctx, "mainScene", state);
+            player.data.timeout = 0;
+            player.data.activity = "";
+            player.data.timeoutStatus = false;
+            stateManager.queue.add(() => {
+                enterScene(ctx, "mainScene");
+            });
         }
-
-        _.each(quests, (quest, key) => {
-            let player = getPlayer(state, params);
-
-            if (player && _.get(player, "currentQuest.name") === key) {
-                const ctx = generateUpdateFromState(state, params);
-                if (quest.fail(state, params)) {
-                    enterScene(ctx, "questRestartScene", state);
-                }
-                if (quest.goal(state, params) && !_.get(player, "currentQuest.status")) {
-                    enterScene(ctx, "outroScene", state);
-                }
-            }
-        });
     });
     // debug(`End tick ${state.currentTick}`);
     state.currentTick++;

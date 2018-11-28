@@ -1,7 +1,5 @@
 import Scene from "telegraf/scenes/base";
-import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, stateWrapper, t } from "../../helpers";
 
 const storeDisclamerScene = new Scene("storeDisclamerScene");
 
@@ -10,7 +8,7 @@ let buttons;
 storeDisclamerScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         buttons = [[t(state, "menu.confirm.confirm")]];
-        return keyboard(t(state, "texts.betaDisclamer"), buttons, { playerId: state.player.id });
+        return keyboard(t(state, "texts.betaDisclamer"), buttons, { playerId: state.player.id }, state);
     })
 );
 
@@ -18,11 +16,9 @@ storeDisclamerScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         switch (ctx.update.message.text) {
             case t(state, "menu.confirm.confirm"):
-                enterScene(ctx, "paymentScene", state);
-                break;
+                return enterScene(ctx, "paymentScene", state);
             default:
-                redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

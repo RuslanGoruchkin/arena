@@ -1,8 +1,16 @@
-import { getItemByClassCaption, startNewGame } from "../../util";
 import Scene from "telegraf/scenes/base";
-import { stateWrapper, t } from "../../helpers/ctx";
+
 import { characters } from "../../resources/characters";
-import { enterScene, redirectToOopsScene, replyWithPhotoAndKeyboard, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
+import {
+    enterScene,
+    getItemByClassCaption,
+    startNewGame,
+    replyWithMarkdown,
+    stateWrapper,
+    redirectToOopsScene,
+    replyWithPhotoAndKeyboard,
+    t
+} from "../../helpers";
 
 const confirmScene = new Scene("confirmScene");
 
@@ -42,13 +50,10 @@ confirmScene.on("text", ctx =>
                 state.player.data.thirstyTick = state.currentTick;
                 state.player.data.sleepyTick = state.currentTick;
                 return enterScene(ctx, "mainScene", state);
-                break;
             case t(state, "texts.startScenes.confirmScene.otherCharacter"):
                 return enterScene(ctx, "selectCharacterScene", state);
-                break;
             default:
-                return redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

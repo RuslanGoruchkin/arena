@@ -1,8 +1,6 @@
 import Scene from "telegraf/scenes/base";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
-
-let debug = require("debug")("bot:mainScene");
+import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown, stateWrapper, t } from "../../helpers";
+// let debug = require("debug")("bot:mainScene");
 
 const mainScene = new Scene("mainScene");
 mainScene.enter(ctx => {
@@ -52,35 +50,27 @@ mainScene.on("text", ctx =>
                 data.timeoutStatus = true;
                 data.activity = "eating";
                 return enterScene(ctx, "eatingScene", state);
-                break;
             case t(state, "menu.action.drink"):
                 data.timeout = currentTick + drinkingTime;
                 data.timeoutStatus = true;
                 data.activity = "drinking";
                 return enterScene(ctx, "drinkingScene", state);
-                break;
             case t(state, "menu.leaveCell"):
                 return enterScene(ctx, "hallwayRoomScene", state);
-                break;
             case t(state, "menu.action.sleep"):
                 data.timeout = currentTick + sleepingTime;
                 data.timeoutStatus = true;
                 data.activity = "sleeping";
                 return enterScene(ctx, "sleepingScene", state);
-                break;
             case t(state, "menu.inventory"):
                 return enterScene(ctx, "inventoryScene", state);
-                break;
             //any scene
             case t(state, "menu.character"):
                 return enterScene(ctx, "characterScene", state);
-                break;
             case t(state, "menu.menu"):
                 return enterScene(ctx, "mainMenuScene", state);
-                break;
             default:
-                return redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

@@ -1,7 +1,6 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, keyboard, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, stateWrapper, t } from "../../helpers";
 
 const inventoryScene = new Scene("inventoryScene");
 
@@ -9,16 +8,6 @@ inventoryScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
         let selectedCharacter = player.selectedCharacter;
-        let programs = "";
-        let programsInMemory = _.cloneDeep(player.data.programsInMemory);
-        programsInMemory = _.sortBy(programsInMemory, [
-            program => {
-                return t(state, `texts.${program.key}`);
-            }
-        ]);
-        _.each(programsInMemory, program => {
-            programs += `\n${t(state, `texts.${program.key}`)}`;
-        });
         let rightHand = player.selectedCharacter.rightHand.name || "Fist";
         let leftHand = player.selectedCharacter.leftHand.name || "Fist";
         let inventory = "";
@@ -47,9 +36,14 @@ inventoryScene.enter(ctx =>
             inventory: inventory,
             belt: belt
         });
-        return keyboard(message, [[t(state, "texts.back")], [t(state, "texts.equip")], [t(state, "texts.unequip")]], {
-            playerId: state.player.id
-        });
+        return keyboard(
+            message,
+            [[t(state, "texts.back")], [t(state, "texts.equip")], [t(state, "texts.unequip")]],
+            {
+                playerId: state.player.id
+            },
+            state
+        );
     })
 );
 
@@ -59,16 +53,12 @@ inventoryScene.on("text", ctx =>
         switch (text) {
             case t(state, "texts.back"):
                 return enterScene(ctx, "mainScene", state);
-                break;
             case t(state, "texts.equip"):
                 return enterScene(ctx, "equipScene", state);
-                break;
             case t(state, "texts.unequip"):
                 return enterScene(ctx, "unequipScene", state);
-                break;
             default:
-                return redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

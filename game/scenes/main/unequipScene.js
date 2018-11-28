@@ -1,7 +1,6 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, keyboard } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, replyWithMarkdown, stateWrapper, t } from "../../helpers";
 
 const unequipScene = new Scene("unequipScene");
 
@@ -21,12 +20,15 @@ unequipScene.enter(ctx =>
         if (player.armor.name) {
             options[0].push(player.armor.name);
         }
-        console.log(options);
         options.push([t(state, "texts.back")]);
-        console.log(options);
-        return keyboard("Which item do you want to unequip?", options, {
-            playerId: state.player.id
-        });
+        return keyboard(
+            "Which item do you want to unequip?",
+            options,
+            {
+                playerId: state.player.id
+            },
+            state
+        );
     })
 );
 

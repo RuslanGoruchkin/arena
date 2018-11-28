@@ -212,11 +212,13 @@ menu:
   needs:
     status: 'Status'
     stop: 'Stop'
+    stopEating: 'StopEating'
 
   room:
     market: 'Market'
     training: 'Training'
     cell: 'Cell'
+    abandonQuest: 'abandonQuest'
 
   shop:
     weapons: 'Weapon shop'

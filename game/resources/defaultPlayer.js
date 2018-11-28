@@ -24,10 +24,6 @@ export let defaultPlayer = {
         timeoutStatus: false,
         activity: "",
         timeout: 0,
-        gameSpeed: 1000,
-        gameSpeedMultiplier: 1,
-        gamePaused: true,
-        coinsPerTick: 42,
         wallets: [],
         inventory: [],
         belt: [],
@@ -45,7 +41,6 @@ export let defaultPlayer = {
     balanceCoin: 50,
     balanceToken: 0,
     level: 1,
-    infamousLevel: 0,
     XP: 0,
     nickname: "",
     selectedCharacter: {

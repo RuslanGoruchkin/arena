@@ -1,7 +1,5 @@
 import Scene from "telegraf/scenes/base";
-import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown, stateWrapper, t } from "../../helpers";
 
 const mainMenuScene = new Scene("mainMenuScene");
 
@@ -25,7 +23,7 @@ Game Designer: Ilya Ulyanov
 mainMenuScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
-        let message = t(state, "texts.mainScenes.infoScene.info");
+        let message = "test";
         let buttons = [
             [t(state, "menu.credits"), t(state, "texts.settings")],
             [t(state, "texts.ratingScenes.sceneName"), t(state, "menu.donate")],
@@ -35,13 +33,13 @@ mainMenuScene.enter(ctx =>
             ]
         ];
         if (player.selectedCharacter.class === "defaultCharacter") {
-            buttons.push([t(state, "texts.rooms.finishTraining")]);
+            buttons.push([t(state, "menu.room.finishTraining")]);
         } else {
-            buttons.push([t(state, "texts.rooms.abandonQuest")]);
+            buttons.push([t(state, "menu.room.abandonQuest")]);
             buttons.push([t(state, "menu.weekly"), t(state, "menu.daily")]);
         }
         buttons.push([t(state, "menu.home"), t(state, "texts.back")]);
-        return keyboard(message, buttons, { playerId: state.player.id });
+        return keyboard(message, buttons, { playerId: state.player.id }, state);
     })
 );
 
@@ -61,70 +59,58 @@ mainMenuScene.on("text", ctx =>
 
         switch (text) {
             case t(state, "menu.credits"):
-                replyWithMarkdown(credits, { playerId: state.player.id });
-                enterScene(ctx, "mainMenuScene", state);
-                break;
+                replyWithMarkdown(credits, { playerId: state.player.id }, state);
+                return enterScene(ctx, "mainMenuScene", state);
             case t(state, "texts.back"):
-                enterScene(ctx, "mainScene", state);
-                break;
+                return enterScene(ctx, "mainScene", state);
             case t(state, "menu.character", { character: player.selectedCharacter.character }):
-                enterScene(ctx, "characterScene", state);
-                break;
+                return enterScene(ctx, "characterScene", state);
             case t(state, "menu.donate"):
-                enterScene(ctx, "storeDisclamerScene", state);
-                break;
+                return enterScene(ctx, "storeDisclamerScene", state);
             case t(state, "menu.home"):
                 if (state.player.finalFightWasStarted || ctx.session.firstFightWasStarted) {
                     ctx.session.firstFightWasStarted = false;
                     state.finalFightWasStarted = false;
-                    enterScene(ctx, "selectCharacterScene", state);
+                    return enterScene(ctx, "selectCharacterScene", state);
                 } else {
-                    enterScene(ctx, "teleportScene", state);
+                    return enterScene(ctx, "teleportScene", state);
                 }
-                break;
             case t(state, "texts.settings", { character: player.selectedCharacter.character }):
-                enterScene(ctx, "settingScene", state);
-                break;
+                return enterScene(ctx, "settingScene", state);
             case t(state, "texts.ratingScenes.sceneName"):
-                enterScene(ctx, "ratingScene", state);
-                break;
+                return enterScene(ctx, "ratingScene", state);
             case t(state, "menu.daily"):
                 if (dailyTickDifference >= dailyDelta) {
                     state.player.data.dailyTick = currentTick;
-                    enterScene(ctx, "dailyQuestScene", state);
+                    return enterScene(ctx, "dailyQuestScene", state);
                 } else {
-                    enterScene(ctx, "dailyTimeoutScene", state);
+                    return enterScene(ctx, "dailyTimeoutScene", state);
                 }
-                break;
             case t(state, "menu.weekly"):
                 if (weeklyTickDifference >= weeklyDelta) {
                     state.player.data.dailyTick = currentTick;
-                    enterScene(ctx, "weeklyQuestScene", state);
+                    return enterScene(ctx, "weeklyQuestScene", state);
                 } else {
-                    enterScene(ctx, "weeklyTimeoutScene", state);
+                    return enterScene(ctx, "weeklyTimeoutScene", state);
                 }
-                break;
             case t(state, "texts.rooms.finishTraining"):
                 if (player.currentFloor === `${player.id}_quest`) {
-                    player.currentQuest = undefined;
+                    player.currentQuest = null;
                     player.data.inventory = [];
-                    enterScene(ctx, "selectCharacterScene", state);
+                    return enterScene(ctx, "selectCharacterScene", state);
                 } else {
-                    redirectToOopsScene(ctx);
+                    return redirectToOopsScene(ctx, state);
                 }
-                break;
-            case t(state, "texts.rooms.abandonQuest"):
+            case t(state, "texts.room.abandonQuest"):
                 if (player.currentQuest) {
                     player.data.droppedQuests[player.currentQuest] = true;
-                    player.currentQuest = undefined;
+                    player.currentQuest = null;
                 }
-                break;
+                return enterScene(ctx, "mainMenuScene", state);
             case t(state, "texts.mainScenes.mainMenuScene.comics"):
-                enterScene(ctx, "comicsListScene", state);
-                break;
+                return enterScene(ctx, "comicsListScene", state);
             default:
-                redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

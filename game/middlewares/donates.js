@@ -1,9 +1,10 @@
+import bodyParser from "body-parser";
+import SHA1 from "crypto-js/sha1";
 import debug0 from "debug";
 import express from "express";
-import bodyParser from "body-parser";
 import log4js from "log4js";
-import SHA1 from "crypto-js/sha1";
 import db from "../../models/index";
+import { errorHandler } from "../helpers";
 
 const debug = debug0("bot:donatesMiddleware");
 
@@ -138,9 +139,7 @@ export default class DonatesMiddleware {
                     invoiceAmount: invoice.invoiceAmount
                 }
             ])
-            .catch(error => {
-                debug(error);
-            });
+            .catch(errorHandler);
     }
 
     middleware() {

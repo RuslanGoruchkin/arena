@@ -1,7 +1,5 @@
 import Scene from "telegraf/scenes/base";
-import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown, stateWrapper, t } from "../../helpers";
 
 const settingScene = new Scene("settingScene");
 
@@ -13,28 +11,24 @@ settingScene.enter(ctx =>
                 [t(state, "texts.mainScenes.settingScene.invite"), t(state, "texts.mainScenes.settingScene.language")],
                 [t(state, "texts.back")]
             ],
-            { playerId: state.player.id }
+            { playerId: state.player.id },
+            state
         );
     })
 );
 
 settingScene.on("text", ctx =>
-    stateWrapper(ctx, (ctx, state) => {
+    stateWrapper(ctx, async (ctx, state) => {
         switch (ctx.update.message.text) {
             case t(state, "texts.mainScenes.settingScene.invite"):
-                ctx.replyWithHTML(`https://telegram.me/${ctx.session.botName}?start=${state.player.telegramId}`).then(
-                    enterScene(ctx, "settingScene", state)
-                );
-                break;
+                await replyWithMarkdown(`https://telegram.me/${ctx.session.botName}?start=${state.player.telegramId}`);
+                return enterScene(ctx, "settingScene", state);
             case t(state, "texts.mainScenes.settingScene.language"):
-                enterScene(ctx, "changeLanguageScene", state);
-                break;
+                return enterScene(ctx, "changeLanguageScene", state);
             case t(state, "texts.back"):
-                enterScene(ctx, "mainMenuScene", state);
-                break;
+                return enterScene(ctx, "mainMenuScene", state);
             default:
-                redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

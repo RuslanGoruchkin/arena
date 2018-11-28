@@ -1,5 +1,5 @@
 module.exports = (sequelize, DataTypes) => {
-    return sequelize.define("floor", {
+    return sequelize.define("properties", {
         id: {
             type: DataTypes.INTEGER,
             primaryKey: true,
@@ -8,14 +8,11 @@ module.exports = (sequelize, DataTypes) => {
         // Timestamps
         createdAt: DataTypes.DATE,
         updatedAt: DataTypes.DATE,
-        name: {
+        key: {
             type: DataTypes.STRING
         },
-        floor: {
+        value: {
             type: DataTypes.STRING
-        },
-        serverSize: {
-            type: DataTypes.INTEGER
         }
     });
 };

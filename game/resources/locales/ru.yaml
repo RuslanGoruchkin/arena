@@ -98,6 +98,11 @@ texts:
     selectCharacterScene:
       chooseCharacter: 'Кто ты?'
     confirmScene:
+      warrior: "Klaus is strong in fencing. He can hit hard with any weapon."
+      mage: "Nimble Cheer avoids close combat and has excellent magic."
+      evangelist: "Alex combines powerful magic with physical abilities and tactics."
+      prophet: "Full of energy, Margit exhausts the enemy to deliver a final hit."
+      nomad: "Loki went through hell and survived. He is tough as an old boot."
       welcome: 'Добро пожаловать в дивный новый мир!'
       otherCharacter: 'Другой персонаж'
       readHistory: 'Читать историю'

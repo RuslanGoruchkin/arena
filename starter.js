@@ -1,5 +1,5 @@
-require("babel-register")({
-    presets: ["env"]
+require("@babel/register")({
+    cache: true
 });
 const dotenv = require("dotenv");
 dotenv.config();

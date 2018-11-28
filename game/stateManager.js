@@ -1,37 +1,96 @@
-import {
-    accessMatrixToCollection,
-    difference,
-    mapCollectionToMatrixReducer,
-    mapMatrixToCollection
-} from "./helpers/helpers";
-import _ from "lodash";
-import db from "../models";
 import Promise from "bluebird";
-import { getPlayer } from "./helpers/ctx";
+import _ from "lodash";
+import PQueue from "p-queue";
+import db from "../models";
+import { difference, errorHandler, getPlayer } from "./helpers";
 
 const debug = require("debug")("bot:stateManager");
-
+const defaultQueryOpt = {
+    raw: true,
+    logging: str => {
+        debug(str);
+    }
+};
 class StateManager {
     constructor() {
         this.client = db;
         this.loading = false;
         this.state = {};
         this.safePromises = [];
+        this.queue = new PQueue({ concurrency: 1 });
+    }
+    getStateFromDb() {
+        if (!this.loading && !_.isEmpty(this.state)) {
+            return Promise.resolve({ ...this.state });
+        }
+        if (this.loading && this.loadPromise) {
+            return this.loadPromise;
+        }
+        debug(`Load state from db`);
+        this.loading = true;
+        this.loadPromise = Promise.all(this.generateLoadPromise())
+            .then(result => {
+                debug(`State loaded succesfully `);
+                return result;
+            })
+            .catch(errorHandler)
+            .finally(() => {
+                this.loading = false;
+            });
+
+        return this.loadPromise;
     }
 
-    getCtxState(params) {
-        this.ctxState = _.cloneDeep(this.state);
-        if (_.get(params, "playerId")) {
-            let player = getPlayer(this.ctxState, params);
-            if (player) {
-                this.ctxState.player = player;
+    generateLoadPromise() {
+        let promises = [];
+        _.each(this.client.models, (value, key) => {
+            let promise = this.loadPromiseFactory(key);
+            switch (key) {
+                case "player": {
+                    promise
+                        .then(result => {
+                            this.state.players = _.keyBy(result, "id");
+                            return this.state.players;
+                        })
+                        .catch(errorHandler);
+                    break;
+                }
+                default: {
+                    promise
+                        .then(result => {
+                            this.state[key] = result;
+                            return result;
+                        })
+                        .catch(errorHandler);
+                }
             }
+            promises.push(promise);
+        });
+        return promises;
+    }
+
+    loadPromiseFactory(modelName, options = {}) {
+        options = { ...defaultQueryOpt, ...options };
+        if (!_.isFunction(_.get(this.client.models, `${modelName}.findAll`))) {
+            return Promise.reject(`Model ${modelName} doesn't exist or don't have method 'findAll' `);
         }
-        return this.ctxState;
+        return this.client.models[modelName].findAll(options);
+    }
+
+    savePromiseFactory(modelName, dataArray, options = {}) {
+        options = { ...defaultQueryOpt, ...options };
+        if (!_.isFunction(_.get(this.client.models, `${modelName}.bulkCreate`))) {
+            return Promise.reject(`Model ${modelName}  doesn't exist or don't have method 'bulkCreate' `);
+        }
+        return this.client.models[modelName].bulkCreate(dataArray, options);
     }
 
     getState(params) {
-        let state = _.cloneDeep(this.state);
+        let state = {
+            ...this.state,
+            players: _.cloneDeep(this.state.players),
+            userHistory: _.cloneDeep(this.state.userHistory)
+        };
         if (_.get(params, "playerId")) {
             let player = getPlayer(state, params);
             if (player) {
@@ -47,180 +106,76 @@ class StateManager {
         if (!_.isEmpty(diff)) {
             this.saveDiff(state, diff);
         }
-        if (player && player.id) {
-            state = { ...state, players: { ...state.players, [player.id]: { ...player } } };
+        if (_.has(diff, "player") && player && player.id) {
+            state = {
+                ...state,
+                players: {
+                    ...state.players,
+                    [player.id]: { ...player }
+                }
+            };
         }
-        return (this.state = state);
+
+        this.state = state;
     }
 
     saveDiff(state, diff) {
-        let promises = [];
         _.each(diff, (value, key) => {
             switch (key) {
-                case "map": {
-                    this.safePromises.push(this.setMaps(value));
-                    break;
-                }
-                case "access": {
-                    this.safePromises.push(this.setAccess(value));
-                    break;
-                }
                 case "player": {
                     let player = { ...state.player };
-                    this.safePromises.push(this.setPlayers([{ ...player }]));
-                    this.state = {
-                        ...state,
-                        players: {
-                            ...state.players,
-                            [player.id]: { ...player }
-                        }
-                    };
+                    let data = _.merge({}, player, value);
+                    let updateOnDuplicate = _.keys(data);
+                    if (_.get(player, "id")) {
+                        this.queue.add(() => this.savePromiseFactory("player", [{ id: player.id, ...data }], { updateOnDuplicate }));
+                    }
                     break;
                 }
 
                 case "players": {
-                    this.safePromises.push(this.setPlayers(value));
+                    let dataArray = [];
+                    let updateOnDuplicate;
+                    _.each(value, (val, id) => {
+                        let player = _.get(state.players, id);
+                        let data = _.merge({}, player, val);
+                        updateOnDuplicate = _.keys(data);
+                        dataArray.push({ id, ...data });
+                    });
+                    this.queue.add(() => this.savePromiseFactory("player", dataArray, { updateOnDuplicate }));
                     break;
                 }
+                case "userHistory": {
+                    let updateOnDuplicate = ["playerId", "action", "data"];
+                    if (!value.playerId) {
+                        break;
+                    }
+                    this.queue.add(() => this.savePromiseFactory("userHistory", _.compact(value), { updateOnDuplicate }));
+                    break;
+                }
+
                 default: {
+                    // this.queue.add(() => this.savePromiseFactory(key, [{ ...value }]));
+                    break;
                 }
             }
         });
-        // return Promise.all(promises).then(() => {
-        //     debug("Changes saves", this.state.currentTick, diff);
-        //     return diff;
-        // });
         return this.safePromises;
     }
 
     sync(newState) {
-        return Promise.all(this.safePromises);
-    }
-
-    getStateFromDb() {
-        if (!this.loading && !_.isEmpty(this.state)) {
-            return Promise.resolve({ ...this.state });
+        if (this.safePromises.length > 0) {
+            // return Promise.mapSeries(this.safePromises, step => step()).then(data => {
+            //     console.log(data);
+            // });
+            // return Promise.all(this.safePromises).finally(err => {
+            //     this.safePromises = [];
+            // });
         }
-        if (this.loading && this.promises) {
-            return this.promises;
-        }
-        debug(`Load state from db`);
-        this.loading = true;
-        let promises = [this.getMaps(""), this.getPlayers(), this.getDonates()];
-        this.promises = Promise.all(promises)
-            .then(([mapsResult, playersResult, donatesResult]) => {
-                let { map, access } = mapCollectionToMatrixReducer(mapsResult);
-                let players = _.keyBy(playersResult, "id");
-                let state = {
-                    map,
-                    access,
-                    players
-                };
-                this.loading = false;
-                this.state = state;
-                debug(`State loaded succesfully `);
-                // let donates = _.keyBy(donatesResult, "id");
-                return state;
-            })
-            .catch(error => {
-                this.loading = false;
-                debug(error);
-            });
-        return this.promises;
     }
 
-    getPlayers() {
-        return this.client.player.findAll({
-            raw: true
-        });
-    }
-
-    getDonates() {
-        return this.client.player.findAll({
-            raw: true
-        });
-    }
-
-    getMaps(floor) {
-        return this.client.mapItem
-            .findAll({
-                where: {
-                    // floor: floor
-                },
-                raw: true,
-                include: [{ all: true }]
-            })
-            .catch(error => {
-                debug(error);
-            });
-    }
-
-    setPlayers(players) {
-        return this.client.player
-            .bulkCreate(players, {
-                updateOnDuplicate: [
-                    "nickname",
-                    "startX",
-                    "startY",
-                    "balanceCoin",
-                    "balanceToken",
-                    "level",
-                    "infamousLevel",
-                    "userDonateLink",
-                    "telegramId",
-                    "data",
-                    "server",
-                    "attackPrograms",
-                    "basement",
-                    "coordinates",
-                    "personalCoordinates",
-                    "currentFloor",
-                    "currentQuest",
-                    "language",
-                    "walletsCount",
-                    "moduleForBuy",
-                    "comics",
-                    "hackStatus",
-                    "finalFightWasStarted",
-                    "alreadyStolen",
-                    "selectedCharacter",
-                    "selectedComics",
-                    "corporation"
-                ],
-                raw: true
-            })
-            .catch(error => {
-                debug(error);
-            });
-    }
-
-    setMaps(map) {
-        let newMap = mapMatrixToCollection(map);
-        return this.client.mapItem
-            .bulkCreate(newMap, {
-                raw: true,
-                updateOnDuplicate: ["data"]
-            })
-            .catch(error => {
-                debug(error);
-            });
-    }
-
-    setAccess(map) {
-        let { newMap, newAccess } = accessMatrixToCollection(map);
-        return this.client.mapItem
-            .bulkCreate(newMap, {
-                raw: true,
-                updateOnDuplicate: ["owner"]
-            })
-            .then(() => {
-                return this.client.access.bulkCreate(newAccess, {
-                    raw: true
-                });
-            })
-            .catch(error => {
-                debug(error);
-            });
+    setMapItem(item) {
+        let updateOnDuplicate = [`x`, `y`, `floor`, `data`];
+        this.queue.add(() => this.savePromiseFactory("mapItem", [...item], { updateOnDuplicate }));
     }
 }
 

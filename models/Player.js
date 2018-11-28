@@ -30,12 +30,7 @@ module.exports = (sequelize, DataTypes) => {
                 type: DataTypes.INTEGER,
                 allowNull: false
             },
-            startX: {
-                type: DataTypes.INTEGER
-            },
-            startY: {
-                type: DataTypes.INTEGER
-            },
+
             balanceCoin: {
                 type: DataTypes.INTEGER
             },
@@ -45,58 +40,44 @@ module.exports = (sequelize, DataTypes) => {
             level: {
                 type: DataTypes.INTEGER
             },
-            infamousLevel: {
-                type: DataTypes.INTEGER
-            },
+
             userDonateLink: {
                 type: DataTypes.STRING
             },
+            XP: { type: DataTypes.STRING },
             telegramId: {
                 type: DataTypes.STRING
             },
             data: {
                 type: DataTypes.JSON
             },
-            server: {
-                type: DataTypes.JSON
-            },
-            coordinates: {
-                type: DataTypes.JSON
-            },
-            personalCoordinates: {
-                type: DataTypes.JSON
-            },
-            currentFloor: {
-                type: DataTypes.STRING
-            },
-            currentQuest: {
-                type: DataTypes.JSON
-            },
+
             language: {
                 type: DataTypes.STRING
             },
-            walletsCount: {
-                type: DataTypes.INTEGER
-            },
-            moduleForBuy: {
-                type: DataTypes.JSON
-            },
+
             comics: {
                 type: DataTypes.JSON
             },
-            hackStatus: {
-                type: DataTypes.BOOLEAN
+            strength: {
+                type: DataTypes.INTEGER
             },
-            alreadyStolen: {
-                type: DataTypes.BOOLEAN
+            dexterity: {
+                type: DataTypes.INTEGER
+            },
+            intelligence: {
+                type: DataTypes.INTEGER
+            },
+            wisdom: {
+                type: DataTypes.INTEGER
+            },
+            vitality: {
+                type: DataTypes.INTEGER
             },
             selectedCharacter: {
                 type: DataTypes.JSON
             },
             selectedComics: {
-                type: DataTypes.STRING
-            },
-            corporation: {
                 type: DataTypes.STRING
             }
         },

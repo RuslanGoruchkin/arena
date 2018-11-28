@@ -1,137 +1,25 @@
+"use strict";
+
 var Sequelize = require("sequelize");
 
 /**
  * Actions summary:
  *
- * createTable "donates", deps: []
- * createTable "floors", deps: []
- * createTable "mapItems", deps: []
  * createTable "players", deps: []
- * createTable "accesses", deps: [mapItems]
+ * createTable "properties", deps: []
+ * createTable "userHistories", deps: []
  * createTable "sessions", deps: [players]
- * addIndex ["x","y","floor"] to table "mapItems"
  *
  **/
 
 var info = {
     revision: 1,
     name: "noname",
-    created: "2018-10-25T07:17:40.289Z",
+    created: "2018-11-28T05:16:59.173Z",
     comment: ""
 };
 
 var migrationCommands = [
-    {
-        fn: "createTable",
-        params: [
-            "donates",
-            {
-                id: {
-                    type: Sequelize.INTEGER,
-                    autoIncrement: true,
-                    primaryKey: true
-                },
-                user: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                pack: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                quantity: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                invoiceId: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                invoiceExId: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                invoiceDate: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                invoiceMetbhod: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                invoiceAgreement: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                invoiceCurrency: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                invoiceAmount: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                }
-            },
-            {}
-        ]
-    },
-    {
-        fn: "createTable",
-        params: [
-            "floors",
-            {
-                id: {
-                    type: Sequelize.INTEGER,
-                    autoIncrement: true,
-                    primaryKey: true
-                },
-                createdAt: {
-                    type: Sequelize.DATE
-                },
-                updatedAt: {
-                    type: Sequelize.DATE
-                },
-                name: {
-                    type: Sequelize.STRING
-                },
-                floor: {
-                    type: Sequelize.STRING
-                },
-                serverSize: {
-                    type: Sequelize.INTEGER
-                }
-            },
-            {}
-        ]
-    },
-    {
-        fn: "createTable",
-        params: [
-            "mapItems",
-            {
-                id: {
-                    type: Sequelize.STRING,
-                    primaryKey: true
-                },
-                x: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                y: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                floor: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                data: {
-                    type: Sequelize.JSON
-                }
-            },
-            {}
-        ]
-    },
     {
         fn: "createTable",
         params: [
@@ -142,20 +30,7 @@ var migrationCommands = [
                     primaryKey: true
                 },
                 nickname: {
-                    type: Sequelize.STRING,
-                    allowNull: false
-                },
-                startX: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                startY: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                currentRoom: {
-                    type: Sequelize.STRING,
-                    allowNull: true
+                    type: Sequelize.STRING
                 },
                 sleepy: {
                     type: Sequelize.BOOLEAN
@@ -178,120 +53,53 @@ var migrationCommands = [
                     type: Sequelize.INTEGER,
                     allowNull: false
                 },
-                strength: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                dexterity: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                intelligence: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                wisdom: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                vitality: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
                 balanceCoin: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
+                    type: Sequelize.INTEGER
                 },
                 balanceToken: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
+                    type: Sequelize.INTEGER
                 },
                 level: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                infamousLevel: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
+                    type: Sequelize.INTEGER
                 },
                 userDonateLink: {
-                    type: Sequelize.STRING,
-                    allowNull: true
+                    type: Sequelize.STRING
+                },
+                XP: {
+                    type: Sequelize.STRING
                 },
                 telegramId: {
-                    type: Sequelize.STRING,
-                    allowNull: true
-                },
-                inventory: {
-                    type: Sequelize.JSON
-                },
-                fastEquipItem: {
-                    type: Sequelize.JSON
-                },
-                rightHand: {
-                    type: Sequelize.JSON
-                },
-                leftHand: {
-                    type: Sequelize.JSON
-                },
-                armor: {
-                    type: Sequelize.JSON
+                    type: Sequelize.STRING
                 },
                 data: {
                     type: Sequelize.JSON
                 },
-                server: {
-                    type: Sequelize.JSON
-                },
-                belt: {
-                    type: Sequelize.JSON
-                },
-                basement: {
-                    type: Sequelize.JSON
-                },
-                personalCoordinates: {
-                    type: Sequelize.JSON
-                },
-                currentFloor: {
-                    type: Sequelize.STRING,
-                    allowNull: true
-                },
-                currentQuest: {
-                    type: Sequelize.JSON
-                },
                 language: {
-                    type: Sequelize.STRING,
-                    allowNull: true
-                },
-                walletsCount: {
-                    type: Sequelize.INTEGER,
-                    allowNull: false
-                },
-                moduleForBuy: {
-                    type: Sequelize.JSON
+                    type: Sequelize.STRING
                 },
                 comics: {
                     type: Sequelize.JSON
                 },
-                hackStatus: {
-                    type: Sequelize.BOOLEAN
+                strength: {
+                    type: Sequelize.INTEGER
                 },
-                finalFightWasStarted: {
-                    type: Sequelize.BOOLEAN
+                dexterity: {
+                    type: Sequelize.INTEGER
                 },
-                alreadyStolen: {
-                    type: Sequelize.BOOLEAN
+                intelligence: {
+                    type: Sequelize.INTEGER
+                },
+                wisdom: {
+                    type: Sequelize.INTEGER
+                },
+                vitality: {
+                    type: Sequelize.INTEGER
                 },
                 selectedCharacter: {
                     type: Sequelize.JSON
                 },
                 selectedComics: {
-                    type: Sequelize.STRING,
-                    allowNull: true
-                },
-                corporation: {
-                    type: Sequelize.STRING,
-                    allowNull: true
+                    type: Sequelize.STRING
                 },
                 createdAt: {
                     type: Sequelize.DATE,
@@ -308,26 +116,57 @@ var migrationCommands = [
     {
         fn: "createTable",
         params: [
-            "accesses",
+            "properties",
             {
                 id: {
                     type: Sequelize.INTEGER,
                     autoIncrement: true,
                     primaryKey: true
                 },
-                owner: {
+                createdAt: {
+                    type: Sequelize.DATE
+                },
+                updatedAt: {
+                    type: Sequelize.DATE
+                },
+                key: {
                     type: Sequelize.STRING
                 },
-                mapItemId: {
+                value: {
+                    type: Sequelize.STRING
+                }
+            },
+            {}
+        ]
+    },
+    {
+        fn: "createTable",
+        params: [
+            "userHistories",
+            {
+                id: {
+                    type: Sequelize.INTEGER,
+                    autoIncrement: true,
+                    primaryKey: true
+                },
+                playerId: {
+                    type: Sequelize.STRING
+                },
+                action: {
                     type: Sequelize.STRING,
-                    onUpdate: "CASCADE",
-                    onDelete: "CASCADE",
-                    references: {
-                        model: "mapItems",
-                        key: "id"
-                    },
-                    allowNull: true,
-                    name: "mapItemId"
+                    allowNull: false
+                },
+                data: {
+                    type: Sequelize.JSON,
+                    allowNull: false
+                },
+                createdAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false
+                },
+                updatedAt: {
+                    type: Sequelize.DATE,
+                    allowNull: false
                 }
             },
             {}
@@ -365,16 +204,6 @@ var migrationCommands = [
                 }
             },
             {}
-        ]
-    },
-    {
-        fn: "addIndex",
-        params: [
-            "mapItems",
-            ["x", "y", "floor"],
-            {
-                indicesType: "UNIQUE"
-            }
         ]
     }
 ];

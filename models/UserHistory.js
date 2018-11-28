@@ -1,25 +1,24 @@
 module.exports = (sequelize, DataTypes) => {
-    // Access.associate = function(models) {
-    //   Access.belongsTo(models.floor);
-    // };
     return sequelize.define(
-        "access",
+        "userHistory",
         {
             id: {
                 type: DataTypes.INTEGER,
                 primaryKey: true,
                 autoIncrement: true
             },
-            owner: {
+            playerId: {
                 type: DataTypes.STRING
             },
-            mapItemId: {
-                type: DataTypes.STRING
+            action: {
+                type: DataTypes.STRING,
+                allowNull: false
+            },
+            data: {
+                type: DataTypes.JSON,
+                allowNull: false
             }
         },
-        {
-            timestamps: false,
-            createdAt: false
-        }
+        {}
     );
 };

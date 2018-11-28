@@ -53,9 +53,16 @@ module.exports = {
         "lodash/prefer-noop": 0,
         "lodash/prefer-filter": 0,
         "lodash/prefer-constant": 0,
+        "lodash/prefer-startswith": 0,
+        "lodash/prefer-map": 0,
         "promise/catch-or-return": 1,
         "promise/no-return-wrap": 1,
         "prettier/prettier": "error",
-        "destructuring/no-rename": 0
+        "destructuring/no-rename": 0,
+        "import/no-cycle" : 0,
+        "import/no-self-import" :1,
+        "import/default" :1,
+        "no-console" : 0,
+
     }
 };

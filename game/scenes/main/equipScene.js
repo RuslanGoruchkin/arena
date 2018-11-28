@@ -1,7 +1,6 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, replyWithMarkdown, keyboard } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, stateWrapper, t, replyWithMarkdown } from "../../helpers";
 
 const equipScene = new Scene("equipScene");
 
@@ -18,9 +17,14 @@ equipScene.enter(ctx =>
             }
         });
         options.push([t(state, "texts.back")]);
-        return keyboard("Which item do you want to equip?", options, {
-            playerId: state.player.id
-        });
+        return keyboard(
+            "Which item do you want to equip?",
+            options,
+            {
+                playerId: state.player.id
+            },
+            state
+        );
     })
 );
 

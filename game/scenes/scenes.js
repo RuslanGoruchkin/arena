@@ -18,6 +18,7 @@ import sleepingScene from "./needs/sleepingScene";
 import hallwayRoomScene from "./rooms/hallwayRoomScene";
 import marketRoomScene from "./rooms/marketRoomScene";
 import inventoryScene from "./main/inventoryScene";
+import ratingScene from "./main/ratingScene";
 import equipScene from "./main/equipScene";
 import unequipScene from "./main/unequipScene";
 import buyScrollScene from "./shop/buyScrollScene";
@@ -30,6 +31,7 @@ export const stage = new Stage([
     languageScene,
     selectCharacterScene,
     confirmScene,
+    ratingScene,
     mainScene,
     settingScene,
     disclamerScene,
@@ -68,6 +70,7 @@ export {
     mainMenuScene,
     storyTellingScene,
     comicsListScene,
+    ratingScene,
     drinkingScene,
     eatingScene,
     sleepingScene,

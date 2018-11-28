@@ -1,5 +1,5 @@
-import db from "../../models/index";
 import _ from "lodash";
+import db from "../../models/index";
 
 const debug = require("debug")("telegraf:session-mysql");
 
@@ -43,7 +43,7 @@ class MySQLSession {
         if (existedPromise) {
             return existedPromise;
         }
-        let promise = this.client.session.findById(key).then(json => {
+        let promise = this.client.models.session.findById(key).then(json => {
             let session = {};
             if (_.get(json, "dataValues.session")) {
                 try {
@@ -72,22 +72,7 @@ class MySQLSession {
         //     debug("session with key", key, "key", " is saving now");
         //     return existedPromise;
         // }
-        let promise = this.client.session.upsert({ id: key, session });
-
-        if (_.get(session, "player.id")) {
-            promise = this.client.player
-                .upsert({
-                    id: session.player.id,
-                    ...session.player
-                })
-                .then(() => this.client.player.findOne({ where: { id: session.player.id } }))
-                .then(player =>
-                    this.client.session.upsert({
-                        id: key,
-                        playerId: player.id
-                    })
-                );
-        }
+        let promise = this.client.models.session.upsert({ id: key, session });
         this.savePromises.set(key, promise);
         return promise;
     }

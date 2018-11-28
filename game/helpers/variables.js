@@ -1,0 +1,9 @@
+export let goods = [];
+export let basements = ["dangerousProcessors", "valleyOfMoney", "programParadise", "miningFarm"];
+export let widthOfScreen = 3;
+export let heightOfScreen = 3;
+export const NICKNAME_LENGTH = 8;
+export let users = {};
+export let nicknames = {};
+export let userDonateLink = {};
+export let ratings = {};

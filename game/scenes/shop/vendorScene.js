@@ -1,7 +1,5 @@
 import Scene from "telegraf/scenes/base";
-import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, replyWithMarkdown, stateWrapper, redirectToOopsScene, t } from "../../helpers";
 
 const vendorScene = new Scene("vendorScene");
 
@@ -14,7 +12,8 @@ vendorScene.enter(ctx =>
                 [t(state, "texts.shopScenes.vendorScene.scrolls"), t(state, "texts.shopScenes.vendorScene.projectiles")],
                 [t(state, "texts.back")]
             ],
-            { playerId: state.player.id }
+            { playerId: state.player.id },
+            state
         );
     })
 );
@@ -24,22 +23,21 @@ vendorScene.on("text", ctx =>
         switch (ctx.update.message.text) {
             case t(state, "texts.shopScenes.vendorScene.potions"):
                 return enterScene(ctx, "buyPotionScene", state);
-                break;
+
             case t(state, "texts.shopScenes.vendorScene.buffs"):
                 return enterScene(ctx, "buyBuffScene", state);
-                break;
+
             case t(state, "texts.shopScenes.vendorScene.scrolls"):
                 return enterScene(ctx, "buyScrollScene", state);
-                break;
+
             case t(state, "texts.shopScenes.vendorScene.projectiles"):
                 return enterScene(ctx, "buyProjectileScene", state);
-                break;
+
             case t(state, "texts.back"):
                 return enterScene(ctx, "marketRoomScene", state);
-                break;
+
             default:
-                return redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

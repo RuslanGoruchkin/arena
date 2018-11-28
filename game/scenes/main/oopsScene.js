@@ -1,7 +1,5 @@
 import Scene from "telegraf/scenes/base";
-import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, stateWrapper, t } from "../../helpers";
 
 const oopsScene = new Scene("oopsScene");
 
@@ -11,7 +9,7 @@ oopsScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         buttons = [[t(state, "menu.confirm.return")]];
         // let user = JSON.parse(JSON.stringify(variables.users[ctx.from.id]));
-        return keyboard(t(state, "texts.oopsMessage"), buttons, { playerId: state.player.id });
+        return keyboard(t(state, "texts.oopsMessage"), buttons, { playerId: state.player.id }, state);
     })
 );
 
@@ -20,14 +18,11 @@ oopsScene.on("text", ctx =>
         switch (ctx.update.message.text) {
             case t(state, "menu.confirm.return"):
                 if (ctx.session.lastScene === "oopsScene") {
-                    enterScene(ctx, "languageScene", state);
-                    break;
+                    return enterScene(ctx, "languageScene", state);
                 }
-                enterScene(ctx, ctx.session.lastScene, state);
-                break;
+                return enterScene(ctx, ctx.session.lastScene, state);
             default:
-                redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

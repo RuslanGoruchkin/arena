@@ -1,5 +1,6 @@
-import { tick } from "../tick";
+import { errorHandler, redirectToOopsScene } from "../helpers";
 import stateManager from "../stateManager";
+import { tick } from "../tick";
 
 const TICK_INTERVAL = parseInt(process.env.TICK_INTERVAL) || 1000;
 
@@ -20,11 +21,13 @@ class TickMiddleware {
     }
 
     middleware() {
-        return (ctx, next) => {
-
-            return stateManager.getStateFromDb().then(state => {
-                return next();
-            });
+        return async (ctx, next) => {
+            try {
+                await stateManager.getStateFromDb();
+                await next();
+            } catch (e) {
+                errorHandler(e);
+            }
         };
     }
 }

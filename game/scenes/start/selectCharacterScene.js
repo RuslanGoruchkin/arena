@@ -1,9 +1,5 @@
-import { keyboard } from "../../helpers/TelegramApiHelpers";
 import Scene from "telegraf/scenes/base";
-import { createServerFromTemplate } from "../../server";
-import { gameModules } from "../../gameModules";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, stateWrapper, t } from "../../helpers";
 
 const selectCharacterScene = new Scene("selectCharacterScene");
 
@@ -16,7 +12,8 @@ selectCharacterScene.enter(ctx =>
                 [t(state, "menu.characters.evangelist"), t(state, "menu.characters.prophet")],
                 [t(state, "menu.characters.nomad")]
             ],
-            { playerId: state.player.id }
+            { playerId: state.player.id },
+            state
         );
     })
 );

@@ -1,8 +1,6 @@
-import Scene from "telegraf/scenes/base";
-import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, t } from "../../helpers/ctx";
 import _ from "lodash";
-import { enterScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
+import Scene from "telegraf/scenes/base";
+import { enterScene, keyboard, replyWithMarkdown, stateWrapper, t } from "../../helpers";
 
 const teleportScene = new Scene("teleportScene");
 
@@ -11,7 +9,10 @@ teleportScene.enter(ctx =>
         return keyboard(
             t(state, "texts.startScenes.teleportScene.goHome"),
             [[t(state, "texts.accept")], [t(state, "texts.decline")]],
-            { playerId: state.player.id }
+            {
+                playerId: state.player.id
+            },
+            state
         );
     })
 );
@@ -27,16 +28,14 @@ teleportScene.on("text", ctx =>
                 player.coordinates.yPos = player.personalCoordinates.yPos;
                 if (_.includes(player.currentFloor, "fight")) {
                     let questFailed = "Your quest was failed";
-                    replyWithMarkdown(questFailed, { playerId: state.player.id });
-                    enterScene(ctx, "congratulationQuestScene", state);
-                    break;
+                    return replyWithMarkdown(questFailed, { playerId: state.player.id }, state).then(
+                        enterScene(ctx, "congratulationQuestScene", state)
+                    );
                 }
                 player.currentFloor = player.personalCoordinates.floor;
-                enterScene(ctx, "mainScene", state);
-                break;
+                return enterScene(ctx, "mainScene", state);
             case t(state, "texts.decline"):
-                enterScene(ctx, "mainMenuScene", state);
-                break;
+                return enterScene(ctx, "mainMenuScene", state);
         }
     })
 );

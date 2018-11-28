@@ -1,8 +1,6 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { keyboard } from "../../helpers/TelegramApiHelpers";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, stateWrapper, t } from "../../helpers";
 
 const comicsListScene = new Scene("comicsListScene");
 
@@ -11,12 +9,13 @@ comicsListScene.enter(ctx =>
         let player = state.player;
         let message = t(state, "texts.mainScenes.comicsListScene.selectComics");
         let buttons = [];
+        // eslint-disable-next-line lodash/prefer-map
         _.each(player.comics, comics => {
             buttons.push([`${t(state, `texts.comics.${comics}.description`)}`]);
         });
         buttons.push([t(state, "texts.back")]);
         player.selectedCharacter.comicsCounter = 1;
-        return keyboard(message, buttons, { playerId: state.player.id });
+        return keyboard(message, buttons, { playerId: state.player.id }, state);
     })
 );
 

@@ -1,8 +1,7 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
 import { consumables } from "../../resources/consumables";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { keyboard, enterScene, redirectToOopsScene, replyWithMarkdown } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, replyWithMarkdown, stateWrapper, redirectToOopsScene, t } from "../../helpers";
 
 const buyProjectileScene = new Scene("buyProjectileScene");
 
@@ -25,16 +24,21 @@ buyProjectileScene.enter(ctx =>
             }
         });
         buttons += t(state, "texts.back");
-        return keyboard(message, [["Knife", "Dart Spear"], ["Poison Bomb", "Web Net"], [t(state, "texts.back")]], {
-            playerId: state.player.id
-        });
+        return keyboard(
+            message,
+            [["Knife", "Dart Spear"], ["Poison Bomb", "Web Net"], [t(state, "texts.back")]],
+            {
+                playerId: state.player.id
+            },
+            state
+        );
     })
 );
 
 buyProjectileScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
-        let selectedCharacter =state.player.selectedCharacter;
+        let selectedCharacter = state.player.selectedCharacter;
         let text = ctx.update.message.text;
         let item = _.find(consumables, { name: text });
         //let module = _.find(consumables, module => {
@@ -63,9 +67,8 @@ buyProjectileScene.on("text", ctx =>
                         enterScene(ctx, "vendorScene", state)
                     );
                 }
-                break;
             default:
-                redirectToOopsScene(ctx);
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

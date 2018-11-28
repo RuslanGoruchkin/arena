@@ -1,7 +1,6 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { stateWrapper, t } from "../../helpers/ctx";
-import { enterScene, keyboard, redirectToOopsScene } from "../../helpers/TelegramApiHelpers";
+import { enterScene, keyboard, redirectToOopsScene, stateWrapper, t } from "../../helpers";
 
 const characterScene = new Scene("characterScene");
 
@@ -26,12 +25,12 @@ characterScene.enter(ctx =>
             intelligence: player.selectedCharacter.baseIntelligence,
             wisdom: player.selectedCharacter.baseWisdom,
             vitality: player.selectedCharacter.baseVitality,
-            rightHandName: player.rightHand.name,
+            rightHandName: player.selectedCharacter.rightHand.name,
             hp: player.data.hp,
             mp: player.data.mp,
             belt: belt
         });
-        return keyboard(message, [[t(state, "texts.back")]], { playerId: state.player.id });
+        return keyboard(message, [[t(state, "texts.back")]], { playerId: state.player.id }, state);
     })
 );
 
@@ -40,11 +39,9 @@ characterScene.on("text", ctx =>
         let text = ctx.update.message.text;
         switch (text) {
             case t(state, "texts.back"):
-                return enterScene(ctx, "mainScene", state);
-                break;
+                return enterScene(ctx, "mainMenuScene", state);
             default:
-                return redirectToOopsScene(ctx);
-                break;
+                return redirectToOopsScene(ctx, state);
         }
     })
 );

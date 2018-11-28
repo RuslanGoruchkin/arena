@@ -1,4 +1,3 @@
-
 export let items = {
     //WEAPONS
     bigNail: {

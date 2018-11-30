@@ -11,7 +11,8 @@ buyScrollScene.enter(ctx =>
         let selectedCharacter = state.player.selectedCharacter;
         let message = "You can carry 6 items in your belt. Items you have in your belt are:\n";
         _.each(selectedCharacter.belt, item => {
-            message += item + " ";
+            let consumable = consumables[item];
+            message += consumable.name + " ";
         });
         message += "\nYou have " + data.coins + " coins to spend";
         message += "\n\nWhat potion do you want to buy?\n";
@@ -49,8 +50,8 @@ buyScrollScene.on("text", ctx =>
             case item.name:
                 let data = player.data;
                 if (data.coins - item.cost >= 0) {
-                    if (selectedCharacter.belt.length <= 6) {
-                        selectedCharacter.belt += item.name;
+                    if (selectedCharacter.belt.length < 6) {
+                        selectedCharacter.belt.push(item.id);
                         data.coins -= item.cost;
                         return replyWithMarkdown("Purchase success", { playerId: state.player.id }, state).then(
                             enterScene(ctx, "vendorScene", state)

@@ -45,29 +45,33 @@ export const tick = async state => {
                 case "eating":
                     player.data.hungryTick = state.currentTick;
                     player.hungry = false;
+                    player.XP += 10;
                     stateManager.queue.add(() => {
-                        replyWithMarkdown("You are no longer hungry. Your stats have been restored", params);
+                        replyWithMarkdown("You are no longer hungry. Your stats have been restored\n +10 XP", params);
                     });
-
                     break;
                 case "drinking":
                     player.data.thirstyTick = state.currentTick;
                     player.thirsty = false;
+                    player.XP += 10;
                     stateManager.queue.add(() => {
-                        replyWithMarkdown("You are no longer thirsty. Your stats have been restored", params);
+                        replyWithMarkdown("You are no longer thirsty. Your stats have been restored\n +10 XP", params);
                     });
-
                     break;
                 case "sleeping":
                     player.data.sleepyTick = state.currentTick;
                     player.sleepy = false;
+                    player.XP += 100;
                     stateManager.queue.add(() => {
-                        replyWithMarkdown("You are no longer sleepy. Your stats have been restored", params);
+                        replyWithMarkdown("You are no longer sleepy. Your stats have been restored\n +100 XP", params);
                     });
-
                     break;
                 default:
                     break;
+            }
+            if (player.XP > player.selectedCharacter.levelUp * Math.floor(player.level ^ 1.5)) {
+                player.level += 1;
+                replyWithMarkdown("Level up!\n You are now " + player.level + " level", params);
             }
             player.data.timeout = 0;
             player.data.activity = "";

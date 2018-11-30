@@ -9,7 +9,11 @@ hallwayRoomScene.enter(ctx => {
         //Status report start
 
         let player = state.player;
-        let needs = (player.hungry * " hungry " + player.thirsty * "thirsty " + player.sleepy * "sleepy ") | "Fine";
+        let needs = "";
+        if (player.hungry) needs += " hungry";
+        if (player.sleepy) needs += " sleepy";
+        if (player.thirsty) needs += " thirsty";
+        if (needs === "") needs = "Fine";
         let status = t(state, "texts.status", {
             charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
             nickname: player.nickname,

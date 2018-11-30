@@ -5,11 +5,11 @@ texts:
   seconds: 'seconds'
 
   status: |
-   *Class*: ${charClass}
-   *Your nickname*: `${nickname}`
-   *Level*: ${level}  *XP*: ${xp}
-   *Coins*: ${coins}  *Tokens* : ${tokens}
-   *Status*: ${needs}
+   Class: ${charClass}
+   Your nickname: `${nickname}`
+   Level: ${level}  XP: ${xp}
+   Coins: ${coins}  Tokens: ${tokens}
+   Status: ${needs}
 
   needs:
     eating: 'You are eating. This will take 360 seconds'
@@ -141,7 +141,7 @@ texts:
         *Level*: ${level}
         *XP*: ${xp}
         *Coins*: ${coins}
-        *Tokens* : ${tokens}
+        *Tokens*: ${tokens}
 
         *Skills*: *Strength*: ${strength}
         *Dexterity*: ${dexterity}

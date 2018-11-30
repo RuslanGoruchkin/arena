@@ -14,7 +14,7 @@ unequipScene.enter(ctx =>
         if (player.rightHand.name) {
             options[0].push(player.rightHand.name);
         }
-        if (player.leftHand.name) {
+        if (player.leftHand.name && player.leftHand.hands != 2) {
             options[0].push(player.leftHand.name);
         }
         if (player.armor.name) {
@@ -38,6 +38,9 @@ unequipScene.on("text", ctx => {
         let player = state.player.selectedCharacter;
         switch (text) {
             case player.rightHand.name: {
+                if (player.rightHand.hands === 2) {
+                    player.leftHand = {};
+                }
                 player.inventory.push(_.cloneDeep(player.rightHand));
                 player.rightHand = {};
                 break;

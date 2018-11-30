@@ -36,10 +36,14 @@ equipScene.on("text", ctx =>
         if (item) {
             let index = _.findIndex(player.inventory, { name: text });
             console.log(index);
-            if (item.type === "weapon" && !player.rightHand.type) {
+            if (item.type === "weapon" && !player.rightHand.type && item.hands === 2) {
+                player.leftHand = _.cloneDeep(item);
                 player.rightHand = _.cloneDeep(item);
                 player.inventory.splice(index, 1);
-            } else if (item.type === "weapon" && !player.leftHand.type) {
+            } else if (item.type === "weapon" && !player.rightHand.type && item.hands === 1) {
+                player.rightHand = _.cloneDeep(item);
+                player.inventory.splice(index, 1);
+            } else if (item.type === "weapon" && !player.leftHand.type && item.hands === 1) {
                 player.leftHand = _.cloneDeep(item);
                 player.inventory.splice(index, 1);
             } else if (item.type === "armor" && !player.armor.type) {

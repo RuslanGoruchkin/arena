@@ -1,6 +1,7 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
 import { enterScene, keyboard, stateWrapper, t } from "../../helpers";
+import { consumables } from "../../resources/consumables";
 
 const inventoryScene = new Scene("inventoryScene");
 
@@ -15,8 +16,9 @@ inventoryScene.enter(ctx =>
         _.each(player.selectedCharacter.inventory, item => {
             inventory += item.name + "\n";
         });
-        _.each(player.selectedCharacter.belt, item => {
-            belt += item + " ";
+        _.each(selectedCharacter.belt, item => {
+            let consumable = consumables[item];
+            belt += consumable.name + " ";
         });
         let message = t(state, "texts.mainScenes.inventoryScene.descriptionCharacter", {
             charClass: t(state, `menu.characters.${selectedCharacter.class}`),

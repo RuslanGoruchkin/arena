@@ -51,6 +51,7 @@ export let defaultPlayer = {
         baseWisdom: 0,
         baseVitality: 0,
         belt: [],
+        levelUp: 9,
         equipment: [],
         inventory: [],
         fastEquipItem: {},

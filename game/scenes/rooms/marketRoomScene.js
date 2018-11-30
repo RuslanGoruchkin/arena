@@ -9,7 +9,11 @@ marketRoomScene.enter(ctx => {
         //Status report start
 
         let player = state.player;
-        let needs = (player.hungry * " hungry " + player.thirsty * "thirsty " + player.sleepy * "sleepy ") | "Fine";
+        let needs = "";
+        if (player.hungry) needs += " hungry";
+        if (player.sleepy) needs += " sleepy";
+        if (player.thirsty) needs += " thirsty";
+        if (needs === "") needs = "Fine";
         let status = t(state, "texts.status", {
             charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
             nickname: player.nickname,
@@ -26,9 +30,9 @@ marketRoomScene.enter(ctx => {
 
         //Status report end
         let message =
-            "You come closer and see three tents. One has lots of weapons. Other two sell shields and armor\n" +
+            "You come closer and see some shops selling things\n" +
             'Inbetween them sits a shady man. A tattoo under his eyes spells:"SECOND HAND"\n' +
-            "Some people are talking about something. Some are playing APPULSE\n";
+            "Some people are talking about something.\nSome are playing APPULSE\n";
         let buttons = [];
         buttons.push([t(state, "menu.shop.consumables"), t(state, "menu.shop.secondHand")]);
         buttons.push([t(state, "menu.rumors"), t(state, "menu.appulse")]);

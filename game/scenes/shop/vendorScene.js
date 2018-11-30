@@ -1,12 +1,20 @@
+import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { enterScene, keyboard, replyWithMarkdown, stateWrapper, redirectToOopsScene, t } from "../../helpers";
+import { consumables } from "../../resources/consumables";
+import { enterScene, keyboard, stateWrapper, redirectToOopsScene, t } from "../../helpers";
 
 const vendorScene = new Scene("vendorScene");
 
 vendorScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
+        let selectedCharacter = state.player.selectedCharacter;
+        let belt = "Your belt cosists of:\n";
+        _.each(selectedCharacter.belt, item => {
+            let consumable = consumables[item];
+            belt += consumable.name + " ";
+        });
         return keyboard(
-            t(state, "texts.selectAction"),
+            belt + "\n" + t(state, "texts.selectAction"),
             [
                 [t(state, "texts.shopScenes.vendorScene.potions"), t(state, "texts.shopScenes.vendorScene.buffs")],
                 [t(state, "texts.shopScenes.vendorScene.scrolls"), t(state, "texts.shopScenes.vendorScene.projectiles")],

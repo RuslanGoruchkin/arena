@@ -32,12 +32,6 @@ mainMenuScene.enter(ctx =>
                 t(state, "menu.character", { character: player.selectedCharacter.character })
             ]
         ];
-        if (player.selectedCharacter.class === "defaultCharacter") {
-            buttons.push([t(state, "menu.room.finishTraining")]);
-        } else {
-            buttons.push([t(state, "menu.room.abandonQuest")]);
-            buttons.push([t(state, "menu.weekly"), t(state, "menu.daily")]);
-        }
         buttons.push([t(state, "menu.home"), t(state, "texts.back")]);
         return keyboard(message, buttons, { playerId: state.player.id }, state);
     })
@@ -79,33 +73,6 @@ mainMenuScene.on("text", ctx =>
                 return enterScene(ctx, "settingScene", state);
             case t(state, "texts.ratingScenes.sceneName"):
                 return enterScene(ctx, "ratingScene", state);
-            case t(state, "menu.daily"):
-                if (dailyTickDifference >= dailyDelta) {
-                    state.player.data.dailyTick = currentTick;
-                    return enterScene(ctx, "dailyQuestScene", state);
-                } else {
-                    return enterScene(ctx, "dailyTimeoutScene", state);
-                }
-            case t(state, "menu.weekly"):
-                if (weeklyTickDifference >= weeklyDelta) {
-                    state.player.data.dailyTick = currentTick;
-                    return enterScene(ctx, "weeklyQuestScene", state);
-                } else {
-                    return enterScene(ctx, "weeklyTimeoutScene", state);
-                }
-            case t(state, "texts.rooms.finishTraining"):
-                if (player.currentFloor === `${player.id}_quest`) {
-                    player.currentQuest = null;
-                    player.data.inventory = [];
-                    return enterScene(ctx, "selectCharacterScene", state);
-                } else {
-                    return redirectToOopsScene(ctx, state);
-                }
-            case t(state, "texts.room.abandonQuest"):
-                if (player.currentQuest) {
-                    player.data.droppedQuests[player.currentQuest] = true;
-                    player.currentQuest = null;
-                }
                 return enterScene(ctx, "mainMenuScene", state);
             case t(state, "texts.mainScenes.mainMenuScene.comics"):
                 return enterScene(ctx, "comicsListScene", state);

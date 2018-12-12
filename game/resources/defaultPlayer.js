@@ -24,9 +24,9 @@ export let defaultPlayer = {
         timeoutStatus: false,
         activity: "",
         timeout: 0,
+        classPoints: 0,
+        statPoints: 0,
         wallets: [],
-        inventory: [],
-        belt: [],
         coins: 50,
         tokens: 0
     },
@@ -44,7 +44,14 @@ export let defaultPlayer = {
     XP: 0,
     nickname: "",
     selectedCharacter: {
-        class: "default",
+        class: "defaultCharacter",
+        classes: {
+            warrior: 0,
+            mage: 0,
+            evangelist: 0,
+            prophet: 0,
+            nomad: 0
+        },
         baseStrength: 0,
         baseDexterity: 0,
         baseIntelligence: 0,
@@ -55,15 +62,10 @@ export let defaultPlayer = {
         equipment: [],
         inventory: [],
         fastEquipItem: {},
-        rightHand: {},
-        leftHand: {},
-        armor: {}
+        rightHand: "",
+        leftHand: "",
+        armor: ""
     },
-    strength: 1,
-    dexterity: 1,
-    intelligence: 1,
-    wisdom: 1,
-    vitality: 1,
     selectedComics: "characterHistory",
     comics: ["worldHistory"]
 };

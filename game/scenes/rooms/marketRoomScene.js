@@ -1,34 +1,21 @@
 import Scene from "telegraf/scenes/base";
-import { enterScene, keyboard, replyWithMarkdown, stateWrapper, redirectToOopsScene, t } from "../../helpers";
+import {
+    enterScene,
+    keyboard,
+    replyWithMarkdown,
+    stateWrapper,
+    redirectToOopsScene,
+    t,
+    statusMessage
+} from "../../helpers";
+import _ from "lodash";
 
 // let debug = require("debug")("bot:marketRoomScene");
 
 const marketRoomScene = new Scene("marketRoomScene");
 marketRoomScene.enter(ctx => {
     return stateWrapper(ctx, (ctx, state) => {
-        //Status report start
-
-        let player = state.player;
-        let needs = "";
-        if (player.hungry) needs += " hungry";
-        if (player.sleepy) needs += " sleepy";
-        if (player.thirsty) needs += " thirsty";
-        if (needs === "") needs = "Fine";
-        let status = t(state, "texts.status", {
-            charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
-            nickname: player.nickname,
-            coins: player.data.coins,
-            tokens: player.data.tokens,
-            hp: player.data.hp,
-            sp: player.data.sp,
-            mp: player.data.mp,
-            level: player.level,
-            xp: player.XP,
-            needs: needs
-        });
-        replyWithMarkdown(status, { playerId: state.player.id }, state);
-
-        //Status report end
+        statusMessage(state);
         let message =
             "You come closer and see some shops selling things\n" +
             'Inbetween them sits a shady man. A tattoo under his eyes spells:"SECOND HAND"\n' +

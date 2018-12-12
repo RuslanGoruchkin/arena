@@ -41,17 +41,17 @@ buyBuffScene.on("text", ctx =>
         let player = state.player;
         let selectedCharacter = state.player.selectedCharacter;
         let text = ctx.update.message.text;
-        let item = _.find(consumables, { name: text });
+        let itemId = _.findKey(consumables, { name: text });
 
         switch (text) {
             case t(state, "texts.back"):
                 return enterScene(ctx, "vendorScene", state);
-            case item.name:
+            case consumables[itemId].name:
                 let data = player.data;
-                if (data.coins - item.cost >= 0) {
+                if (data.coins - consumables[itemId].cost >= 0) {
                     if (selectedCharacter.belt.length < 6) {
-                        selectedCharacter.belt.push(item.id);
-                        data.coins -= item.cost;
+                        selectedCharacter.belt.push(itemId);
+                        data.coins -= consumables[itemId].cost;
                         return replyWithMarkdown("Purchase success", { playerId: state.player.id }, state).then(
                             enterScene(ctx, "vendorScene", state)
                         );

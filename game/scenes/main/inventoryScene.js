@@ -2,6 +2,7 @@ import _ from "lodash";
 import Scene from "telegraf/scenes/base";
 import { enterScene, keyboard, stateWrapper, t } from "../../helpers";
 import { consumables } from "../../resources/consumables";
+import { items } from "../../resources/items";
 
 const inventoryScene = new Scene("inventoryScene");
 
@@ -9,19 +10,26 @@ inventoryScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
         let selectedCharacter = player.selectedCharacter;
-        let rightHand = player.selectedCharacter.rightHand.name || "Fist";
-        let leftHand = player.selectedCharacter.leftHand.name || "Fist";
+        let rightHand = items[selectedCharacter.rightHand].name || "Fist";
+        let leftHand = items[selectedCharacter.leftHand].name || "Fist";
+        let armor = items[selectedCharacter.armor].name || "Fist";
         let inventory = "";
         let belt = "";
         _.each(player.selectedCharacter.inventory, item => {
-            inventory += item.name + "\n";
+            inventory += items[item].name + "\n";
         });
         _.each(selectedCharacter.belt, item => {
             let consumable = consumables[item];
             belt += consumable.name + " ";
         });
+        let charClass = "\n";
+        _.forEach(selectedCharacter.classes, function(classLvl, key) {
+            if (classLvl > 0) {
+                charClass += "\n" + t(state, `menu.characters.${key}`) + " " + classLvl + " lvl";
+            }
+        });
         let message = t(state, "texts.mainScenes.inventoryScene.descriptionCharacter", {
-            charClass: t(state, `menu.characters.${selectedCharacter.class}`),
+            charClass: charClass,
             nickname: player.nickname,
             level: player.level,
             xp: player.XP,
@@ -32,9 +40,9 @@ inventoryScene.enter(ctx =>
             intelligence: player.selectedCharacter.baseIntelligence,
             wisdom: player.selectedCharacter.baseWisdom,
             vitality: player.selectedCharacter.baseVitality,
-            armor: player.selectedCharacter.armor.name,
             rightHand: rightHand,
             leftHand: leftHand,
+            armor: armor,
             inventory: inventory,
             belt: belt
         });

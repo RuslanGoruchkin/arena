@@ -1,7 +1,9 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
-import { enterScene, keyboard, redirectToOopsScene, stateWrapper, t } from "../../helpers";
+import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown, stateWrapper, t } from "../../helpers";
 import { consumables } from "../../resources/consumables";
+import { items } from "../../resources/items";
+import stateManager from "../../stateManager";
 
 const characterScene = new Scene("characterScene");
 
@@ -11,12 +13,20 @@ characterScene.enter(ctx =>
         let selectedCharacter = player.selectedCharacter;
         let message = "";
         let belt = "";
+        let rightHand = items[selectedCharacter.rightHand].name || "Fist";
+        let leftHand = items[selectedCharacter.leftHand].name || "Fist";
         _.each(selectedCharacter.belt, item => {
             let consumable = consumables[item];
             belt += consumable.name + " ";
         });
+        let charClass = "";
+        _.forEach(selectedCharacter.classes, function(classLvl, key) {
+            if (classLvl > 0) {
+                charClass += "\n" + t(state, `menu.characters.${key}`) + " " + classLvl + " lvl";
+            }
+        });
         message += t(state, "texts.mainScenes.characterScene.descriptionCharacter", {
-            charClass: t(state, `menu.characters.${selectedCharacter.class}`),
+            charClass: charClass,
             nickname: player.nickname,
             level: player.level,
             xp: player.XP,
@@ -27,12 +37,17 @@ characterScene.enter(ctx =>
             intelligence: player.selectedCharacter.baseIntelligence,
             wisdom: player.selectedCharacter.baseWisdom,
             vitality: player.selectedCharacter.baseVitality,
-            rightHandName: player.selectedCharacter.rightHand.name,
+            rightHandName: rightHand,
+            leftHandName: leftHand,
             hp: player.data.hp,
             mp: player.data.mp,
             belt: belt
         });
-        return keyboard(message, [[t(state, "texts.back")]], { playerId: state.player.id }, state);
+        let buttons = [[t(state, "texts.back")]];
+        if (player.data.classPoints > 0 || player.data.statPoints > 0) {
+            buttons.push([t(state, "menu.levelUp")]);
+        }
+        return keyboard(message, buttons, { playerId: state.player.id }, state);
     })
 );
 
@@ -41,7 +56,14 @@ characterScene.on("text", ctx =>
         let text = ctx.update.message.text;
         switch (text) {
             case t(state, "texts.back"):
-                return enterScene(ctx, "mainMenuScene", state);
+                return enterScene(ctx, "mainScene", state);
+            case t(state, "menu.levelUp"):
+                if (state.player.data.statPoints) {
+                    state.player.data.activity = "leveling1";
+                } else if (!state.player.data.statPoints && state.player.data.classPoints) {
+                    state.player.data.activity = "leveling2";
+                }
+                return enterScene(ctx, "mainScene", state);
             default:
                 return redirectToOopsScene(ctx, state);
         }

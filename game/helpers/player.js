@@ -72,7 +72,6 @@ export const startNewGame = async (state, params) => {
     player.language = params.language;
     player.nickname = generatePlayerNickname();
     player.selectedCharacter = getItemByClassCaption(character, characters);
-    player.selectedCharacter.comicsCounter = 1;
     player.telegramId = ctx.from.id;
 
     player.userDonateLink = await userLink(player.id);
@@ -89,4 +88,54 @@ export const generatePlayerNickname = () => {
 };
 export const calculateProgramCount = playerMemory => {
     return 10 + (playerMemory * (playerMemory + 1)) / 2;
+};
+
+export const statusMessage = state => {
+    let player = state.player;
+    let hydration = "";
+    let satiety = "";
+    let awakeness = "";
+    let levelUpExp = player.selectedCharacter.levelUp * 2 ** player.level - player.selectedCharacter.levelUp;
+    let playerExp = player.XP + "/" + levelUpExp;
+    if (player.hungry) {
+        satiety = "Hungry";
+    } else {
+        let satietyCapacity = player.data.hungryTick + player.hungryTime - state.currentTick;
+        satiety = "Satiety: " + "\t\t\t\t\t\t\t\t" + satietyCapacity + "/" + player.hungryTime;
+    }
+    if (player.sleepy) {
+        awakeness = "Sleepy";
+    } else {
+        let awakenessCapacity = player.sleepyTime + player.data.sleepyTick - state.currentTick;
+        awakeness = "Awakeness: " + awakenessCapacity + "/" + player.sleepyTime;
+    }
+    if (player.thirsty) {
+        hydration = "Thirsty";
+    } else {
+        let hydrationCapacity = player.thirstyTime + player.data.thirstyTick - state.currentTick;
+        hydration = "Hydration: " + "\t\t" + hydrationCapacity + "/" + player.thirstyTime;
+    }
+
+    let selectedCharacter = player.selectedCharacter;
+    let charClass = "";
+    _.forEach(selectedCharacter.classes, function(classLvl, key) {
+        if (classLvl > 0) {
+            charClass += "\n" + t(state, `menu.characters.${key}`) + " " + classLvl + " lvl";
+        }
+    });
+    let status = t(state, "texts.status", {
+        charClass: charClass,
+        nickname: player.nickname,
+        coins: player.data.coins,
+        tokens: player.data.tokens,
+        hp: player.data.hp,
+        sp: player.data.sp,
+        mp: player.data.mp,
+        level: player.level,
+        xp: playerExp,
+        hydration: hydration,
+        satiety: satiety,
+        awakeness: awakeness
+    });
+    return replyWithMarkdown(status, { playerId: state.player.id }, state);
 };

@@ -1,6 +1,7 @@
 import _ from "lodash";
 import Scene from "telegraf/scenes/base";
 import { enterScene, keyboard, replyWithMarkdown, stateWrapper, t } from "../../helpers";
+import { items } from "../../resources/items";
 
 const unequipScene = new Scene("unequipScene");
 
@@ -11,14 +12,16 @@ unequipScene.enter(ctx =>
         let options = [];
         options[0] = [];
         let player = state.player.selectedCharacter;
-        if (player.rightHand.name) {
-            options[0].push(player.rightHand.name);
+        if (player.rightHand !== "fist") {
+            options[0].push(items[player.rightHand].name);
         }
-        if (player.leftHand.name && player.leftHand.hands != 2) {
-            options[0].push(player.leftHand.name);
+        if (player.leftHand !== "fist") {
+            if (items[player.leftHand] !== 2) {
+                options[0].push(items[player.leftHand].name);
+            }
         }
-        if (player.armor.name) {
-            options[0].push(player.armor.name);
+        if (player.armor !== "naked") {
+            options[0].push(items[player.armor].name);
         }
         options.push([t(state, "texts.back")]);
         return keyboard(
@@ -36,27 +39,32 @@ unequipScene.on("text", ctx => {
     return stateWrapper(ctx, (ctx, state) => {
         let text = ctx.update.message.text;
         let player = state.player.selectedCharacter;
-        switch (text) {
-            case player.rightHand.name: {
-                if (player.rightHand.hands === 2) {
-                    player.leftHand = {};
+        let itemId = _.findKey(items, { name: text });
+        if (text === t(state, "texts.back")) {
+            return enterScene(ctx, "inventoryScene", state);
+        } else {
+            switch (itemId) {
+                case player.rightHand: {
+                    if (items[itemId].hands === 2) {
+                        player.leftHand = "fist";
+                    }
+                    player.inventory.push(player.rightHand);
+                    player.rightHand = "fist";
+                    break;
                 }
-                player.inventory.push(_.cloneDeep(player.rightHand));
-                player.rightHand = {};
-                break;
+                case player.leftHand: {
+                    player.inventory.push(player.leftHand);
+                    player.leftHand = "fist";
+                    break;
+                }
+                case player.armor: {
+                    player.inventory.push(player.armor);
+                    player.armor = "naked";
+                    break;
+                }
             }
-            case player.leftHand.name: {
-                player.inventory.push(_.cloneDeep(player.leftHand));
-                player.leftHand = {};
-                break;
-            }
-            case player.armor.name: {
-                player.inventory.push(_.cloneDeep(player.armor));
-                player.armor = {};
-                break;
-            }
+            return enterScene(ctx, "unequipScene", state);
         }
-        return enterScene(ctx, "inventoryScene", state);
     });
 });
 

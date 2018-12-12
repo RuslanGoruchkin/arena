@@ -4,12 +4,33 @@ texts:
   unequip: 'Unequip'
   seconds: 'seconds'
 
+  attributes:
+   baseStrength: "Strength"
+   baseDexterity: "Dexterity"
+   baseIntelligence: "Intelligence"
+   baseWisdom: "Wisdom"
+   baseVitality: "Vitality"
+
+
   status: |
-   Class: ${charClass}
    Your nickname: `${nickname}`
+   Class: ${charClass}
    Level: ${level}  XP: ${xp}
    Coins: ${coins}  Tokens: ${tokens}
-   Status: ${needs}
+   ${hydration}
+   ${satiety}
+   ${awakeness}
+
+  levelUpConfirm: |
+     Your current stats are:
+     Class: ${charClass}
+     Your nickname: `${nickname}`
+     Level: ${level}
+     Strength: ${strength}
+     Dexterity: ${dexterity}
+     Intelligence: ${intelligence}
+     Wisdom: ${wisdom}
+     Vitality: ${vitality}
 
   needs:
     eating: 'You are eating. This will take 360 seconds'
@@ -148,8 +169,8 @@ texts:
         *Intelligence*: ${intelligence}
         *Wisdom*: ${wisdom}
         *Vitality*: ${vitality}
-        *Right Hand*: ${rightHand}
-        *Left Hand*: ${leftHand}
+        *Right Hand*: ${rightHandName}
+        *Left Hand*: ${leftHandName}
         *Belt*: ${belt}
 
     inventoryScene:
@@ -276,3 +297,4 @@ menu:
   daily: 'Daily quest'
   weekly: 'Weekly quest'
   level: 'lvl'
+  levelUp: 'Level Up'

@@ -1,5 +1,14 @@
 import _ from "lodash";
-import { enterScene, generateUpdateFromState, getPlayer, replyWithMarkdown, t } from "./helpers";
+import {
+    enterScene,
+    errorHandler,
+    generateUpdateFromState,
+    getPlayer,
+    removeKeyboard,
+    replyWithMarkdown,
+    routerScene,
+    t
+} from "./helpers";
 import { characters } from "./resources/characters";
 import stateManager from "./stateManager";
 
@@ -69,16 +78,26 @@ export const tick = async state => {
                 default:
                     break;
             }
-            if (player.XP > player.selectedCharacter.levelUp * Math.floor(player.level ^ 1.5)) {
-                player.level += 1;
-                replyWithMarkdown("Level up!\n You are now " + player.level + " level", params);
-            }
             player.data.timeout = 0;
             player.data.activity = "";
             player.data.timeoutStatus = false;
             stateManager.queue.add(() => {
-                enterScene(ctx, "mainScene");
+                enterScene(ctx, "mainScene", state);
+                //    routerScene(ctx, "mainScene", false);
             });
+            /*
+            if (player.XP > player.selectedCharacter.levelUp * (2 ^ player.level) - player.selectedCharacter.levelUp) {
+                player.level += 1;
+                player.classPoints += 1;
+                player.statPoints += 1;
+                replyWithMarkdown("Level up!\nYou are now " + player.level + " level", params);
+                stateManager.queue.add(() => {
+                    routerScene(ctx, "levelUpScene");
+                });
+            } else {
+
+            }
+            */
         }
     });
     // debug(`End tick ${state.currentTick}`);

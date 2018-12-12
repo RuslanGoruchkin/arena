@@ -18,7 +18,13 @@ export const characters = {
         },
         character: "👨‍🚒",
         class: "warrior",
-        description: "",
+        classes: {
+            warrior: 1,
+            mage: 0,
+            evangelist: 0,
+            prophet: 0,
+            nomad: 0
+        },
         baseStrength: 7,
         baseDexterity: 5,
         baseIntelligence: 6,
@@ -40,6 +46,13 @@ export const characters = {
         },
         character: "👩‍🔧",
         class: "mage",
+        classes: {
+            warrior: 0,
+            mage: 1,
+            evangelist: 0,
+            prophet: 0,
+            nomad: 0
+        },
         description: "",
         baseStrength: 4,
         baseDexterity: 7,
@@ -51,7 +64,7 @@ export const characters = {
         levelUp: 8,
         age: 0,
         belt: ["SP Pot", "MP Pot", "Knife", "Knife", "Knife"],
-        inventory: [combineWeapon(1, weapons_bodies.longbow)],
+        inventory: ["longbow"],
         armor: combineArmor(1, armors_bodies.jacket),
         rightHand: combineWeapon(1, weapons_bodies.wand),
         leftHand: combineWeapon(1, weapons_bodies.dagger)
@@ -62,6 +75,13 @@ export const characters = {
         },
         character: "🕵️",
         class: "evangelist",
+        classes: {
+            warrior: 0,
+            mage: 0,
+            evangelist: 1,
+            prophet: 0,
+            nomad: 0
+        },
         description: "",
         baseStrength: 5,
         baseDexterity: 3,
@@ -84,6 +104,13 @@ export const characters = {
         },
         character: "👩‍🔬",
         class: "prophet",
+        classes: {
+            warrior: 0,
+            mage: 0,
+            evangelist: 0,
+            prophet: 1,
+            nomad: 0
+        },
         description: "",
         baseStrength: 3,
         baseDexterity: 6,
@@ -106,6 +133,13 @@ export const characters = {
         },
         character: "👨‍🎤",
         class: "nomad",
+        classes: {
+            warrior: 0,
+            mage: 0,
+            evangelist: 0,
+            prophet: 0,
+            nomad: 1
+        },
         description: "",
         baseStrength: 6,
         baseDexterity: 4,
@@ -117,9 +151,9 @@ export const characters = {
         age: 0,
         levelUp: 10,
         belt: ["heal", "manna", "web"],
-        inventory: [combineWeapon(1, weapons_bodies.knuckle), combineWeapon(1, weapons_bodies.knuckle)],
-        armor: combineArmor(1, armors_bodies.chain),
-        rightHand: combineWeapon(1, weapons_bodies.rod),
-        leftHand: combineShield(1, shields_bodies.heater)
+        inventory: ["knuckle", "knuckle"],
+        armor: "chain",
+        rightHand: "rod",
+        leftHand: "heater"
     }
 };

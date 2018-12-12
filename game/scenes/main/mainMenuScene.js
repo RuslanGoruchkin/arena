@@ -73,7 +73,6 @@ mainMenuScene.on("text", ctx =>
                 return enterScene(ctx, "settingScene", state);
             case t(state, "texts.ratingScenes.sceneName"):
                 return enterScene(ctx, "ratingScene", state);
-                return enterScene(ctx, "mainMenuScene", state);
             case t(state, "texts.mainScenes.mainMenuScene.comics"):
                 return enterScene(ctx, "comicsListScene", state);
             default:

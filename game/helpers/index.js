@@ -11,9 +11,20 @@ import {
     getItemByClassCaption,
     getPlayer,
     getPlayerState,
-    startNewGame
+    startNewGame,
+    statusMessage
 } from "./player";
-import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown, replyWithPhotoAndKeyboard } from "./telegram";
+import {
+    enterScene,
+    enterSceneCB,
+    routerScene,
+    keyboard,
+    inlineKeyboard,
+    removeKeyboard,
+    redirectToOopsScene,
+    replyWithMarkdown,
+    replyWithPhotoAndKeyboard
+} from "./telegram";
 import { t } from "./translate";
 
 export {
@@ -33,10 +44,15 @@ export {
     getPlayer,
     getPlayerState,
     enterScene,
+    enterSceneCB,
+    routerScene,
     keyboard,
+    inlineKeyboard,
+    removeKeyboard,
     redirectToOopsScene,
     replyWithMarkdown,
     replyWithPhotoAndKeyboard,
     t,
-    errorHandler
+    errorHandler,
+    statusMessage
 };

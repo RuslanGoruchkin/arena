@@ -26,6 +26,12 @@ import buyBuffScene from "./shop/buyBuffScene";
 import buyProjectileScene from "./shop/buyProjectileScene";
 import buyPotionScene from "./shop/buyPotionScene";
 import vendorScene from "./shop/vendorScene";
+import levelUpScene from "./levelUp/levelUpScene";
+import statScene from "./levelUp/statScene";
+import levelUpConfirmScene from "./levelUp/levelUpConfirmScene";
+import levelUpAltScene from "./levelUp/levelUpAltScene";
+import levelUpRefreshScene from "./levelUp/levelUpRefreshScene";
+import routerScene from "./main/routerScene";
 
 export const stage = new Stage([
     languageScene,
@@ -54,7 +60,13 @@ export const stage = new Stage([
     buyBuffScene,
     buyPotionScene,
     buyProjectileScene,
-    vendorScene
+    vendorScene,
+    levelUpScene,
+    statScene,
+    levelUpConfirmScene,
+    levelUpAltScene,
+    levelUpRefreshScene,
+    routerScene
 ]);
 export {
     languageScene,
@@ -83,5 +95,11 @@ export {
     buyBuffScene,
     buyPotionScene,
     buyProjectileScene,
-    vendorScene
+    vendorScene,
+    levelUpScene,
+    statScene,
+    levelUpConfirmScene,
+    levelUpAltScene,
+    levelUpRefreshScene,
+    routerScene
 };

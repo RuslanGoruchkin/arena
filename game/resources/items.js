@@ -1,19 +1,8 @@
-export let items = {
-    //WEAPONS
-    bigNail: {
-        key: "bigNail",
-        name: "bigNail",
-        type: "weapon",
-        minLvl: 0,
-        minDamage: 1,
-        maxDamage: 3,
-        bonus: {
-            strength: 1
-        },
-        price: 20,
-        shop: true,
-        minSellLvl: 0,
-        maxSellLvl: 5,
-        equipped: false
-    }
-};
+import _ from 'lodash';
+
+
+import {armors_bodies, interior_armors} from './armors';
+import {weapons_bodies, interior_weapons} from './weapons';
+import {shields_bodies} from './shields';
+
+export const items = _.assign({}, armors_bodies, interior_armors, weapons_bodies, interior_weapons, shields_bodies);

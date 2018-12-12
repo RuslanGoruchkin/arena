@@ -1,34 +1,22 @@
 import Scene from "telegraf/scenes/base";
-import { enterScene, keyboard, replyWithMarkdown, stateWrapper, redirectToOopsScene, t } from "../../helpers";
+import {
+    enterScene,
+    keyboard,
+    replyWithMarkdown,
+    stateWrapper,
+    redirectToOopsScene,
+    t,
+    statusMessage
+} from "../../helpers";
+import _ from "lodash";
 
 // let debug = require("debug")("bot:hallwayRoomScene");
 
 const hallwayRoomScene = new Scene("hallwayRoomScene");
 hallwayRoomScene.enter(ctx => {
     return stateWrapper(ctx, (ctx, state) => {
-        //Status report start
+        statusMessage(state);
 
-        let player = state.player;
-        let needs = "";
-        if (player.hungry) needs += " hungry";
-        if (player.sleepy) needs += " sleepy";
-        if (player.thirsty) needs += " thirsty";
-        if (needs === "") needs = "Fine";
-        let status = t(state, "texts.status", {
-            charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
-            nickname: player.nickname,
-            coins: player.data.coins,
-            tokens: player.data.tokens,
-            hp: player.data.hp,
-            sp: player.data.sp,
-            mp: player.data.mp,
-            level: player.level,
-            xp: player.XP,
-            needs: needs
-        });
-        replyWithMarkdown(status, { playerId: state.player.id }, state);
-
-        //Status report end
         let message =
             'You are in a large hallway.\n It has a grandiose staircase in the center with giant floating "ARENA" hologram.\n' +
             'There is a stairway down as well. Weary sign nearby spells "TRAINING".' +

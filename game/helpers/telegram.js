@@ -33,6 +33,54 @@ export const keyboard = (text = "", menu = [], params, state = null) => {
     return global.bot.telegram.sendMessage(playerId, text, options).catch(e => errorHandler(e, null, state));
 };
 
+export const inlineKeyboard = (text = "", menu = [], params, state = null) => {
+    let options = {
+        parse_mode: "Markdown",
+        reply_markup: {
+            inline_keyboard: menu
+        }
+    };
+    let playerId = _.get(params, "playerId");
+    if (!playerId || !text) {
+        return Promise.reject("No id or text");
+    }
+    if (state) {
+        state.userHistory.push({
+            playerId,
+            action: "inlineKeyboard",
+            data: {
+                text,
+                menu
+            }
+        });
+        stateManager.setState(state);
+    }
+    return global.bot.telegram.sendMessage(playerId, text, options).catch(e => errorHandler(e, null, state));
+};
+export const removeKeyboard = (text = "", params, state = null) => {
+    let options = {
+        parse_mode: "Markdown",
+        reply_markup: {
+            remove_keyboard: true
+        }
+    };
+    let playerId = _.get(params, "playerId");
+    if (!playerId || !text) {
+        return Promise.reject("No id or text");
+    }
+    if (state) {
+        state.userHistory.push({
+            playerId,
+            action: "removeKeyboard",
+            data: {
+                text
+            }
+        });
+        stateManager.setState(state);
+    }
+    return global.bot.telegram.sendMessage(playerId, text, options).catch(e => errorHandler(e, null, state));
+};
+
 export let replyWithPhotoAndKeyboard = (text = "", photo = "", menu = [], params, state = null) => {
     let options = {
         caption: text,
@@ -114,6 +162,40 @@ export const enterScene = (ctx, sceneName, state) => {
     }
 };
 
+export const enterSceneCB = (ctx, sceneName, state) => {
+    const idFromCtx = _.get(ctx, "update.callback_query.from.id");
+    const fake_update = _.has(ctx, "update.fake_update");
+    if (state) {
+        state.userHistory.push({
+            playerId: idFromCtx,
+            action: "enterScene",
+            data: {
+                sceneName
+            }
+        });
+        stateManager.setState(state);
+    }
+    if (!idFromCtx) {
+        return Promise.reject("No id");
+    }
+    if (!fake_update) {
+        return ctx.scene.enter(sceneName).catch(e => errorHandler(e, ctx, state));
+    }
+    if (_.get(scenes, sceneName)) {
+        let options = {
+            retryAfter: 1,
+            handlerTimeout: 0,
+            telegram: {
+                webhookReply: true
+            }
+        };
+        let newCtx = new TelegrafContext(ctx.update, global.bot, options);
+        return _.get(scenes, sceneName)
+            .enterHandler.call(state, newCtx)
+            .catch(e => errorHandler(e, ctx, state));
+    }
+};
+
 export let redirectToOopsScene = (ctx = {}, state = {}, e) => {
     console.log(
         `User ${ctx.update.message.from.first_name} ${ctx.update.message.from.last_name} ${ctx.update.message.from.id} tries to write "${
@@ -130,4 +212,15 @@ export let redirectToOopsScene = (ctx = {}, state = {}, e) => {
     // return null;
 
     // return enterScene(ctx, "oopsScene");
+};
+
+export let routerScene = (ctx = {}, routerScene = "mainScene", callback = false) => {
+    console.log(routerScene);
+    //ctx.session.routerScene = routerScene;
+    //console.log(ctx.session.routerScene);
+    if (callback) {
+        return enterSceneCB(ctx, "routerScene");
+    } else {
+        return enterScene(ctx, "routerScene");
+    }
 };

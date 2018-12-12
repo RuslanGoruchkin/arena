@@ -7,7 +7,7 @@ drinkingScene.enter(ctx =>
         let player = state.player;
         let data = player.data;
         let currentTick = state.currentTick;
-        let drinkingTime = 36;
+        let drinkingTime = 5;
         data.timeout = currentTick + drinkingTime;
         data.timeoutStatus = true;
         data.activity = "drinking";
@@ -25,9 +25,13 @@ drinkingScene.enter(ctx =>
 drinkingScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
+        let data = player.data;
+        let currentTick = state.currentTick;
+        let drinkingTime = 36;
+        let sleepingTime = 100;
+        let eatingTime = 100;
         switch (ctx.update.message.text) {
             case t(state, "menu.needs.status"):
-                let currentTick = state.currentTick;
                 let timeout = player.data.timeout;
                 let delta = timeout - currentTick;
                 if (delta > 0) {
@@ -45,6 +49,34 @@ drinkingScene.on("text", ctx =>
                 timeout = 0;
                 replyWithMarkdown(t(state, "texts.needs.stopDrinking"), { playerId: player.id }, state);
                 return enterScene(ctx, "mainScene", state);
+            case t(state, "menu.action.eat"):
+                data.timeout = currentTick + eatingTime;
+                data.timeoutStatus = true;
+                data.activity = "eating";
+                return enterScene(ctx, "eatingScene", state);
+            case t(state, "menu.action.drink"):
+                data.timeout = currentTick + drinkingTime;
+                data.timeoutStatus = true;
+                data.activity = "drinking";
+                return enterScene(ctx, "drinkingScene", state);
+            case t(state, "menu.leaveCell"):
+                data.timeout = 0;
+                return enterScene(ctx, "hallwayRoomScene", state);
+            case t(state, "menu.action.sleep"):
+                data.timeout = currentTick + sleepingTime;
+                data.timeoutStatus = true;
+                data.activity = "sleeping";
+                return enterScene(ctx, "sleepingScene", state);
+            case t(state, "menu.inventory"):
+                data.timeout = 0;
+                return enterScene(ctx, "inventoryScene", state);
+            //any scene
+            case t(state, "menu.character"):
+                data.timeout = 0;
+                return enterScene(ctx, "characterScene", state);
+            case t(state, "menu.menu"):
+                data.timeout = 0;
+                return enterScene(ctx, "mainMenuScene", state);
             default:
                 return redirectToOopsScene(ctx, state);
         }

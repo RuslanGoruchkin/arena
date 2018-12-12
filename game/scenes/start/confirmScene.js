@@ -19,10 +19,9 @@ confirmScene.enter(ctx =>
         await startNewGame(state, { ctx });
         let player = state.player;
         player.selectedCharacter = getItemByClassCaption(ctx.session.character, characters);
-        let selectedCharacter = player.selectedCharacter;
         let message = t(state, "texts.startScenes.confirmScene.descriptionCharacter", {
-            charClass: t(state, `menu.characters.${selectedCharacter.class}`),
-            description: t(state, `texts.startScenes.confirmScene.${selectedCharacter.class}`),
+            charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
+            description: t(state, `texts.startScenes.confirmScene.${player.selectedCharacter.class}`),
             nickname: player.nickname,
             strength: player.selectedCharacter.baseStrength,
             dexterity: player.selectedCharacter.baseDexterity,

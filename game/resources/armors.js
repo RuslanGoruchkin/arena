@@ -1,18 +1,19 @@
 import _ from "lodash";
 
 export var armors_bodies = {
-    robe: { name: "Robe", load: 3, delay: 3, absorption: 2, resistance: 2, stability: 3 },
+    robe: { name: "Robe", type: "armor", load: 3, delay: 3, absorption: 2, resistance: 2, stability: 3 },
     //skin:  {name: "Skin",                 load: 6, delay: 8, absorption: 2, resistance: 4, stability: 4},
     //skin:  {name: "Skin",                 load: 8, delay: 5, absorption: 2, resistance: 4, stability: 6},
-    jacket: { name: "Jacket", load: 5, delay: 6, absorption: 4, resistance: 3, stability: 4 },
-    leather: { name: "Leather", load: 8, delay: 5, absorption: 5, resistance: 3, stability: 9 },
-    lamellar: { name: "Lamellar", load: 10, delay: 11, absorption: 8, resistance: 2, stability: 18 },
-    chest: { name: "Chest", load: 14, delay: 16, absorption: 10, resistance: 4, stability: 28 },
-    chain: { name: "Chain", load: 15, delay: 12, absorption: 15, resistance: 1, stability: 15 },
+    jacket: { name: "Jacket", type: "armor", load: 5, delay: 6, absorption: 4, resistance: 3, stability: 4 },
+    leather: { name: "Leather", type: "armor", load: 8, delay: 5, absorption: 5, resistance: 3, stability: 9 },
+    lamellar: { name: "Lamellar", type: "armor", load: 10, delay: 11, absorption: 8, resistance: 2, stability: 18 },
+    chest: { name: "Chest", type: "armor",  load: 14, delay: 16, absorption: 10, resistance: 4, stability: 28 },
+    chain: { name: "Chain", type: "armor",  load: 15, delay: 12, absorption: 15, resistance: 1, stability: 15 },
     //brigand:  {name: "Brigand",           load: 18, delay: 13, absorption: 8, resistance: 4, stability: 16},
-    plate: { name: "Plate", load: 22, delay: 21, absorption: 18, resistance: 4, stability: 36 },
+    plate: { name: "Plate", type: "armor",  load: 22, delay: 21, absorption: 18, resistance: 4, stability: 36 },
     //plate:  {name: "Plate",     load: 30, delay: 24, absorption: 12, resistance: 4, stability: 36},
-    full_plate: { name: "Full Plate", load: 26, delay: 35, absorption: 26, resistance: 5, stability: 42 }
+    full_plate: { name: "Full Plate", type: "armor",  load: 26, delay: 35, absorption: 26, resistance: 5, stability: 42 },
+    naked: { name: "Naked", type: "armor",  load: 0, delay: 0, absorption: 0, resistance: 0, stability: 0 }
     //turtle_plate: {name: "Turtle Plate",  load: 35, delay: 35, absorption: 15, resistance: 5, stability: 40},
 };
 

@@ -368,6 +368,20 @@ const unsort_weapons_bodies = {
         accuracy: 12,
         range: 65,
         speed: 38
+    },
+    fist: {
+        name: "Fist",
+        type: "weapon",
+        hands: 1,
+        load: 0,
+        min_dmg: 1,
+        max_dmg: 2,
+        dmg_type: "crushing",
+        bonus_stat: "str",
+        stunning: 16,
+        accuracy: 5,
+        range: 1,
+        speed: 20
     }
 };
 

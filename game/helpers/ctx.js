@@ -4,10 +4,12 @@ import { errorHandler } from "./loggers";
 
 let debug = require("debug")("bot:ctx-helpers");
 
-export let stateWrapper = (ctx, fn) => {
+export let stateWrapper = async (ctx, fn) => {
     let state = stateManager.getState({ playerId: _.get(ctx, "from.id") });
     try {
-        return fn.call(this, ctx, state).catch(e => errorHandler(e, ctx, state));
+        await fn.call(this, ctx, state);
+        return stateManager.sync();
+        //return fn.call(this, ctx, state).catch(e => errorHandler(e, ctx, state));
     } catch (e) {
         errorHandler(e, ctx, state);
     }

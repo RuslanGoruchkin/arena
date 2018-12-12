@@ -41,20 +41,17 @@ buyProjectileScene.on("text", ctx =>
         let player = state.player;
         let selectedCharacter = state.player.selectedCharacter;
         let text = ctx.update.message.text;
-        let item = _.find(consumables, { name: text });
-        //let module = _.find(consumables, module => {
-        //    return t(state, `texts.modules.${module.name}`) === ctx.session.player.moduleForBuy.name;
-        //});
+        let itemId = _.findKey(consumables, { name: text });
+
         switch (text) {
             case t(state, "texts.back"):
-                enterScene(ctx, "vendorScene", state);
-                break;
-            case item.name:
+                return enterScene(ctx, "vendorScene", state);
+            case consumables[itemId].name:
                 let data = player.data;
-                if (data.coins - item.cost >= 0) {
+                if (data.coins - consumables[itemId].cost >= 0) {
                     if (selectedCharacter.belt.length < 6) {
-                        selectedCharacter.belt.push(item.id);
-                        data.coins -= item.cost;
+                        selectedCharacter.belt.push(itemId);
+                        data.coins -= consumables[itemId].cost;
                         return replyWithMarkdown("Purchase success", { playerId: state.player.id }).then(
                             enterScene(ctx, "vendorScene", state)
                         );

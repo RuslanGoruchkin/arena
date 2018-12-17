@@ -6,13 +6,11 @@ export let defaultPlayer = {
         hungryTick: 0,
         thirstyTick: 0,
         sleepyTick: 0,
-        trainTick: {
-            strength: 0,
-            dexterity: 0,
-            intellect: 0,
-            wisdom: 0,
-            vitality: 0
+        levelBuffer: {
+            cls: { warrior: 0, mage: 0, evangelist: 0, prophet: 0, nomad: 0 },
+            att: { strength: 0, dexterity: 0, intelligence: 0, wisdom: 0, vitality: 0 }
         },
+        salary: 0,
         hp: 1,
         max_hp: 1,
         sp: 1,
@@ -28,7 +26,8 @@ export let defaultPlayer = {
         statPoints: 0,
         wallets: [],
         coins: 50,
-        tokens: 0
+        tokens: 0,
+        conditions: []
     },
     sleepy: false,
     hungry: false,
@@ -52,11 +51,11 @@ export let defaultPlayer = {
             prophet: 0,
             nomad: 0
         },
-        baseStrength: 0,
-        baseDexterity: 0,
-        baseIntelligence: 0,
-        baseWisdom: 0,
-        baseVitality: 0,
+        strength: 0,
+        dexterity: 0,
+        intelligence: 0,
+        wisdom: 0,
+        vitality: 0,
         belt: [],
         levelUp: 9,
         equipment: [],

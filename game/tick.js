@@ -27,7 +27,7 @@ export const tick = async state => {
                 state = item.onTick(state, params);
             }
         });
-
+//Global timers
         if (player.sleepy === false && state.currentTick - player.sleepyTime > player.data.sleepyTick) {
             player.sleepy = true;
             stateManager.queue.add(() => {
@@ -48,6 +48,7 @@ export const tick = async state => {
             });
         }
 
+        //Room timers
         if (player.data.timeoutStatus === true && player.data.timeout < state.currentTick) {
             const ctx = generateUpdateFromState(state, params);
             switch (player.data.activity) {
@@ -75,16 +76,68 @@ export const tick = async state => {
                         replyWithMarkdown("You are no longer sleepy. Your stats have been restored\n +100 XP", params);
                     });
                     break;
+                case "training_dexterity":
+                    player.data.sleepyTick = state.currentTick;
+                    player.data.conditions.push("TBDexterity");
+                    stateManager.queue.add(() => {
+                        replyWithMarkdown("You are 20% more agile", params);
+                    });
+                    break;
+                case "training_vitality":
+                    player.data.sleepyTick = state.currentTick;
+                    player.data.conditions.push("TBVitality");
+                    stateManager.queue.add(() => {
+                        replyWithMarkdown("You are 20% buffer", params);
+                    });
+                    break;
+                case "training_intelligence":
+                    player.data.sleepyTick = state.currentTick;
+                    player.data.conditions.push("TBIntelligence");
+                    stateManager.queue.add(() => {
+                        replyWithMarkdown("You are 20% smarter", params);
+                    });
+                    break;
+                case "training_strength":
+                    player.data.sleepyTick = state.currentTick;
+                    player.data.conditions.push("TBStrength");
+                    stateManager.queue.add(() => {
+                        replyWithMarkdown("You are 20% stronger", params);
+                    });
+                    break;
+                case "training_wisdom":
+                    player.data.sleepyTick = state.currentTick;
+                    player.data.conditions.push("TBWisdom");
+                    stateManager.queue.add(() => {
+                        replyWithMarkdown("You are 20% wiser", params);
+                    });
+                    break;
                 default:
                     break;
             }
             player.data.timeout = 0;
-            player.data.activity = "";
             player.data.timeoutStatus = false;
+            player.data.activity = "";
+            //ctx.scene.reenter();
+
             stateManager.queue.add(() => {
                 enterScene(ctx, "mainScene", state);
+                /*
+                if (data.activity.startsWith("training")) {
+                    data.activity = "";
+                    enterScene(ctx, "trainingRoomScene", state);
+                } else if (data.activity.startsWith("work")) {
+                    data.coins += data.salary * 10;
+                    data.salary = 0;
+                    data.activity = "";
+                    enterScene(ctx, "workRoomScene", state);
+                } else {
+                    data.activity = "";
+
+                }
+*/
                 //    routerScene(ctx, "mainScene", false);
             });
+
             /*
             if (player.XP > player.selectedCharacter.levelUp * (2 ^ player.level) - player.selectedCharacter.levelUp) {
                 player.level += 1;

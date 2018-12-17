@@ -44,13 +44,12 @@ mainScene.enter(ctx => {
             message = t(state, "texts.needs.sleeping");
             buttons.push([t(state, "menu.needs.status")]);
             buttons.push([t(state, "menu.needs.stop")]);
+        } else if (data.activity === "leveling1") {
+            ctx.scene.leave();
+            return enterScene(ctx, "statScene", state);
         }
 
         if (player.XP >= player.selectedCharacter.levelUp * 2 ** player.level - player.selectedCharacter.levelUp) {
-            state.levelBuffer = {
-                cls: { warrior: 0, mage: 0, evangelist: 0, prophet: 0, nomad: 0 },
-                att: { baseStrength: 0, baseDexterity: 0, baseIntelligence: 0, baseWisdom: 0, baseVitality: 0 }
-            };
             player.level += 1;
             player.data.classPoints += 1;
             player.data.statPoints += 1;
@@ -178,6 +177,7 @@ mainScene.on("text", ctx =>
                     return enterScene(ctx, "mainMenuScene", state);
                 case "NOW":
                     data.activity = "leveling1";
+                    ctx.scene.leave();
                     return enterScene(ctx, "levelUpScene", state);
                 case "LATER":
                     return enterScene(ctx, "mainScene", state);

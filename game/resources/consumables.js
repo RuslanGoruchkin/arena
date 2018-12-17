@@ -15,7 +15,7 @@ export const consumables = {
     light_resin: {
         name: "Light Resin",
         cost: 10,
-        text: "Adds dark damage to weapons attacks, but lowers stunning.",
+        text: "Adds light damage to weapons attacks, but lowers stunning.",
         load: 5,
         type: "buffs"
     },

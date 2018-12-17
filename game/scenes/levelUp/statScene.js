@@ -10,10 +10,13 @@ statScene.enter(ctx =>
         let player = state.player;
         let message = "What ATTRIBUTE would you want to upgrade?\n\n";
         let buttons = [
-            [t(state, "texts.attributes.baseStrength"), t(state, "texts.attributes.baseDexterity")],
-            [t(state, "texts.attributes.baseIntelligence"), t(state, "texts.attributes.baseWisdom")],
-            [t(state, "texts.attributes.baseVitality")]
+            [t(state, "texts.attributes.strength"), t(state, "texts.attributes.dexterity")],
+            [t(state, "texts.attributes.intelligence"), t(state, "texts.attributes.wisdom")],
+            [t(state, "texts.attributes.vitality")]
         ];
+        if (!player.data.statPoints) {
+            buttons = [];
+        }
         message +=
             "Player: " +
             player.nickname +
@@ -30,16 +33,16 @@ statScene.enter(ctx =>
             "\n Attribute upgrades: " +
             player.data.statPoints;
         _.forEach(player.selectedCharacter.classes, function(classLvl, key) {
-            if (classLvl || state.levelBuffer.cls[key]) message += "\n";
+            if (classLvl || state.player.data.levelBuffer.cls[key]) message += "\n";
             if (classLvl) {
                 message += t(state, `menu.characters.${key}`) + " " + classLvl + " lvl";
             }
-            if (state.levelBuffer.cls[key] >= 1) {
-                let futureLvl = state.levelBuffer.cls[key] + classLvl;
-                message += " ➕ " + state.levelBuffer.cls[key] + " ➡️ " + t(state, `menu.characters.${key}`) + " " + futureLvl + " lvl";
+            if (state.player.data.levelBuffer.cls[key] >= 1) {
+                let futureLvl = state.player.data.levelBuffer.cls[key] + classLvl;
+                message += " ➕ " + state.player.data.levelBuffer.cls[key] + " ➡️ " + t(state, `menu.characters.${key}`) + " " + futureLvl + " lvl";
             }
         });
-        _.forEach(state.levelBuffer.att, function(value, att) {
+        _.forEach(state.player.data.levelBuffer.att, function(value, att) {
             message += "\n" + t(state, `texts.attributes.${att}`) + ": " + player.selectedCharacter[att];
             if (value >= 1) {
                 let futureAtt = player.selectedCharacter[att] + value;
@@ -58,49 +61,51 @@ statScene.on("text", ctx =>
         let player = state.player;
         let selectedCharacter = player.selectedCharacter;
         switch (ctx.update.message.text) {
-            case t(state, "texts.attributes.baseStrength"):
-                state.levelBuffer.att.baseStrength += 1;
-                data.statPoints -= 1;
+            case t(state, "texts.attributes.strength"):
+                state.player.data.levelBuffer.att.strength += 1;
+                state.player.data.statPoints -= 1;
                 return enterScene(ctx, "statScene", state);
-            case t(state, "texts.attributes.baseDexterity"):
-                state.levelBuffer.att.baseDexterity += 1;
-                data.statPoints -= 1;
+            case t(state, "texts.attributes.dexterity"):
+                state.player.data.levelBuffer.att.dexterity += 1;
+                state.player.data.statPoints -= 1;
                 return enterScene(ctx, "statScene", state);
-            case t(state, "texts.attributes.baseIntelligence"):
-                state.levelBuffer.att.baseIntelligence += 1;
-                data.statPoints -= 1;
+            case t(state, "texts.attributes.intelligence"):
+                state.player.data.levelBuffer.att.intelligence += 1;
+                state.player.data.statPoints -= 1;
                 return enterScene(ctx, "statScene", state);
-            case t(state, "texts.attributes.baseWisdom"):
-                state.levelBuffer.att.baseWisdom += 1;
-                data.statPoints -= 1;
+            case t(state, "texts.attributes.wisdom"):
+                state.player.data.levelBuffer.att.wisdom += 1;
+                state.player.data.statPoints -= 1;
                 return enterScene(ctx, "statScene", state);
-            case t(state, "texts.attributes.baseVitality"):
-                state.levelBuffer.att.baseVitality += 1;
-                data.statPoints -= 1;
+            case t(state, "texts.attributes.vitality"):
+                state.player.data.levelBuffer.att.vitality += 1;
+                state.player.data.statPoints -= 1;
                 return enterScene(ctx, "statScene", state);
             case t(state, "texts.ok"):
+                player.data.activity = "";
 
                 _.forEach(player.selectedCharacter.classes, function(classLvl, key) {
-                    player.selectedCharacter.classes[key] = classLvl + state.levelBuffer.cls[key];
-                    state.levelBuffer.cls[key] = 0;
+                    player.selectedCharacter.classes[key] = classLvl + state.player.data.levelBuffer.cls[key];
+                    state.player.data.levelBuffer.cls[key] = 0;
                 });
-                _.forEach(state.levelBuffer.att, function(value, att) {
+                _.forEach(state.player.data.levelBuffer.att, function(value, att) {
                     player.selectedCharacter.classes[att] = value + player.selectedCharacter.classes[att];
-                    state.levelBuffer.att[att] = 0;
+                    state.player.data.levelBuffer.att[att] = 0;
                 });
                 return enterScene(ctx, "mainScene", state);
             case "RESET":
-                data.classPoints += _.sum(state.levelBuffer.cls);
-                _.fill(state.levelBuffer.cls, 0);
-                data.statPoints += _.sum(state.levelBuffer.att);
-                _.fill(state.levelBuffer.att, 0);
+                state.player.data.classPoints += _.sum(state.player.data.levelBuffer.cls);
+                _.fill(state.player.data.levelBuffer.cls, 0);
+                state.player.data.statPoints += _.sum(state.player.data.levelBuffer.att);
+                _.fill(state.player.data.levelBuffer.att, 0);
+                console.log("\nClass points: " + state.player.data.classPoints + "\nBuffer points: "+state.player.data.levelBuffer.cls.warrior);
                 return enterScene(ctx, "levelUpScene", state);
             case "LATER":
-                data.classPoints += _.sum(state.levelBuffer.cls);
-                _.fill(state.levelBuffer.cls, 0);
-                data.statPoints += _.sum(state.levelBuffer.att);
-                _.fill(state.levelBuffer.att, 0);
-                data.activity = "";
+                state.player.data.classPoints += _.sum(state.player.data.levelBuffer.cls);
+                _.fill(state.player.data.levelBuffer.cls, 0);
+                state.player.data.statPoints += _.sum(state.player.data.levelBuffer.att);
+                _.fill(state.player.data.levelBuffer.att, 0);
+                state.player.data.activity = "";
                 return enterScene(ctx, "mainScene", state);
         }})
 );

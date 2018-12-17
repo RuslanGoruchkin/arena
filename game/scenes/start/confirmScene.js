@@ -23,11 +23,11 @@ confirmScene.enter(ctx =>
             charClass: t(state, `menu.characters.${player.selectedCharacter.class}`),
             description: t(state, `texts.startScenes.confirmScene.${player.selectedCharacter.class}`),
             nickname: player.nickname,
-            strength: player.selectedCharacter.baseStrength,
-            dexterity: player.selectedCharacter.baseDexterity,
-            intelligence: player.selectedCharacter.baseIntelligence,
-            wisdom: player.selectedCharacter.baseWisdom,
-            vitality: player.selectedCharacter.baseVitality
+            strength: player.selectedCharacter.strength,
+            dexterity: player.selectedCharacter.dexterity,
+            intelligence: player.selectedCharacter.intelligence,
+            wisdom: player.selectedCharacter.wisdom,
+            vitality: player.selectedCharacter.vitality
         });
         return replyWithPhotoAndKeyboard(
             message,

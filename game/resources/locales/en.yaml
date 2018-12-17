@@ -5,11 +5,11 @@ texts:
   seconds: 'seconds'
 
   attributes:
-   baseStrength: "Strength"
-   baseDexterity: "Dexterity"
-   baseIntelligence: "Intelligence"
-   baseWisdom: "Wisdom"
-   baseVitality: "Vitality"
+   strength: "Strength"
+   dexterity: "Dexterity"
+   intelligence: "Intelligence"
+   wisdom: "Wisdom"
+   vitality: "Vitality"
 
 
   status: |

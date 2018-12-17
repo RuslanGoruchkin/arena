@@ -43,7 +43,8 @@ class MySQLSession {
         if (existedPromise) {
             return existedPromise;
         }
-        let promise = this.client.models.session.findById(key).then(json => {
+        //let promise = this.client.models.session.findById(key).then(json => {
+        let promise = this.client.models.session.findByPk(key).then(json => {
             let session = {};
             if (_.get(json, "dataValues.session")) {
                 try {

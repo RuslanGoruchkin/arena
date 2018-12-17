@@ -2,6 +2,7 @@ import execPromise from "@chmontgomery/exec-promise";
 import _ from "lodash";
 import { characters } from "../resources/characters";
 import { getDefaultPlayer } from "../resources/defaultPlayer";
+import { conditions } from "../resources/conditions";
 import { errorHandler, replyWithMarkdown, t } from "./";
 export const NICKNAME_LENGTH = 8;
 let debug = require("debug")("bot:player-helpers");
@@ -92,6 +93,16 @@ export const calculateProgramCount = playerMemory => {
 
 export const statusMessage = state => {
     let player = state.player;
+    let completePlayer = player;
+    let params = { playerId: player.id };
+    let conditionList = "";
+    if (player.data.conditions) {
+        _.forEach(player.data.conditions, function(condition) {
+            conditionList += "\n" + conditions[condition].name;
+            let con = conditions[condition];
+            completePlayer = con.transformation(state, params);
+        });
+    }
     let hydration = "";
     let satiety = "";
     let awakeness = "";
@@ -137,5 +148,5 @@ export const statusMessage = state => {
         satiety: satiety,
         awakeness: awakeness
     });
-    return replyWithMarkdown(status, { playerId: state.player.id }, state);
+    return replyWithMarkdown(status + conditionList, { playerId: state.player.id }, state);
 };

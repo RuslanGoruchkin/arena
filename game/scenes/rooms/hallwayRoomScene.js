@@ -23,9 +23,9 @@ hallwayRoomScene.enter(ctx => {
             "Also you see some people doing little business here";
         let buttons = [];
         buttons.push([t(state, "menu.enterArena"), t(state, "menu.room.market")]);
-        buttons.push([t(state, "menu.room.training"), t(state, "menu.room.cell")]);
+        buttons.push([t(state, "menu.room.training"), t(state, "menu.room.work")]);
         //any scene
-        buttons.push([t(state, "menu.character"), t(state, "menu.menu")]);
+        buttons.push([t(state, "menu.character"), t(state, "menu.menu"), t(state, "menu.room.cell")]);
         return keyboard(message, buttons, { playerId: state.player.id }, state);
     });
 });
@@ -44,6 +44,9 @@ hallwayRoomScene.on("text", ctx =>
 
             case t(state, "menu.room.cell"):
                 return enterScene(ctx, "mainScene", state);
+            case t(state, "menu.room.work"):
+                return enterScene(ctx, "workRoomScene", state);
+
 
             //any scene
             case t(state, "menu.character"):

@@ -32,6 +32,8 @@ import levelUpConfirmScene from "./levelUp/levelUpConfirmScene";
 import levelUpAltScene from "./levelUp/levelUpAltScene";
 import levelUpRefreshScene from "./levelUp/levelUpRefreshScene";
 import routerScene from "./main/routerScene";
+import trainingRoomScene from "./rooms/trainingRoomScene";
+import workRoomScene from "./rooms/workRoomScene";
 
 export const stage = new Stage([
     languageScene,
@@ -66,7 +68,9 @@ export const stage = new Stage([
     levelUpConfirmScene,
     levelUpAltScene,
     levelUpRefreshScene,
-    routerScene
+    routerScene,
+    trainingRoomScene,
+    workRoomScene
 ]);
 export {
     languageScene,
@@ -101,5 +105,7 @@ export {
     levelUpConfirmScene,
     levelUpAltScene,
     levelUpRefreshScene,
-    routerScene
+    routerScene,
+    trainingRoomScene,
+    workRoomScene
 };

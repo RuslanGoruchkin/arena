@@ -239,7 +239,7 @@ menu:
     market: 'Market'
     training: 'Training'
     cell: 'Cell'
-    abandonQuest: 'abandonQuest'
+    work: 'Work'
 
   shop:
     weapons: 'Weapon shop'

@@ -1,14 +1,5 @@
 import _ from "lodash";
-import {
-    enterScene,
-    errorHandler,
-    generateUpdateFromState,
-    getPlayer,
-    removeKeyboard,
-    replyWithMarkdown,
-    routerScene,
-    t
-} from "./helpers";
+import { enterScene, errorHandler, generateUpdateFromState, getPlayer, removeKeyboard, replyWithMarkdown, routerScene, t } from "./helpers";
 import { characters } from "./resources/characters";
 import stateManager from "./stateManager";
 
@@ -27,7 +18,7 @@ export const tick = async state => {
                 state = item.onTick(state, params);
             }
         });
-//Global timers
+        //Global timers
         if (player.sleepy === false && state.currentTick - player.sleepyTime > player.data.sleepyTick) {
             player.sleepy = true;
             stateManager.queue.add(() => {
@@ -116,25 +107,25 @@ export const tick = async state => {
             }
             player.data.timeout = 0;
             player.data.timeoutStatus = false;
-            player.data.activity = "";
+            //player.data.activity = "";
             //ctx.scene.reenter();
 
             stateManager.queue.add(() => {
-                enterScene(ctx, "mainScene", state);
-                /*
-                if (data.activity.startsWith("training")) {
-                    data.activity = "";
+                // enterScene(ctx, "mainScene", state);
+
+                if (player.data.activity.startsWith("training")) {
+                    player.data.activity = "";
                     enterScene(ctx, "trainingRoomScene", state);
-                } else if (data.activity.startsWith("work")) {
-                    data.coins += data.salary * 10;
-                    data.salary = 0;
-                    data.activity = "";
+                } else if (player.data.activity.startsWith("work")) {
+                    player.player.data.coins += player.data.salary * 10;
+                    player.data.salary = 0;
+                    player.data.activity = "";
                     enterScene(ctx, "workRoomScene", state);
                 } else {
-                    data.activity = "";
-
+                    player.data.activity = "";
+                    enterScene(ctx, "mainScene", state);
                 }
-*/
+
                 //    routerScene(ctx, "mainScene", false);
             });
 

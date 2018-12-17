@@ -4,17 +4,26 @@ import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown, stateWrap
 import { consumables } from "../../resources/consumables";
 import { items } from "../../resources/items";
 import stateManager from "../../stateManager";
+import { conditions } from "../../resources/conditions";
 
 const characterScene = new Scene("characterScene");
 
 characterScene.enter(ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
+
         let selectedCharacter = player.selectedCharacter;
         let message = "";
         let belt = "";
         let rightHand = items[selectedCharacter.rightHand].name || "Fist";
         let leftHand = items[selectedCharacter.leftHand].name || "Fist";
+        if (player.data.conditions) {
+            _.forEach(player.data.conditions, function(condition) {
+                conditionList += "\n" + conditions[condition].name;
+                let con = conditions[condition];
+                completePlayer = con.transformation(state, params);
+            });
+        }
         _.each(selectedCharacter.belt, item => {
             let consumable = consumables[item];
             belt += consumable.name + " ";

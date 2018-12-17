@@ -9,8 +9,8 @@ import {
     t
 } from "../../helpers";
 
-const trainingRoomScene = new Scene("trainingRoomScene");
-trainingRoomScene.enter(ctx => {
+const workRoomScene = new Scene("workRoomScene");
+workRoomScene.enter(ctx => {
     return stateWrapper(ctx, (ctx, state) => {
         let message = "";
         let buttons = [];
@@ -25,23 +25,23 @@ trainingRoomScene.enter(ctx => {
         } else {
             statusMessage(state);
             message = "You are in a work room. What work do you want?";
-            buttons.push("str+dex", "str+int", "str+vit");
-            buttons.push("str+wis", "dex+int","dex+vit");
-            buttons.push("dex+wis", "int+vit","int+wis");
+            buttons.push(["str+dex", "str+int", "str+vit"]);
+            buttons.push(["str+wis", "dex+int","dex+vit"]);
+            buttons.push(["dex+wis", "int+vit","int+wis"]);
             //any scene
-            buttons.push("vit+wis", [t(state, "texts.back")]);
+            buttons.push(["vit+wis", t(state, "texts.back")]);
         }
 
         return keyboard(message, buttons, { playerId: state.player.id });
     });
 });
 
-trainingRoomScene.on("text", ctx =>
+workRoomScene.on("text", ctx =>
     stateWrapper(ctx, (ctx, state) => {
         let player = state.player;
         let data = player.data;
         let currentTick = state.currentTick;
-        let trainingTime = 100;
+        let workingTime = 100;
         //Training
         if (data.activity.startsWith("work")) {
             switch (ctx.update.message.text) {
@@ -56,12 +56,12 @@ trainingRoomScene.on("text", ctx =>
                             state
                         );
                     } else {
-                        return replyWithMarkdown("You are already trained", { playerId: player.id }, state);
+                        return replyWithMarkdown("You have already worked", { playerId: player.id }, state);
                     }
                 case t(state, "menu.needs.stop"):
                     data.timeout = 0;
                     data.activity = "";
-                    return enterScene(ctx, "trainingRoomScene", state);
+                    return enterScene(ctx, "workRoomScene", state);
                 default:
                     return redirectToOopsScene(ctx, state);
             }
@@ -69,30 +69,30 @@ trainingRoomScene.on("text", ctx =>
             //Main
             switch (ctx.update.message.text) {
                 case t(state, "texts.attributes.strength"):
-                    data.timeout = currentTick + trainingTime;
+                    data.timeout = currentTick + workingTime;
                     data.timeoutStatus = true;
                     data.activity = "training_strength";
-                    return enterScene(ctx, "trainingRoomScene", state);
+                    return enterScene(ctx, "workRoomScene", state);
                 case t(state, "menu.action.vitality"):
-                    data.timeout = currentTick + trainingTime;
+                    data.timeout = currentTick + workingTime;
                     data.timeoutStatus = true;
                     data.activity = "training_vitality";
-                    return enterScene(ctx, "trainingRoomScene", state);
+                    return enterScene(ctx, "workRoomScene", state);
                 case t(state, "menu.action.wisdom"):
                     data.timeout = currentTick + trainingTime;
                     data.timeoutStatus = true;
                     data.activity = "training_wisdom";
-                    return enterScene(ctx, "trainingRoomScene", state);
+                    return enterScene(ctx, "workRoomScene", state);
                 case t(state, "menu.intelligence"):
-                    data.timeout = currentTick + trainingTime;
+                    data.timeout = currentTick + workingTime;
                     data.timeoutStatus = true;
                     data.activity = "training_intelligence";
-                    return enterScene(ctx, "trainingRoomScene", state);
+                    return enterScene(ctx, "workRoomScene", state);
                 case t(state, "menu.dexterity"):
-                    data.timeout = currentTick + trainingTime;
+                    data.timeout = currentTick + workingTime;
                     data.timeoutStatus = true;
                     data.activity = "training_dexterity";
-                    return enterScene(ctx, "trainingRoomScene", state);
+                    return enterScene(ctx, "workRoomScene", state);
                 //any scene
                 case t(state, "texts.back"):
                     return enterScene(ctx, "hallwayRoomScene", state);
@@ -103,4 +103,4 @@ trainingRoomScene.on("text", ctx =>
     })
 );
 
-module.exports = trainingRoomScene;
+module.exports = workRoomScene;

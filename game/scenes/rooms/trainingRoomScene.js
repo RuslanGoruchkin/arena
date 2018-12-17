@@ -1,13 +1,5 @@
 import Scene from "telegraf/scenes/base";
-import {
-    enterScene,
-    keyboard,
-    redirectToOopsScene,
-    replyWithMarkdown,
-    stateWrapper,
-    statusMessage,
-    t
-} from "../../helpers";
+import { enterScene, keyboard, redirectToOopsScene, replyWithMarkdown, stateWrapper, statusMessage, t } from "../../helpers";
 
 const trainingRoomScene = new Scene("trainingRoomScene");
 trainingRoomScene.enter(ctx => {
@@ -20,16 +12,15 @@ trainingRoomScene.enter(ctx => {
         if (data.activity !== "") {
             if (data.activity.startsWith("training")) {
                 message = t(state, "texts.needs.training");
-                buttons.push([t(state, "menu.needs.status")]);
-                buttons.push([t(state, "menu.needs.stop")]);
+                buttons = [[t(state, "menu.needs.status")], [t(state, "menu.needs.stop")]];
             }
         } else {
             statusMessage(state);
             message = "You are in a training room. What do you want to train?";
-            buttons.push([t(state, "texts.attributes.strength"), t(state, "menu.action.vitality"), t(state, "menu.action.wisdom")]);
-            buttons.push([t(state, "menu.intelligence"), t(state, "menu.dexterity")]);
-            //any scene
-            buttons.push([t(state, "texts.back")]);
+            buttons = [
+                [t(state, "texts.attributes.strength"), t(state, "menu.action.vitality"), t(state, "menu.action.wisdom")],
+                [t(state, "menu.intelligence"), t(state, "menu.dexterity"), t(state, "texts.back")]
+            ];
         }
 
         return keyboard(message, buttons, { playerId: state.player.id });
@@ -41,7 +32,7 @@ trainingRoomScene.on("text", ctx =>
         let player = state.player;
         let data = player.data;
         let currentTick = state.currentTick;
-        let trainingTime = 100;
+        let trainingTime = 10;
         //Training
         if (data.activity.startsWith("training")) {
             switch (ctx.update.message.text) {

@@ -58,12 +58,11 @@ characterScene.on("text", ctx =>
             case t(state, "texts.back"):
                 return enterScene(ctx, "mainScene", state);
             case t(state, "menu.levelUp"):
-                if (state.player.data.statPoints) {
-                    state.player.data.activity = "leveling1";
-                } else if (!state.player.data.statPoints && state.player.data.classPoints) {
-                    state.player.data.activity = "leveling2";
+                if (state.player.data.classPoints) {
+                    return enterScene(ctx, "levelUpScene", state);
+                } else if (!state.player.data.classPoints && state.player.data.statPoints) {
+                    return enterScene(ctx, "statScene", state);
                 }
-                return enterScene(ctx, "mainScene", state);
             default:
                 return redirectToOopsScene(ctx, state);
         }

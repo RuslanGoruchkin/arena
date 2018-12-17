@@ -100,16 +100,26 @@ levelUpScene.on("text", ctx =>
                 return enterScene(ctx, "statScene", state);
                 break;
             case "RESET":
-                data.classPoints += _.sum(state.player.data.levelBuffer.cls);
-                _.fill(state.player.data.levelBuffer.cls, 0);
+                state.player.data.classPoints += _.sum(_.values(state.player.data.levelBuffer.cls));
+                _.forEach(state.player.data.levelBuffer.cls, function(value, key) {
+                    state.player.data.levelBuffer.cls[key] = 0;
+                });
+                state.player.data.statPoints += _.sum(_.values(state.player.data.levelBuffer.att));
+                _.forEach(state.player.data.levelBuffer.att, function(value, key) {
+                    state.player.data.levelBuffer.att[key] = 0;
+                });
                 return enterScene(ctx, "levelUpScene", state);
-                break;
             case "LATER":
-                data.classPoints += _.sum(state.player.data.levelBuffer.cls);
-                _.fill(state.player.data.levelBuffer.cls, 0);
-                data.activity = "";
+                player.data.activity = "";
+                state.player.data.classPoints += _.sum(_.values(state.player.data.levelBuffer.cls));
+                _.forEach(state.player.data.levelBuffer.cls, function(value, key) {
+                    state.player.data.levelBuffer.cls[key] = 0;
+                });
+                state.player.data.statPoints += _.sum(_.values(state.player.data.levelBuffer.att));
+                _.forEach(state.player.data.levelBuffer.att, function(value, key) {
+                    state.player.data.levelBuffer.att[key] = 0;
+                });
                 return enterScene(ctx, "mainScene", state);
-                break;
         }
     })
 );

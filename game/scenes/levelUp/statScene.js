@@ -39,7 +39,14 @@ statScene.enter(ctx =>
             }
             if (state.player.data.levelBuffer.cls[key] >= 1) {
                 let futureLvl = state.player.data.levelBuffer.cls[key] + classLvl;
-                message += " ➕ " + state.player.data.levelBuffer.cls[key] + " ➡️ " + t(state, `menu.characters.${key}`) + " " + futureLvl + " lvl";
+                message +=
+                    " ➕ " +
+                    state.player.data.levelBuffer.cls[key] +
+                    " ➡️ " +
+                    t(state, `menu.characters.${key}`) +
+                    " " +
+                    futureLvl +
+                    " lvl";
             }
         });
         _.forEach(state.player.data.levelBuffer.att, function(value, att) {
@@ -94,20 +101,30 @@ statScene.on("text", ctx =>
                 });
                 return enterScene(ctx, "mainScene", state);
             case "RESET":
-                state.player.data.classPoints += _.sum(state.player.data.levelBuffer.cls);
-                _.fill(state.player.data.levelBuffer.cls, 0);
-                state.player.data.statPoints += _.sum(state.player.data.levelBuffer.att);
-                _.fill(state.player.data.levelBuffer.att, 0);
-                console.log("\nClass points: " + state.player.data.classPoints + "\nBuffer points: "+state.player.data.levelBuffer.cls.warrior);
+                state.player.data.classPoints += _.sum(_.values(state.player.data.levelBuffer.cls));
+                _.forEach(state.player.data.levelBuffer.cls, function(value, key) {
+                    state.player.data.levelBuffer.cls[key] = 0;
+                });
+                //_.map(state.player.data.levelBuffer.cls, 0);
+                state.player.data.statPoints += _.sum(_.values(state.player.data.levelBuffer.att));
+                _.forEach(state.player.data.levelBuffer.att, function(value, key) {
+                    state.player.data.levelBuffer.att[key] = 0;
+                });
                 return enterScene(ctx, "levelUpScene", state);
             case "LATER":
-                state.player.data.classPoints += _.sum(state.player.data.levelBuffer.cls);
-                _.fill(state.player.data.levelBuffer.cls, 0);
-                state.player.data.statPoints += _.sum(state.player.data.levelBuffer.att);
-                _.fill(state.player.data.levelBuffer.att, 0);
-                state.player.data.activity = "";
+                player.data.activity = "";
+                state.player.data.classPoints += _.sum(_.values(state.player.data.levelBuffer.cls));
+                _.forEach(state.player.data.levelBuffer.cls, function(value, key) {
+                    state.player.data.levelBuffer.cls[key] = 0;
+                });
+                //_.map(state.player.data.levelBuffer.cls, 0);
+                state.player.data.statPoints += _.sum(_.values(state.player.data.levelBuffer.att));
+                _.forEach(state.player.data.levelBuffer.att, function(value, key) {
+                    state.player.data.levelBuffer.att[key] = 0;
+                });
                 return enterScene(ctx, "mainScene", state);
-        }})
+        }
+    })
 );
 
 module.exports = statScene;

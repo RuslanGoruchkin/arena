@@ -4,6 +4,8 @@ import { characters } from "../resources/characters";
 import { getDefaultPlayer } from "../resources/defaultPlayer";
 import { conditions } from "../resources/conditions";
 import { errorHandler, replyWithMarkdown, t } from "./";
+import { items } from "../resources/items";
+import { consumables } from "../resources/consumables";
 export const NICKNAME_LENGTH = 8;
 let debug = require("debug")("bot:player-helpers");
 
@@ -149,4 +151,96 @@ export const statusMessage = state => {
         awakeness: awakeness
     });
     return replyWithMarkdown(status + conditionList, { playerId: state.player.id }, state);
+};
+
+export const attributesMessage = state => {
+    let player = state.player;
+    let completePlayer = player;
+    let params = { playerId: player.id };
+
+    if (player.data.conditions) {
+        _.forEach(player.data.conditions, function(condition) {
+            let con = conditions[condition];
+            completePlayer = con.transformation(state, params);
+        });
+    }
+    let basicAttributes = [
+        player.selectedCharacter.strength,
+        player.selectedCharacter.dexterity,
+        player.selectedCharacter.intelligence,
+        player.selectedCharacter.wisdom,
+        player.selectedCharacter.vitality
+    ];
+    let modifiedAttributes = [
+        completePlayer.selectedCharacter.strength,
+        completePlayer.selectedCharacter.dexterity,
+        completePlayer.selectedCharacter.intelligence,
+        completePlayer.selectedCharacter.wisdom,
+        completePlayer.selectedCharacter.vitality
+    ];
+    let finalAttributes = [];
+
+    _.forEach(basicAttributes, function(value, key) {
+        if (modifiedAttributes[key] > value) {
+            finalAttributes[key] = modifiedAttributes[key] + "(+)";
+        } else if (modifiedAttributes[key] < value) {
+            finalAttributes[key] = modifiedAttributes[key] + "(-)";
+        } else {
+            finalAttributes[key] = modifiedAttributes[key];
+        }
+    });
+
+    let attributes = t(state, "texts.attributes", {
+        strength: finalAttributes[0],
+        dexterity: finalAttributes[1],
+        intelligence: finalAttributes[2],
+        wisdom: finalAttributes[3],
+        vitality: finalAttributes[4]
+    });
+    return attributes;
+};
+
+export const inventoryMessage = state => {
+    let player = state.player;
+    let inventoryList = "";
+
+    _.each(player.selectedCharacter.inventory, item => {
+        inventoryList += items[item].name + "\n";
+    });
+
+    let inventory = t(state, "texts.inventory", {
+        inventory: inventoryList
+    });
+    return inventory;
+};
+
+export const beltMessage = state => {
+    let player = state.player;
+    let beltList = "";
+    let selectedCharacter = player.selectedCharacter;
+
+    _.each(selectedCharacter.belt, item => {
+        let consumable = consumables[item];
+        beltList += consumable.name + " ";
+    });
+
+    let belt = t(state, "texts.inventory", {
+        belt: beltList
+    });
+    return belt;
+};
+
+export const equipmentMessage = state => {
+    let player = state.player;
+    let selectedCharacter = player.selectedCharacter;
+    let rightHand = items[selectedCharacter.rightHand].name || "Fist";
+    let leftHand = items[selectedCharacter.leftHand].name || "Fist";
+    let armor = items[selectedCharacter.armor].name || "Fist";
+
+    let equipment = t(state, "texts.equipment", {
+        rightHand: rightHand,
+        leftHand: leftHand,
+        armor: armor
+    });
+    return equipment;
 };

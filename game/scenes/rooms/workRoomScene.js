@@ -18,7 +18,7 @@ workRoomScene.enter(ctx => {
         let data = player.data;
         if (data.activity !== "") {
             if (data.activity.startsWith("work")) {
-                message = t(state, "texts.needs.training");
+                message = t(state, "texts.work.status");
                 buttons.push([t(state, "menu.needs.status")]);
                 buttons.push([t(state, "menu.needs.stop")]);
             }
@@ -41,8 +41,8 @@ workRoomScene.on("text", ctx =>
         let player = state.player;
         let data = player.data;
         let currentTick = state.currentTick;
-        let workingTime = 100;
-        //Training
+        let workingTime = 10;
+        //Work
         if (data.activity.startsWith("work")) {
             switch (ctx.update.message.text) {
                 case t(state, "menu.needs.status"):
@@ -68,30 +68,65 @@ workRoomScene.on("text", ctx =>
         } else if (!data.activity) {
             //Main
             switch (ctx.update.message.text) {
-                case t(state, "texts.attributes.strength"):
+                case "str+dex":
                     data.timeout = currentTick + workingTime;
                     data.timeoutStatus = true;
-                    data.activity = "training_strength";
+                    data.salary = player.selectedCharacter.strength * player.selectedCharacter.dexterity;
+                    data.activity = "work";
                     return enterScene(ctx, "workRoomScene", state);
-                case t(state, "menu.action.vitality"):
+                case "str+int":
                     data.timeout = currentTick + workingTime;
                     data.timeoutStatus = true;
-                    data.activity = "training_vitality";
+                    data.salary = player.selectedCharacter.strength * player.selectedCharacter.intelligence;
+                    data.activity = "work";
                     return enterScene(ctx, "workRoomScene", state);
-                case t(state, "menu.action.wisdom"):
-                    data.timeout = currentTick + trainingTime;
-                    data.timeoutStatus = true;
-                    data.activity = "training_wisdom";
-                    return enterScene(ctx, "workRoomScene", state);
-                case t(state, "menu.intelligence"):
+                case "str+vit":
                     data.timeout = currentTick + workingTime;
                     data.timeoutStatus = true;
-                    data.activity = "training_intelligence";
+                    data.salary = player.selectedCharacter.strength * player.selectedCharacter.vitality;
+                    data.activity = "work";
                     return enterScene(ctx, "workRoomScene", state);
-                case t(state, "menu.dexterity"):
+                case "str+wis":
                     data.timeout = currentTick + workingTime;
                     data.timeoutStatus = true;
-                    data.activity = "training_dexterity";
+                    data.salary = player.selectedCharacter.strength * player.selectedCharacter.wisdom;
+                    data.activity = "work";
+                    return enterScene(ctx, "workRoomScene", state);
+                case "dex+int":
+                    data.timeout = currentTick + workingTime;
+                    data.timeoutStatus = true;
+                    data.salary = player.selectedCharacter.int * player.selectedCharacter.dexterity;
+                    data.activity = "work";
+                    return enterScene(ctx, "workRoomScene", state);
+                case "dex+vit":
+                    data.timeout = currentTick + workingTime;
+                    data.timeoutStatus = true;
+                    data.salary = player.selectedCharacter.vitality * player.selectedCharacter.dexterity;
+                    data.activity = "work";
+                    return enterScene(ctx, "workRoomScene", state);
+                case "dex+wis":
+                    data.timeout = currentTick + workingTime;
+                    data.timeoutStatus = true;
+                    data.salary = player.selectedCharacter.wisdom * player.selectedCharacter.dexterity;
+                    data.activity = "work";
+                    return enterScene(ctx, "workRoomScene", state);
+                case "int+vit":
+                    data.timeout = currentTick + workingTime;
+                    data.timeoutStatus = true;
+                    data.salary = player.selectedCharacter.intelligence * player.selectedCharacter.vitality;
+                    data.activity = "work";
+                    return enterScene(ctx, "workRoomScene", state);
+                case "int+wis":
+                    data.timeout = currentTick + workingTime;
+                    data.timeoutStatus = true;
+                    data.salary = player.selectedCharacter.intelligence * player.selectedCharacter.wisdom;
+                    data.activity = "work";
+                    return enterScene(ctx, "workRoomScene", state);
+                case "vit+wis":
+                    data.timeout = currentTick + workingTime;
+                    data.timeoutStatus = true;
+                    data.salary = player.selectedCharacter.vitality * player.selectedCharacter.wisdom;
+                    data.activity = "work";
                     return enterScene(ctx, "workRoomScene", state);
                 //any scene
                 case t(state, "texts.back"):

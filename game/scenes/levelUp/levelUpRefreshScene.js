@@ -110,23 +110,23 @@ levelUpRefreshScene.on("text", ctx =>
             //Level-Up
             if (data.statPoints > 0 && data.activity === "leveling2") {
                 switch (ctx.update.message.text) {
-                    case t(state, "texts.attributes.strength"):
+                    case t(state, "texts.attributeNames.strength"):
                         state.player.data.levelBuffer.att.strength += 1;
                         data.statPoints -= 1;
                         break;
-                    case t(state, "texts.attributes.dexterity"):
+                    case t(state, "texts.attributeNames.dexterity"):
                         state.player.data.levelBuffer.att.dexterity += 1;
                         data.statPoints -= 1;
                         break;
-                    case t(state, "texts.attributes.intelligence"):
+                    case t(state, "texts.attributeNames.intelligence"):
                         state.player.data.levelBuffer.att.intelligence += 1;
                         data.statPoints -= 1;
                         break;
-                    case t(state, "texts.attributes.wisdom"):
+                    case t(state, "texts.attributeNames.wisdom"):
                         state.player.data.levelBuffer.att.wisdom += 1;
                         data.statPoints -= 1;
                         break;
-                    case t(state, "texts.attributes.vitality"):
+                    case t(state, "texts.attributeNames.vitality"):
                         state.player.data.levelBuffer.att.vitality += 1;
                         data.statPoints -= 1;
                         break;

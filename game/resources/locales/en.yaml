@@ -4,13 +4,31 @@ texts:
   unequip: 'Unequip'
   seconds: 'seconds'
 
-  attributes:
+  attributeNames:
    strength: "Strength"
    dexterity: "Dexterity"
    intelligence: "Intelligence"
    wisdom: "Wisdom"
    vitality: "Vitality"
 
+  inventory: |
+   *Inventory*:
+   ${inventory}
+
+  belt: |
+   *Belt*: ${belt}
+
+  equipment: |
+   *Armor*: ${armor}
+   *Right Hand*: ${rightHand},
+   *Left Hand*: ${leftHand}
+
+  attributes: |
+   *Strength*: ${strength},
+   *Dexterity*: ${dexterity},
+   *Intelligence*: ${intelligence},
+   *Wisdom*: ${wisdom},
+   *Vitality*: ${vitality}
 
   status: |
    Your nickname: `${nickname}`
@@ -37,6 +55,9 @@ texts:
     drinking: 'You are drinking. This will take 36 seconds'
     sleeping: 'You are sleeping. This will take 3600 seconds'
     timeLeft: 'Time left:'
+
+  work:
+    status: 'You are working now'
 
   message:
     cell: 'You are in your cell. You are sitting on your bed. There is a table nearby. You can see a glass of bits and a cybermeal programmed not to induce vomit on it and a cybervomit under it'
@@ -189,7 +210,7 @@ texts:
         *Intelligence*: ${intelligence},
         *Wisdom*: ${wisdom},
         *Vitality*: ${vitality},
-        *Armor*: ${armor}
+        *Armor*: ${armor},
         *Right Hand*: ${rightHand},
         *Left Hand*: ${leftHand},
         *Belt*: ${belt},

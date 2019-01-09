@@ -10,9 +10,9 @@ statScene.enter(ctx =>
         let player = state.player;
         let message = "What ATTRIBUTE would you want to upgrade?\n\n";
         let buttons = [
-            [t(state, "texts.attributes.strength"), t(state, "texts.attributes.dexterity")],
-            [t(state, "texts.attributes.intelligence"), t(state, "texts.attributes.wisdom")],
-            [t(state, "texts.attributes.vitality")]
+            [t(state, "texts.attributeNames.strength"), t(state, "texts.attributeNames.dexterity")],
+            [t(state, "texts.attributeNames.intelligence"), t(state, "texts.attributeNames.wisdom")],
+            [t(state, "texts.attributeNames.vitality")]
         ];
         if (!player.data.statPoints) {
             buttons = [];
@@ -50,7 +50,7 @@ statScene.enter(ctx =>
             }
         });
         _.forEach(state.player.data.levelBuffer.att, function(value, att) {
-            message += "\n" + t(state, `texts.attributes.${att}`) + ": " + player.selectedCharacter[att];
+            message += "\n" + t(state, `texts.attributeNames.${att}`) + ": " + player.selectedCharacter[att];
             if (value >= 1) {
                 let futureAtt = player.selectedCharacter[att] + value;
                 message += " ➕ " + value + " ➡️ " + futureAtt;
@@ -68,19 +68,19 @@ statScene.on("text", ctx =>
         let player = state.player;
         let selectedCharacter = player.selectedCharacter;
         switch (ctx.update.message.text) {
-            case t(state, "texts.attributes.strength"):
+            case t(state, "texts.attributeNames.strength"):
                 state.player.data.levelBuffer.att.strength += 1;
                 state.player.data.statPoints -= 1;
                 return enterScene(ctx, "statScene", state);
-            case t(state, "texts.attributes.dexterity"):
+            case t(state, "texts.attributeNames.dexterity"):
                 state.player.data.levelBuffer.att.dexterity += 1;
                 state.player.data.statPoints -= 1;
                 return enterScene(ctx, "statScene", state);
-            case t(state, "texts.attributes.intelligence"):
+            case t(state, "texts.attributeNames.intelligence"):
                 state.player.data.levelBuffer.att.intelligence += 1;
                 state.player.data.statPoints -= 1;
                 return enterScene(ctx, "statScene", state);
-            case t(state, "texts.attributes.wisdom"):
+            case t(state, "texts.attributeNames.wisdom"):
                 state.player.data.levelBuffer.att.wisdom += 1;
                 state.player.data.statPoints -= 1;
                 return enterScene(ctx, "statScene", state);

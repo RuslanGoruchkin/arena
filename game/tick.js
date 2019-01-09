@@ -68,38 +68,39 @@ export const tick = async state => {
                     });
                     break;
                 case "training_dexterity":
-                    player.data.sleepyTick = state.currentTick;
                     player.data.conditions.push("TBDexterity");
                     stateManager.queue.add(() => {
                         replyWithMarkdown("You are 20% more agile", params);
                     });
                     break;
                 case "training_vitality":
-                    player.data.sleepyTick = state.currentTick;
                     player.data.conditions.push("TBVitality");
                     stateManager.queue.add(() => {
                         replyWithMarkdown("You are 20% buffer", params);
                     });
                     break;
                 case "training_intelligence":
-                    player.data.sleepyTick = state.currentTick;
                     player.data.conditions.push("TBIntelligence");
                     stateManager.queue.add(() => {
                         replyWithMarkdown("You are 20% smarter", params);
                     });
                     break;
                 case "training_strength":
-                    player.data.sleepyTick = state.currentTick;
                     player.data.conditions.push("TBStrength");
                     stateManager.queue.add(() => {
                         replyWithMarkdown("You are 20% stronger", params);
                     });
                     break;
                 case "training_wisdom":
-                    player.data.sleepyTick = state.currentTick;
                     player.data.conditions.push("TBWisdom");
                     stateManager.queue.add(() => {
                         replyWithMarkdown("You are 20% wiser", params);
+                    });
+                    break;
+                case "work":
+                    player.data.coins += player.data.salary;
+                    stateManager.queue.add(() => {
+                        replyWithMarkdown("You have earned " + player.data.salary + " coins for your great work!", params);
                     });
                     break;
                 default:
@@ -107,25 +108,26 @@ export const tick = async state => {
             }
             player.data.timeout = 0;
             player.data.timeoutStatus = false;
+            player.data.salary = 0;
             //player.data.activity = "";
             //ctx.scene.reenter();
 
             stateManager.queue.add(() => {
-                // enterScene(ctx, "mainScene", state);
+                player.data.activity = "";
+                enterScene(ctx, "mainScene", state);
+                /*
 
                 if (player.data.activity.startsWith("training")) {
                     player.data.activity = "";
                     enterScene(ctx, "trainingRoomScene", state);
                 } else if (player.data.activity.startsWith("work")) {
-                    player.player.data.coins += player.data.salary * 10;
-                    player.data.salary = 0;
                     player.data.activity = "";
                     enterScene(ctx, "workRoomScene", state);
                 } else {
                     player.data.activity = "";
                     enterScene(ctx, "mainScene", state);
                 }
-
+                */
                 //    routerScene(ctx, "mainScene", false);
             });
 

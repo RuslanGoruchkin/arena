@@ -53,7 +53,7 @@ levelUpScene.enter(ctx =>
             }
         });
         _.forEach(state.player.data.levelBuffer.att, function(value, att) {
-            message += "\n" + t(state, `texts.attributes.${att}`) + ": " + player.selectedCharacter[att];
+            message += "\n" + t(state, `texts.attributeNames.${att}`) + ": " + player.selectedCharacter[att];
             if (value >= 1) {
                 let futureAtt = player.selectedCharacter[att] + value;
                 message += " ➕ " + value + " ➡️ " + futureAtt;

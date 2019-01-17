@@ -71,3 +71,4 @@ $ npm run db-make-migration
 
 # Debug configuration for idea ides
 ![Alt text](https://monosnap.com/image/wWApX4AJfOz6ROwoUtdRRqcDEusR4z.png)
+# arena
